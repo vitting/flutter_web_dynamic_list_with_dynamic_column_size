@@ -50,6 +50,8 @@ class CustomList extends StatefulWidget {
 class _CustomListState extends State<CustomList> {
   late ColumnDefinitionMap _localColumnDefs;
   late List<Map<String, String>> _data;
+  final ScrollController _horizontalController = ScrollController();
+  final ScrollController _verticalController = ScrollController();
 
   @override
   void initState() {
@@ -65,29 +67,59 @@ class _CustomListState extends State<CustomList> {
     });
   }
 
+  // Calculate the total width needed for all columns
+  double get _totalWidth {
+    double totalWidth = 0;
+    for (var columnDef in _localColumnDefs.values) {
+      totalWidth += columnDef.width ?? 100; // Default width if null
+    }
+    return totalWidth;
+  }
+
+  @override
+  void dispose() {
+    _horizontalController.dispose();
+    _verticalController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      shrinkWrap: true,
-      slivers: [
-        SliverAppBar(
-          pinned: true,
-          backgroundColor: Colors.orange,
-          title: CustomHeader(
-            columnDefs: _localColumnDefs,
-            useExpanded: true,
-            onDragUpdate: (delta, id, currentWidth) {
-              _updateColumnWidth(id, delta, currentWidth);
-            },
+    return Scrollbar(
+      controller: _horizontalController,
+      scrollbarOrientation: ScrollbarOrientation.bottom,
+      thumbVisibility: true,
+      trackVisibility: true,
+      child: SingleChildScrollView(
+        controller: _horizontalController,
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: _totalWidth.clamp(MediaQuery.of(context).size.width, double.infinity),
+          child: CustomScrollView(
+            controller: _verticalController,
+            shrinkWrap: true,
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                backgroundColor: Colors.orange,
+                title: CustomHeader(
+                  columnDefs: _localColumnDefs,
+                  useExpanded: true,
+                  onDragUpdate: (delta, id, currentWidth) {
+                    _updateColumnWidth(id, delta, currentWidth);
+                  },
+                ),
+              ),
+              SliverList.builder(
+                itemCount: 150,
+                itemBuilder: (context, index) {
+                  return CustomRow(columnDefs: _localColumnDefs, data: _data[index]);
+                },
+              ),
+            ],
           ),
         ),
-        SliverList.builder(
-          itemCount: 150,
-          itemBuilder: (context, index) {
-            return CustomRow(columnDefs: _localColumnDefs, data: _data[index]);
-          },
-        ),
-      ],
+      ),
     );
   }
 }
