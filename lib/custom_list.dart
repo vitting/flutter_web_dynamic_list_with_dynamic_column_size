@@ -1,47 +1,21 @@
-import 'package:faker/faker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DataRow;
 import 'package:web_dynamic_list/custom_header.dart';
 import 'package:web_dynamic_list/custom_row.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
-
-final faker = Faker();
-String getValueForColumn(String columnId) {
-  switch (columnId) {
-    case 'id':
-      return faker.guid.guid();
-    case 'name':
-      return faker.person.name();
-    case 'email':
-      return faker.internet.email();
-    case 'phone':
-      return faker.phoneNumber.us();
-    case 'street':
-      return faker.address.streetAddress();
-    case 'city':
-      return faker.address.city();
-    case 'country':
-      return faker.address.country();
-    default:
-      return '';
-  }
-}
-
-List<Map<String, String>> generateData(int rowCount, List<String> columnIds) {
-  final List<Map<String, String>> rows = [];
-
-  for (int i = 0; i < rowCount; i++) {
-    final Map<String, String> rowData = {};
-    for (var columnId in columnIds) {
-      rowData[columnId] = getValueForColumn(columnId);
-    }
-    rows.add(Map.from(rowData));
-  }
-  return rows;
-}
+import 'package:web_dynamic_list/enums.dart';
 
 class CustomList extends StatefulWidget {
   final ColumnDefinitionMap columnDefs;
-  const CustomList({super.key, required this.columnDefs});
+  final DataRowList data;
+  final bool showTooltip;
+  final bool textIsSelectable;
+  const CustomList({
+    super.key,
+    required this.columnDefs,
+    this.data = const [],
+    this.showTooltip = false,
+    this.textIsSelectable = true,
+  });
 
   @override
   State<CustomList> createState() => _CustomListState();
@@ -49,7 +23,6 @@ class CustomList extends StatefulWidget {
 
 class _CustomListState extends State<CustomList> {
   late ColumnDefinitionMap _localColumnDefs;
-  late List<Map<String, String>> _data;
   final ScrollController _horizontalController = ScrollController();
   final ScrollController _verticalController = ScrollController();
 
@@ -57,7 +30,6 @@ class _CustomListState extends State<CustomList> {
   void initState() {
     super.initState();
     _localColumnDefs = {...widget.columnDefs};
-    _data = generateData(150, widget.columnDefs.keys.toList());
   }
 
   void _updateColumnWidth(String id, double delta, currentColumnWidth) {
@@ -83,6 +55,16 @@ class _CustomListState extends State<CustomList> {
     super.dispose();
   }
 
+  Widget _buildRow(DataRow data, bool isEven, bool textIsSelectable) {
+    final rowContent = CustomRow(columnDefs: _localColumnDefs, data: data, isEven: isEven, showTooltip: widget.showTooltip);
+
+    if (textIsSelectable) {
+      return SelectionArea(child: rowContent);
+    } else {
+      return rowContent;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
@@ -105,15 +87,27 @@ class _CustomListState extends State<CustomList> {
                 title: CustomHeader(
                   columnDefs: _localColumnDefs,
                   useExpanded: true,
+                  onSortTap: (id, sortState) {
+                    setState(() {
+                      _localColumnDefs = _localColumnDefs.map((key, value) {
+                        if (key == id) {
+                          return MapEntry(key, value.copyWith(sortState: sortState));
+                        } else {
+                          return MapEntry(key, value.copyWith(sortState: ColumnSortState.none));
+                        }
+                      });
+                    });
+                  },
                   onDragUpdate: (delta, id, currentWidth) {
                     _updateColumnWidth(id, delta, currentWidth);
                   },
                 ),
               ),
               SliverList.builder(
-                itemCount: 150,
+                itemCount: widget.data.length,
                 itemBuilder: (context, index) {
-                  return CustomRow(columnDefs: _localColumnDefs, data: _data[index]);
+                  final bool isEven = index % 2 == 0;
+                  return _buildRow(widget.data[index], isEven, widget.textIsSelectable);
                 },
               ),
             ],
