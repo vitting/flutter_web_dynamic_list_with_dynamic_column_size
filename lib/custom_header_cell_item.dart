@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:web_dynamic_list/custom_header_resizable_handler.dart';
 import 'package:web_dynamic_list/enums.dart';
 
 class CustomHeaderCellItem extends StatefulWidget {
@@ -89,14 +90,7 @@ class _CustomHeaderCellItemState extends State<CustomHeaderCellItem> {
                   }
                 : null,
 
-            child: widget.isResizable && _isHovering
-                ? Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.grey[300]),
-                    child: Icon(Symbols.arrows_outward),
-                  )
-                : SizedBox.shrink(),
+            child: widget.isResizable && _isHovering ? CustomHeaderResizableHandler() : SizedBox.shrink(),
           ),
         ],
       ),
