@@ -37,21 +37,131 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late DataRowList _data;
+  bool _isLoading = false;
+  int _currentPage = 1;
+  final int _itemsPerPage = 50;
+  final int _totalItems = 1000;
+
   @override
   void initState() {
     super.initState();
-    _data = GenerateFakeDataHelper.generateData(150, columnDefsWithColumnsThatArentResizable.keys.toList());
+    _data = GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList());
+  }
+
+  void _loadMoreData() {
+    if (_isLoading) return;
+
+    setState(() async {
+      _isLoading = true;
+    });
+
+    // Simulate network delay
+
+    final newData = GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList());
+    _data.addAll(newData);
+    _currentPage++;
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
-      body: CustomList(
-        columnDefs: columnDefsWithColumnsThatArentResizable,
-        data: _data,
-        showTooltip: true,
-        textIsSelectable: false,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        color: Colors.amber,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                      Container(
+                        color: Colors.amber,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        color: Colors.blue,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                      Container(
+                        color: Colors.blue,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        color: Colors.green,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                      Container(
+                        color: Colors.green,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        color: Colors.red,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                      Container(
+                        color: Colors.red,
+                        height: 50,
+                        child: const Center(child: Text('This is a header that is outside of the list')),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: CustomList(
+                columnDefs: columnDefs,
+                data: _data,
+                showTooltip: true,
+                textIsSelectable: false,
+                // onLoadMore: _loadMoreData,
+                // isLoading: false,
+                totalItems: _totalItems,
+                onRowTap: (data) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $data'))));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

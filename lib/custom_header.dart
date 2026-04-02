@@ -8,23 +8,36 @@ class CustomHeader extends StatelessWidget {
   final Function(double, String, double)? onDragUpdate;
   final ColumnDefinitionMap columnDefs;
   final Function(String id, ColumnSortState sortState)? onSortTap;
-  const CustomHeader({super.key, this.useExpanded = false, this.onDragUpdate, this.columnDefs = const {}, this.onSortTap});
+  final int? totalItems;
+  const CustomHeader({
+    super.key,
+    this.useExpanded = false,
+    this.onDragUpdate,
+    this.columnDefs = const {},
+    this.onSortTap,
+    this.totalItems,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: columnDefs.entries.map((entry) {
-        final columnDef = entry.value;
-        return CustomHeaderCell(
-          id: columnDef.id,
-          title: columnDef.label,
-          width: columnDef.width,
-          onDragUpdate: onDragUpdate,
-          isResizable: columnDef.isResizable,
-          onSortTap: onSortTap,
-          sortState: columnDef.sortState,
-        );
-      }).toList(),
+    return Column(
+      children: [
+        if (totalItems != null) Row(children: [Text('Total Items: $totalItems')]),
+        Row(
+          children: columnDefs.entries.map((entry) {
+            final columnDef = entry.value;
+            return CustomHeaderCell(
+              id: columnDef.id,
+              title: columnDef.label,
+              width: columnDef.width,
+              onDragUpdate: onDragUpdate,
+              isResizable: columnDef.isResizable,
+              onSortTap: onSortTap,
+              sortState: columnDef.sortState,
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

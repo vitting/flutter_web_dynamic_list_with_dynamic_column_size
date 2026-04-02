@@ -9,12 +9,28 @@ class CustomList extends StatefulWidget {
   final DataRowList data;
   final bool showTooltip;
   final bool textIsSelectable;
+  final VoidCallback? onLoadMore;
+  final bool isLoading;
+  final int totalItems;
+  final double parentPaddingForWidthCalculation;
+  final bool longPressToCopyCellValueToClipboard;
+  final String? copyCellValueToClipboardMessage;
+  final Function(DataRow data)? onRowTap;
+  final Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
   const CustomList({
     super.key,
     required this.columnDefs,
     this.data = const [],
     this.showTooltip = false,
     this.textIsSelectable = true,
+    this.onLoadMore,
+    this.isLoading = false,
+    this.totalItems = 0,
+    this.parentPaddingForWidthCalculation = 16,
+    this.longPressToCopyCellValueToClipboard = true,
+    this.copyCellValueToClipboardMessage,
+    this.onRowTap,
+    this.onColumnDefsChanged,
   });
 
   @override
@@ -25,17 +41,41 @@ class _CustomListState extends State<CustomList> {
   late ColumnDefinitionMap _localColumnDefs;
   final ScrollController _horizontalController = ScrollController();
   final ScrollController _verticalController = ScrollController();
+  bool _hasTriggeredLoadMore = false;
 
   @override
   void initState() {
     super.initState();
     _localColumnDefs = {...widget.columnDefs};
+    _verticalController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_verticalController.hasClients && widget.onLoadMore != null && !widget.isLoading) {
+      final scrollPosition = _verticalController.position;
+      final scrollPercentage = scrollPosition.pixels / scrollPosition.maxScrollExtent;
+
+      if (scrollPercentage >= 0.5 && !_hasTriggeredLoadMore) {
+        _hasTriggeredLoadMore = true;
+        widget.onLoadMore!();
+      }
+    }
+  }
+
+  @override
+  void didUpdateWidget(CustomList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.data.length != widget.data.length) {
+      // Reset the load more trigger when new data is loaded
+      _hasTriggeredLoadMore = false;
+    }
   }
 
   void _updateColumnWidth(String id, double delta, currentColumnWidth) {
     setState(() {
       final newWidth = (currentColumnWidth ?? 100) + delta;
       _localColumnDefs = {..._localColumnDefs, id: _localColumnDefs[id]!.copyWith(width: newWidth.clamp(100, 500))};
+      widget.onColumnDefsChanged?.call(_localColumnDefs);
     });
   }
 
@@ -45,6 +85,8 @@ class _CustomListState extends State<CustomList> {
     for (var columnDef in _localColumnDefs.values) {
       totalWidth += columnDef.width ?? 100; // Default width if null
     }
+
+    totalWidth += 100; // Add some padding to prevent scrollbar from overlapping content
     return totalWidth;
   }
 
@@ -56,13 +98,35 @@ class _CustomListState extends State<CustomList> {
   }
 
   Widget _buildRow(DataRow data, bool isEven, bool textIsSelectable) {
-    final rowContent = CustomRow(columnDefs: _localColumnDefs, data: data, isEven: isEven, showTooltip: widget.showTooltip);
+    final rowContent = CustomRow(
+      columnDefs: _localColumnDefs,
+      data: data,
+      isEven: isEven,
+      showTooltip: widget.showTooltip,
+      onRowTap: widget.onRowTap,
+      longPressToCopyCellValueToClipboard: widget.longPressToCopyCellValueToClipboard,
+      copyCellValueToClipboardMessage: widget.copyCellValueToClipboardMessage,
+    );
 
     if (textIsSelectable) {
       return SelectionArea(child: rowContent);
     } else {
       return rowContent;
     }
+  }
+
+  void _sortChanged(String id, ColumnSortState sortState) {
+    setState(() {
+      _localColumnDefs = _localColumnDefs.map((key, value) {
+        if (key == id) {
+          return MapEntry(key, value.copyWith(sortState: sortState));
+        } else {
+          return MapEntry(key, value.copyWith(sortState: ColumnSortState.none));
+        }
+      });
+
+      widget.onColumnDefsChanged?.call(_localColumnDefs);
+    });
   }
 
   @override
@@ -76,7 +140,7 @@ class _CustomListState extends State<CustomList> {
         controller: _horizontalController,
         scrollDirection: Axis.horizontal,
         child: SizedBox(
-          width: _totalWidth.clamp(MediaQuery.of(context).size.width, double.infinity),
+          width: _totalWidth.clamp(MediaQuery.of(context).size.width - widget.parentPaddingForWidthCalculation, double.infinity),
           child: CustomScrollView(
             controller: _verticalController,
             shrinkWrap: true,
@@ -84,28 +148,27 @@ class _CustomListState extends State<CustomList> {
               SliverAppBar(
                 pinned: true,
                 backgroundColor: Colors.orange,
+                forceElevated: false,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                surfaceTintColor: Colors.transparent,
                 title: CustomHeader(
                   columnDefs: _localColumnDefs,
                   useExpanded: true,
-                  onSortTap: (id, sortState) {
-                    setState(() {
-                      _localColumnDefs = _localColumnDefs.map((key, value) {
-                        if (key == id) {
-                          return MapEntry(key, value.copyWith(sortState: sortState));
-                        } else {
-                          return MapEntry(key, value.copyWith(sortState: ColumnSortState.none));
-                        }
-                      });
-                    });
-                  },
+                  onSortTap: _sortChanged,
                   onDragUpdate: (delta, id, currentWidth) {
                     _updateColumnWidth(id, delta, currentWidth);
                   },
+                  totalItems: widget.totalItems,
                 ),
               ),
               SliverList.builder(
-                itemCount: widget.data.length,
+                itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
                 itemBuilder: (context, index) {
+                  if (index == widget.data.length) {
+                    // Show loading indicator at the end
+                    return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
+                  }
                   final bool isEven = index % 2 == 0;
                   return _buildRow(widget.data[index], isEven, widget.textIsSelectable);
                 },

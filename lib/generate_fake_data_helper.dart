@@ -32,7 +32,13 @@ class GenerateFakeDataHelper {
     for (int i = 0; i < rowCount; i++) {
       final DataRow rowData = {};
       for (var columnId in columnIds) {
-        rowData[columnId] = _getValueForColumn(columnId);
+        if (i == 0) {
+          rowData[columnId] = 'first';
+        } else if (i == rowCount - 1) {
+          rowData[columnId] = 'last';
+        } else {
+          rowData[columnId] = _getValueForColumn(columnId);
+        }
       }
       rows.add(Map.from(rowData));
     }
@@ -41,7 +47,7 @@ class GenerateFakeDataHelper {
 }
 
 final ColumnDefinitionMap columnDefs = {
-  'id': ColumnDefinition(id: 'id', label: 'ID', width: 100),
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: null),
   'name': ColumnDefinition(id: 'name', label: 'Name', width: null),
   'email': ColumnDefinition(id: 'email', label: 'Email', width: null),
   'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null),
