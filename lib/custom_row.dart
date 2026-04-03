@@ -11,6 +11,8 @@ class CustomRow extends StatefulWidget {
   final Function(DataRow data)? onRowTap;
   final bool longPressToCopyCellValueToClipboard;
   final String? copyCellValueToClipboardMessage;
+  final double rowSpacing;
+  final EdgeInsetsGeometry rowPadding;
   const CustomRow({
     super.key,
     required this.columnDefs,
@@ -20,6 +22,8 @@ class CustomRow extends StatefulWidget {
     this.showTooltip = false,
     this.longPressToCopyCellValueToClipboard = true,
     this.copyCellValueToClipboardMessage,
+    this.rowSpacing = 5,
+    this.rowPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
   });
 
   @override
@@ -47,13 +51,13 @@ class _CustomRowState extends State<CustomRow> {
           widget.onRowTap?.call(widget.data);
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: widget.rowPadding,
           color: _isHovered
               ? Colors.grey.shade400
               : widget.isEven
               ? Colors.grey.shade300
               : Colors.grey.shade200,
-          margin: EdgeInsets.only(bottom: 5),
+          margin: EdgeInsets.only(bottom: widget.rowSpacing),
           child: Row(
             children: widget.columnDefs.entries.map((entry) {
               final columnDef = entry.value;
@@ -62,6 +66,10 @@ class _CustomRowState extends State<CustomRow> {
                 value: widget.data[columnDef.id] ?? '',
                 width: columnDef.width,
                 showTooltip: widget.showTooltip,
+                icon: columnDef.rowCellIcon,
+                iconPlacement: columnDef.rowCellIconPlacement,
+                iconSpacing: columnDef.rowCellIconSpacing,
+                columnSpacing: columnDef.columnSpacing,
                 onLongPressCell: widget.longPressToCopyCellValueToClipboard
                     ? (value) async {
                         await Clipboard.setData(ClipboardData(text: value));
