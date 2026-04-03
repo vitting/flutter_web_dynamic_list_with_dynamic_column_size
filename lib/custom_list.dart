@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide DataRow;
 import 'package:web_dynamic_list/custom_header.dart';
 import 'package:web_dynamic_list/custom_row.dart';
+import 'package:web_dynamic_list/custom_total_count.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 import 'package:web_dynamic_list/enums.dart';
 
@@ -8,16 +9,23 @@ class CustomList extends StatefulWidget {
   final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;
   final void Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
   final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefs)? onSortChanged;
+  final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final ColumnDefinitionMap columnDefs;
   final String? copyCellValueToClipboardMessage;
   final DataRowList data;
+  final double headerBottomSpacing;
+  final double headerHeight;
   final bool isLoading;
   final bool longPressToCopyCellValueToClipboard;
   final VoidCallback? onLoadMore;
   final double parentPaddingForWidthCalculation;
+  final bool pinHeader;
+  final EdgeInsetsGeometry rowPadding;
+  final double rowSpacing;
   final bool showTooltip;
   final bool textIsSelectable;
-  final int totalItems;
+  final int? totalItems;
+  final CustomListTotalCountPosition totalItemsPosition;
 
   const CustomList({
     super.key,
@@ -27,13 +35,20 @@ class CustomList extends StatefulWidget {
     this.textIsSelectable = true,
     this.onLoadMore,
     this.isLoading = false,
-    this.totalItems = 0,
+    this.totalItems,
     this.parentPaddingForWidthCalculation = 16,
     this.longPressToCopyCellValueToClipboard = true,
     this.copyCellValueToClipboardMessage,
     this.onRowTap,
     this.onColumnDefsChanged,
     this.onSortChanged,
+    this.rowPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    this.rowSpacing = 5,
+    this.headerHeight = 40,
+    this.headerBottomSpacing = 4,
+    this.onLongPress,
+    this.totalItemsPosition = CustomListTotalCountPosition.bottom,
+    this.pinHeader = true,
   });
 
   @override
@@ -83,8 +98,13 @@ class _CustomListState extends State<CustomList> {
 
   void _updateColumnWidth(String id, double delta, currentColumnWidth) {
     setState(() {
-      final newWidth = (currentColumnWidth ?? 100) + delta;
-      _localColumnDefs = {..._localColumnDefs, id: _localColumnDefs[id]!.copyWith(width: newWidth.clamp(100, 500))};
+      if (currentColumnWidth != null) {
+        final newWidth = (currentColumnWidth ?? 100) + delta;
+        _localColumnDefs = {..._localColumnDefs, id: _localColumnDefs[id]!.setWidth(newWidth.clamp(100, 500))};
+      } else {
+        _localColumnDefs = {..._localColumnDefs, id: _localColumnDefs[id]!.setWidth(null)};
+      }
+
       widget.onColumnDefsChanged?.call(_localColumnDefs);
     });
   }
@@ -126,6 +146,10 @@ class _CustomListState extends State<CustomList> {
       },
       longPressToCopyCellValueToClipboard: widget.longPressToCopyCellValueToClipboard,
       copyCellValueToClipboardMessage: widget.copyCellValueToClipboardMessage,
+      rowPadding: widget.rowPadding,
+      rowSpacing: widget.rowSpacing,
+      showEvenBackgroundColor: true,
+      showHoverBackgroundColor: true,
     );
 
     if (textIsSelectable) {
@@ -133,6 +157,21 @@ class _CustomListState extends State<CustomList> {
     } else {
       return rowContent;
     }
+  }
+
+  Widget _buildTotalCount() {
+    return SliverPadding(
+      padding: EdgeInsets.only(bottom: 4),
+      sliver: SliverToBoxAdapter(
+        child: widget.totalItems != null
+            ? CustomTotalCount(
+                total: widget.totalItems!,
+                backgroundColor: Colors.grey.shade800,
+                horizontalPadding: widget.rowPadding.horizontal / 2,
+              )
+            : null,
+      ),
+    );
   }
 
   @override
@@ -151,23 +190,57 @@ class _CustomListState extends State<CustomList> {
             controller: _verticalController,
             shrinkWrap: true,
             slivers: [
-              SliverAppBar(
-                pinned: true,
-                backgroundColor: Colors.orange,
-                forceElevated: false,
-                elevation: 0,
-                scrolledUnderElevation: 0,
-                surfaceTintColor: Colors.transparent,
-                title: CustomHeader(
-                  columnDefs: _localColumnDefs,
-                  useExpanded: true,
-                  onSortTap: _sortChanged,
-                  onDragUpdate: (delta, id, currentWidth) {
-                    _updateColumnWidth(id, delta, currentWidth);
-                  },
-                  totalItems: widget.totalItems,
+              if (widget.totalItems != null && widget.totalItemsPosition == CustomListTotalCountPosition.top) _buildTotalCount(),
+              SliverPadding(
+                padding: EdgeInsets.only(bottom: widget.headerBottomSpacing),
+                sliver: SliverAppBar(
+                  pinned: widget.pinHeader,
+                  backgroundColor: Colors.grey.shade800,
+                  forceElevated: false,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  surfaceTintColor: Colors.transparent,
+                  toolbarHeight: widget.headerHeight,
+                  titleSpacing: 0,
+                  titleTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                  title: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: widget.rowPadding.horizontal / 2),
+                    child: CustomHeader(
+                      columnDefs: _localColumnDefs,
+                      useExpanded: true,
+                      onSortTap: _sortChanged,
+                      onDragHandlerLongPress: (id) async {
+                        final result = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Reset Column Width'),
+                            content: Text('Do you want to reset the width of this column to default?'),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                                child: Text('Reset'),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (result == true) {
+                          _updateColumnWidth(id, 0, null);
+                        }
+                      },
+                      onDragUpdate: (delta, id, currentWidth) {
+                        _updateColumnWidth(id, delta, currentWidth);
+                      },
+                      // totalItems: widget.totalItems,
+                    ),
+                  ),
                 ),
               ),
+              if (widget.totalItems != null && widget.totalItemsPosition == CustomListTotalCountPosition.bottom)
+                _buildTotalCount(),
               SliverList.builder(
                 itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
                 itemBuilder: (context, index) {

@@ -38,6 +38,25 @@ class ColumnDefinition extends Equatable {
     rowCellIconPlacement,
   ];
 
+  ColumnDefinition setWidth(double? newWidth) {
+    return ColumnDefinition(
+      id: id,
+      label: label,
+      width: newWidth,
+      isResizable: isResizable,
+      sortState: sortState,
+      rowCellIcon: rowCellIcon,
+      rowCellIconSpacing: rowCellIconSpacing,
+      rowCellIconPlacement: rowCellIconPlacement,
+      columnSpacing: columnSpacing,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ColumnDefinition(id: $id, label: $label, width: $width, isResizable: $isResizable, sortState: $sortState, rowCellIcon: $rowCellIcon, rowCellIconSpacing: $rowCellIconSpacing, rowCellIconPlacement: $rowCellIconPlacement, columnSpacing: $columnSpacing)';
+  }
+
   ColumnDefinition copyWith({
     String? id,
     String? label,

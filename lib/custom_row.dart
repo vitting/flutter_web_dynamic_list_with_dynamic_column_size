@@ -4,15 +4,19 @@ import 'package:web_dynamic_list/custom_row_cell.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 
 class CustomRow extends StatefulWidget {
+  final Function(DataRow data)? onRowTap;
+  final void Function(String id, String value, DataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final ColumnDefinitionMap columnDefs;
+  final String? copyCellValueToClipboardMessage;
   final DataRow data;
   final bool isEven;
-  final bool showTooltip;
-  final Function(DataRow data)? onRowTap;
   final bool longPressToCopyCellValueToClipboard;
-  final String? copyCellValueToClipboardMessage;
-  final double rowSpacing;
   final EdgeInsetsGeometry rowPadding;
+  final double rowSpacing;
+  final bool showEvenBackgroundColor;
+  final bool showHoverBackgroundColor;
+  final bool showTooltip;
+
   const CustomRow({
     super.key,
     required this.columnDefs,
@@ -24,6 +28,9 @@ class CustomRow extends StatefulWidget {
     this.copyCellValueToClipboardMessage,
     this.rowSpacing = 5,
     this.rowPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    this.showEvenBackgroundColor = true,
+    this.showHoverBackgroundColor = true,
+    this.onLongPress,
   });
 
   @override
@@ -32,6 +39,7 @@ class CustomRow extends StatefulWidget {
 
 class _CustomRowState extends State<CustomRow> {
   bool _isHovered = false;
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
@@ -51,12 +59,15 @@ class _CustomRowState extends State<CustomRow> {
           widget.onRowTap?.call(widget.data);
         },
         child: Container(
+          decoration: BoxDecoration(
+            color: widget.showHoverBackgroundColor && _isHovered
+                ? Colors.grey.shade400
+                : widget.showEvenBackgroundColor && widget.isEven
+                ? Colors.grey.shade300
+                : Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
+          ),
           padding: widget.rowPadding,
-          color: _isHovered
-              ? Colors.grey.shade400
-              : widget.isEven
-              ? Colors.grey.shade300
-              : Colors.grey.shade200,
           margin: EdgeInsets.only(bottom: widget.rowSpacing),
           child: Row(
             children: widget.columnDefs.entries.map((entry) {
@@ -70,20 +81,22 @@ class _CustomRowState extends State<CustomRow> {
                 iconPlacement: columnDef.rowCellIconPlacement,
                 iconSpacing: columnDef.rowCellIconSpacing,
                 columnSpacing: columnDef.columnSpacing,
-                onLongPressCell: widget.longPressToCopyCellValueToClipboard
-                    ? (value) async {
-                        await Clipboard.setData(ClipboardData(text: value));
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Center(
-                                child: Text('${widget.copyCellValueToClipboardMessage ?? "Copied to clipboard"}: $value'),
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    : null,
+                onLongPressCell: (value) async {
+                  if (widget.longPressToCopyCellValueToClipboard) {
+                    await Clipboard.setData(ClipboardData(text: value));
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Center(
+                            child: Text('${widget.copyCellValueToClipboardMessage ?? "Copied to clipboard"}: $value'),
+                          ),
+                        ),
+                      );
+                    }
+                  }
+
+                  widget.onLongPress?.call(columnDef.id, value, widget.data, widget.columnDefs);
+                },
               );
             }).toList(),
           ),
