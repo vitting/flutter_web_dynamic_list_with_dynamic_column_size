@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
-import 'package:web_dynamic_list/custom_header_resizable_handler.dart';
+import 'package:web_dynamic_list/custom_resizable_handler.dart';
 import 'package:web_dynamic_list/enums.dart';
 
 class CustomHeaderCell extends StatefulWidget {
@@ -12,6 +11,9 @@ class CustomHeaderCell extends StatefulWidget {
   final ColumnSortState sortState;
   final String title;
   final double? width;
+  final Widget? sortIconAscending;
+  final Widget? sortIconDescending;
+  final Widget? resizeHandler;
 
   const CustomHeaderCell({
     super.key,
@@ -23,6 +25,9 @@ class CustomHeaderCell extends StatefulWidget {
     this.onSortTap,
     this.sortState = ColumnSortState.none,
     this.onDragHandlerLongPress,
+    this.sortIconAscending,
+    this.sortIconDescending,
+    this.resizeHandler,
   });
 
   @override
@@ -69,8 +74,10 @@ class _CustomHeaderCellState extends State<CustomHeaderCell> {
                     },
                     child: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
                   ),
-                  if (widget.sortState == ColumnSortState.ascending) Icon(Symbols.arrow_upward_alt, color: Colors.white),
-                  if (widget.sortState == ColumnSortState.descending) Icon(Symbols.arrow_downward_alt, color: Colors.white),
+                  if (widget.sortState == ColumnSortState.ascending && widget.sortIconAscending != null)
+                    widget.sortIconAscending!,
+                  if (widget.sortState == ColumnSortState.descending && widget.sortIconDescending != null)
+                    widget.sortIconDescending!,
                 ],
               ),
               GestureDetector(
@@ -95,7 +102,7 @@ class _CustomHeaderCellState extends State<CustomHeaderCell> {
                 onLongPress: () {
                   widget.onDragHandlerLongPress?.call(widget.id);
                 },
-                child: widget.isResizable && _isHovering ? CustomHeaderResizableHandler() : SizedBox.shrink(),
+                child: widget.isResizable && _isHovering ? widget.resizeHandler : SizedBox.shrink(),
               ),
             ],
           ),

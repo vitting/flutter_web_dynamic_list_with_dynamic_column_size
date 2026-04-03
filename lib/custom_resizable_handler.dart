@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-class CustomHeaderResizableHandler extends StatelessWidget {
-  const CustomHeaderResizableHandler({super.key});
+class CustomResizableHandler extends StatelessWidget {
+  const CustomResizableHandler({super.key});
 
   @override
   Widget build(BuildContext context) {

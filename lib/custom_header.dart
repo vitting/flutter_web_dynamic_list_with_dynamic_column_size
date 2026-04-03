@@ -9,6 +9,9 @@ class CustomHeader extends StatelessWidget {
   final void Function(String id)? onDragHandlerLongPress;
   final ColumnDefinitionMap columnDefs;
   final bool useExpanded;
+  final Widget? sortIconAscending;
+  final Widget? sortIconDescending;
+  final Widget? resizeHandler;
 
   const CustomHeader({
     super.key,
@@ -17,6 +20,9 @@ class CustomHeader extends StatelessWidget {
     this.columnDefs = const {},
     this.onSortTap,
     this.onDragHandlerLongPress,
+    this.sortIconAscending,
+    this.sortIconDescending,
+    this.resizeHandler,
   });
 
   @override
@@ -33,6 +39,9 @@ class CustomHeader extends StatelessWidget {
           onSortTap: onSortTap,
           sortState: columnDef.sortState,
           onDragHandlerLongPress: onDragHandlerLongPress,
+          sortIconAscending: sortIconAscending,
+          sortIconDescending: sortIconDescending,
+          resizeHandler: resizeHandler,
         );
       }).toList(),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide DataRow;
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:web_dynamic_list/custom_header.dart';
+import 'package:web_dynamic_list/custom_resizable_handler.dart';
 import 'package:web_dynamic_list/custom_row.dart';
 import 'package:web_dynamic_list/custom_total_count.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
@@ -27,6 +29,9 @@ class CustomList extends StatefulWidget {
   final int? totalItems;
   final CustomListTotalCountPosition totalItemsPosition;
   final bool canResetColumnWidthOnLongPress;
+  final Widget sortIconAscending;
+  final Widget sortIconDescending;
+  final Widget resizeHandler;
 
   const CustomList({
     super.key,
@@ -51,6 +56,9 @@ class CustomList extends StatefulWidget {
     this.totalItemsPosition = CustomListTotalCountPosition.bottom,
     this.pinHeader = true,
     this.canResetColumnWidthOnLongPress = true,
+    this.sortIconAscending = const Icon(Symbols.arrow_upward_alt, color: Colors.white),
+    this.sortIconDescending = const Icon(Symbols.arrow_downward_alt, color: Colors.white),
+    this.resizeHandler = const CustomResizableHandler(),
   });
 
   @override
@@ -211,7 +219,10 @@ class _CustomListState extends State<CustomList> {
                     child: CustomHeader(
                       columnDefs: _localColumnDefs,
                       useExpanded: true,
+                      resizeHandler: widget.resizeHandler,
                       onSortTap: _sortChanged,
+                      sortIconAscending: widget.sortIconAscending,
+                      sortIconDescending: widget.sortIconDescending,
                       onDragHandlerLongPress: (id) async {
                         if (widget.canResetColumnWidthOnLongPress) {
                           final result = await showDialog<bool>(
