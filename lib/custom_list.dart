@@ -26,6 +26,7 @@ class CustomList extends StatefulWidget {
   final bool textIsSelectable;
   final int? totalItems;
   final CustomListTotalCountPosition totalItemsPosition;
+  final bool canResetColumnWidthOnLongPress;
 
   const CustomList({
     super.key,
@@ -49,6 +50,7 @@ class CustomList extends StatefulWidget {
     this.onLongPress,
     this.totalItemsPosition = CustomListTotalCountPosition.bottom,
     this.pinHeader = true,
+    this.canResetColumnWidthOnLongPress = true,
   });
 
   @override
@@ -211,24 +213,26 @@ class _CustomListState extends State<CustomList> {
                       useExpanded: true,
                       onSortTap: _sortChanged,
                       onDragHandlerLongPress: (id) async {
-                        final result = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Reset Column Width'),
-                            content: Text('Do you want to reset the width of this column to default?'),
-                            actions: [
-                              TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                child: Text('Reset'),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (result == true) {
-                          _updateColumnWidth(id, 0, null);
+                        if (widget.canResetColumnWidthOnLongPress) {
+                          final result = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Reset Column Width'),
+                              content: Text('Do you want to reset the width of this column to default?'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text('Reset'),
+                                ),
+                              ],
+                            ),
+                          );
+                          if (result == true) {
+                            _updateColumnWidth(id, 0, null);
+                          }
                         }
                       },
                       onDragUpdate: (delta, id, currentWidth) {
