@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/custom_resizable_handler.dart';
 import 'package:web_dynamic_list/enums.dart';
 
 class CustomHeaderCell extends StatefulWidget {
