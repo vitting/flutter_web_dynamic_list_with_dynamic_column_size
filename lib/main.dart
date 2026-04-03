@@ -155,8 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 // onLoadMore: _loadMoreData,
                 // isLoading: false,
                 totalItems: _totalItems,
-                onRowTap: (data) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $data'))));
+                onRowTap: (rowData, _) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                 },
               ),
             ),

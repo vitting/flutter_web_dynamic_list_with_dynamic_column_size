@@ -5,18 +5,20 @@ import 'package:web_dynamic_list/custom_type_definitions.dart';
 import 'package:web_dynamic_list/enums.dart';
 
 class CustomList extends StatefulWidget {
+  final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;
+  final void Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
+  final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefs)? onSortChanged;
   final ColumnDefinitionMap columnDefs;
+  final String? copyCellValueToClipboardMessage;
   final DataRowList data;
+  final bool isLoading;
+  final bool longPressToCopyCellValueToClipboard;
+  final VoidCallback? onLoadMore;
+  final double parentPaddingForWidthCalculation;
   final bool showTooltip;
   final bool textIsSelectable;
-  final VoidCallback? onLoadMore;
-  final bool isLoading;
   final int totalItems;
-  final double parentPaddingForWidthCalculation;
-  final bool longPressToCopyCellValueToClipboard;
-  final String? copyCellValueToClipboardMessage;
-  final Function(DataRow data)? onRowTap;
-  final Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
+
   const CustomList({
     super.key,
     required this.columnDefs,
@@ -31,6 +33,7 @@ class CustomList extends StatefulWidget {
     this.copyCellValueToClipboardMessage,
     this.onRowTap,
     this.onColumnDefsChanged,
+    this.onSortChanged,
   });
 
   @override
@@ -38,10 +41,26 @@ class CustomList extends StatefulWidget {
 }
 
 class _CustomListState extends State<CustomList> {
-  late ColumnDefinitionMap _localColumnDefs;
-  final ScrollController _horizontalController = ScrollController();
-  final ScrollController _verticalController = ScrollController();
   bool _hasTriggeredLoadMore = false;
+  final ScrollController _horizontalController = ScrollController();
+  late ColumnDefinitionMap _localColumnDefs;
+  final ScrollController _verticalController = ScrollController();
+
+  @override
+  void didUpdateWidget(CustomList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.data.length != widget.data.length) {
+      // Reset the load more trigger when new data is loaded
+      _hasTriggeredLoadMore = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _horizontalController.dispose();
+    _verticalController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -59,15 +78,6 @@ class _CustomListState extends State<CustomList> {
         _hasTriggeredLoadMore = true;
         widget.onLoadMore!();
       }
-    }
-  }
-
-  @override
-  void didUpdateWidget(CustomList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.data.length != widget.data.length) {
-      // Reset the load more trigger when new data is loaded
-      _hasTriggeredLoadMore = false;
     }
   }
 
@@ -90,31 +100,6 @@ class _CustomListState extends State<CustomList> {
     return totalWidth;
   }
 
-  @override
-  void dispose() {
-    _horizontalController.dispose();
-    _verticalController.dispose();
-    super.dispose();
-  }
-
-  Widget _buildRow(DataRow data, bool isEven, bool textIsSelectable) {
-    final rowContent = CustomRow(
-      columnDefs: _localColumnDefs,
-      data: data,
-      isEven: isEven,
-      showTooltip: widget.showTooltip,
-      onRowTap: widget.onRowTap,
-      longPressToCopyCellValueToClipboard: widget.longPressToCopyCellValueToClipboard,
-      copyCellValueToClipboardMessage: widget.copyCellValueToClipboardMessage,
-    );
-
-    if (textIsSelectable) {
-      return SelectionArea(child: rowContent);
-    } else {
-      return rowContent;
-    }
-  }
-
   void _sortChanged(String id, ColumnSortState sortState) {
     setState(() {
       _localColumnDefs = _localColumnDefs.map((key, value) {
@@ -126,7 +111,28 @@ class _CustomListState extends State<CustomList> {
       });
 
       widget.onColumnDefsChanged?.call(_localColumnDefs);
+      widget.onSortChanged?.call(id, sortState, _localColumnDefs);
     });
+  }
+
+  Widget _buildRow(DataRow data, bool isEven, bool textIsSelectable) {
+    final rowContent = CustomRow(
+      columnDefs: _localColumnDefs,
+      data: data,
+      isEven: isEven,
+      showTooltip: widget.showTooltip,
+      onRowTap: (rowData) {
+        widget.onRowTap?.call(rowData, _localColumnDefs);
+      },
+      longPressToCopyCellValueToClipboard: widget.longPressToCopyCellValueToClipboard,
+      copyCellValueToClipboardMessage: widget.copyCellValueToClipboardMessage,
+    );
+
+    if (textIsSelectable) {
+      return SelectionArea(child: rowContent);
+    } else {
+      return rowContent;
+    }
   }
 
   @override
