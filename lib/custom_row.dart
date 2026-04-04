@@ -16,6 +16,11 @@ class CustomRow extends StatefulWidget {
   final bool showEvenBackgroundColor;
   final bool showHoverBackgroundColor;
   final bool showTooltip;
+  final double borderRadius;
+  final bool showRowClickHandler;
+  final Widget? rowClickHandlerIcon;
+  final double rowClickHandlerWidth;
+  final bool triggerOnRowTapWhenRowClickHandlerIsShown;
 
   const CustomRow({
     super.key,
@@ -31,6 +36,11 @@ class CustomRow extends StatefulWidget {
     this.showEvenBackgroundColor = true,
     this.showHoverBackgroundColor = true,
     this.onLongPress,
+    this.borderRadius = 8,
+    this.showRowClickHandler = false,
+    this.rowClickHandlerIcon,
+    this.rowClickHandlerWidth = 45,
+    this.triggerOnRowTapWhenRowClickHandlerIsShown = false,
   });
 
   @override
@@ -55,9 +65,11 @@ class _CustomRowState extends State<CustomRow> {
         });
       },
       child: GestureDetector(
-        onTap: () {
-          widget.onRowTap?.call(widget.data);
-        },
+        onTap: widget.showRowClickHandler && !widget.triggerOnRowTapWhenRowClickHandlerIsShown
+            ? null
+            : () {
+                widget.onRowTap?.call(widget.data);
+              },
         child: Container(
           decoration: BoxDecoration(
             color: widget.showHoverBackgroundColor && _isHovered
@@ -65,40 +77,50 @@ class _CustomRowState extends State<CustomRow> {
                 : widget.showEvenBackgroundColor && widget.isEven
                 ? Colors.grey.shade300
                 : Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
           padding: widget.rowPadding,
           margin: EdgeInsets.only(bottom: widget.rowSpacing),
           child: Row(
-            children: widget.columnDefs.entries.map((entry) {
-              final columnDef = entry.value;
-              return CustomRowCell(
-                id: columnDef.id,
-                value: widget.data[columnDef.id] ?? '',
-                width: columnDef.width,
-                showTooltip: widget.showTooltip,
-                icon: columnDef.rowCellIcon,
-                iconPlacement: columnDef.rowCellIconPlacement,
-                iconSpacing: columnDef.rowCellIconSpacing,
-                columnSpacing: columnDef.columnSpacing,
-                onLongPressCell: (value) async {
-                  if (widget.longPressToCopyCellValueToClipboard) {
-                    await Clipboard.setData(ClipboardData(text: value));
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Center(
-                            child: Text('${widget.copyCellValueToClipboardMessage ?? "Copied to clipboard"}: $value'),
-                          ),
-                        ),
-                      );
+            children: [
+              ...widget.columnDefs.entries.map((entry) {
+                final columnDef = entry.value;
+                return CustomRowCell(
+                  id: columnDef.id,
+                  value: widget.data[columnDef.id] ?? '',
+                  width: columnDef.width,
+                  showTooltip: widget.showTooltip,
+                  icon: columnDef.rowCellIcon,
+                  iconPlacement: columnDef.rowCellIconPlacement,
+                  iconSpacing: columnDef.rowCellIconSpacing,
+                  columnSpacing: columnDef.columnSpacing,
+                  onLongPressCell: (value) async {
+                    if (widget.longPressToCopyCellValueToClipboard) {
+                      await Clipboard.setData(ClipboardData(text: value));
+                      if (context.mounted && widget.copyCellValueToClipboardMessage != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Center(child: Text('${widget.copyCellValueToClipboardMessage}: $value'))),
+                        );
+                      }
                     }
-                  }
 
-                  widget.onLongPress?.call(columnDef.id, value, widget.data, widget.columnDefs);
-                },
-              );
-            }).toList(),
+                    widget.onLongPress?.call(columnDef.id, value, widget.data, widget.columnDefs);
+                  },
+                );
+              }),
+              if (widget.showRowClickHandler && widget.rowClickHandlerIcon != null)
+                CustomRowCell(
+                  id: '_trigger_cell_vlist',
+                  value: '',
+                  width: widget.rowClickHandlerWidth,
+                  icon: IconButton(
+                    onPressed: () {
+                      widget.onRowTap?.call(widget.data);
+                    },
+                    icon: widget.rowClickHandlerIcon!,
+                  ),
+                ),
+            ],
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:web_dynamic_list/custom_list.dart';
+import 'package:web_dynamic_list/custom_list_config.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 import 'package:web_dynamic_list/generate_fake_data_helper.dart';
 
@@ -74,6 +75,35 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomList(
+                      columnDefs: columnDefWithAllColumnsResizable,
+                      data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
+                      config: CustomListConfig(),
+                      // onLoadMore: _loadMoreData,
+                      // isLoading: false,
+                      // totalItems: _totalItems,
+                      onRowTap: (rowData, column) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
+                        debugPrint(column.toString());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.blue,
+                      height: 50,
+                      child: const Center(child: Text('This is a header that is outside of the list')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Row(
               children: [
                 Expanded(
@@ -86,22 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Container(
                         color: Colors.amber,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: Colors.blue,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                      Container(
-                        color: Colors.blue,
                         height: 50,
                         child: const Center(child: Text('This is a header that is outside of the list')),
                       ),
@@ -150,11 +164,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CustomList(
                 columnDefs: columnDefs,
                 data: _data,
-                showTooltip: true,
-                textIsSelectable: false,
+                config: CustomListConfig(),
                 // onLoadMore: _loadMoreData,
                 // isLoading: false,
-                totalItems: _totalItems,
+                // totalItems: _totalItems,
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                   debugPrint(column.toString());

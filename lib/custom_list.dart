@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' hide DataRow;
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:web_dynamic_list/custom_header.dart';
-import 'package:web_dynamic_list/custom_resizable_handler.dart';
+import 'package:web_dynamic_list/custom_list_config.dart';
 import 'package:web_dynamic_list/custom_row.dart';
 import 'package:web_dynamic_list/custom_total_count.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
@@ -13,52 +12,24 @@ class CustomList extends StatefulWidget {
   final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefs)? onSortChanged;
   final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final ColumnDefinitionMap columnDefs;
-  final String? copyCellValueToClipboardMessage;
   final DataRowList data;
-  final double headerBottomSpacing;
-  final double headerHeight;
   final bool isLoading;
-  final bool longPressToCopyCellValueToClipboard;
   final VoidCallback? onLoadMore;
-  final double parentPaddingForWidthCalculation;
-  final bool pinHeader;
-  final EdgeInsetsGeometry rowPadding;
-  final double rowSpacing;
-  final bool showTooltip;
-  final bool textIsSelectable;
   final int? totalItems;
-  final CustomListTotalCountPosition totalItemsPosition;
-  final bool canResetColumnWidthOnLongPress;
-  final Widget sortIconAscending;
-  final Widget sortIconDescending;
-  final Widget resizeHandler;
+  final CustomListConfig config;
 
   const CustomList({
     super.key,
     required this.columnDefs,
     this.data = const [],
-    this.showTooltip = false,
-    this.textIsSelectable = true,
     this.onLoadMore,
     this.isLoading = false,
     this.totalItems,
-    this.parentPaddingForWidthCalculation = 16,
-    this.longPressToCopyCellValueToClipboard = true,
-    this.copyCellValueToClipboardMessage,
     this.onRowTap,
     this.onColumnDefsChanged,
     this.onSortChanged,
-    this.rowPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    this.rowSpacing = 5,
-    this.headerHeight = 40,
-    this.headerBottomSpacing = 4,
     this.onLongPress,
-    this.totalItemsPosition = CustomListTotalCountPosition.bottom,
-    this.pinHeader = true,
-    this.canResetColumnWidthOnLongPress = true,
-    this.sortIconAscending = const Icon(Symbols.arrow_upward_alt, color: Colors.white),
-    this.sortIconDescending = const Icon(Symbols.arrow_downward_alt, color: Colors.white),
-    this.resizeHandler = const CustomResizableHandler(),
+    required this.config,
   });
 
   @override
@@ -123,10 +94,12 @@ class _CustomListState extends State<CustomList> {
   double get _totalWidth {
     double totalWidth = 0;
     for (var columnDef in _localColumnDefs.values) {
-      totalWidth += columnDef.width ?? 100; // Default width if null
+      // Default width if null
+      totalWidth += columnDef.width ?? 100;
     }
 
-    totalWidth += 100; // Add some padding to prevent scrollbar from overlapping content
+    // Add some padding to prevent scrollbar from overlapping content
+    totalWidth += 100;
     return totalWidth;
   }
 
@@ -145,24 +118,29 @@ class _CustomListState extends State<CustomList> {
     });
   }
 
-  Widget _buildRow(DataRow data, bool isEven, bool textIsSelectable) {
+  Widget _buildRow(DataRow data, bool isEven) {
     final rowContent = CustomRow(
       columnDefs: _localColumnDefs,
       data: data,
       isEven: isEven,
-      showTooltip: widget.showTooltip,
+      showTooltip: widget.config.showTooltip,
       onRowTap: (rowData) {
         widget.onRowTap?.call(rowData, _localColumnDefs);
       },
-      longPressToCopyCellValueToClipboard: widget.longPressToCopyCellValueToClipboard,
-      copyCellValueToClipboardMessage: widget.copyCellValueToClipboardMessage,
-      rowPadding: widget.rowPadding,
-      rowSpacing: widget.rowSpacing,
+      longPressToCopyCellValueToClipboard: widget.config.longPressToCopyCellValueToClipboard,
+      copyCellValueToClipboardMessage: widget.config.copyCellValueToClipboardMessage,
+      rowPadding: widget.config.rowPadding,
+      rowSpacing: widget.config.rowSpacing,
+      borderRadius: widget.config.borderRadiusRow,
       showEvenBackgroundColor: true,
       showHoverBackgroundColor: true,
+      showRowClickHandler: widget.config.showRowClickHandler,
+      rowClickHandlerIcon: widget.config.rowClickHandlerIcon,
+      rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
+      triggerOnRowTapWhenRowClickHandlerIsShown: widget.config.triggerOnRowTapWhenRowClickHandlerIsShown,
     );
 
-    if (textIsSelectable) {
+    if (widget.config.textIsSelectable) {
       return SelectionArea(child: rowContent);
     } else {
       return rowContent;
@@ -176,101 +154,117 @@ class _CustomListState extends State<CustomList> {
         child: widget.totalItems != null
             ? CustomTotalCount(
                 total: widget.totalItems!,
+                borderRadius: widget.config.borderRadiusTotalCount,
                 backgroundColor: Colors.grey.shade800,
-                horizontalPadding: widget.rowPadding.horizontal / 2,
+                horizontalPadding: widget.config.rowPadding.horizontal / 2,
               )
             : null,
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scrollbar(
-      controller: _horizontalController,
-      scrollbarOrientation: ScrollbarOrientation.bottom,
-      thumbVisibility: true,
-      trackVisibility: true,
-      child: SingleChildScrollView(
-        controller: _horizontalController,
-        scrollDirection: Axis.horizontal,
-        child: SizedBox(
-          width: _totalWidth.clamp(MediaQuery.of(context).size.width - widget.parentPaddingForWidthCalculation, double.infinity),
-          child: CustomScrollView(
-            controller: _verticalController,
-            shrinkWrap: true,
-            slivers: [
-              if (widget.totalItems != null && widget.totalItemsPosition == CustomListTotalCountPosition.top) _buildTotalCount(),
-              SliverPadding(
-                padding: EdgeInsets.only(bottom: widget.headerBottomSpacing),
-                sliver: SliverAppBar(
-                  pinned: widget.pinHeader,
-                  backgroundColor: Colors.grey.shade800,
-                  forceElevated: false,
-                  elevation: 0,
-                  scrolledUnderElevation: 0,
-                  surfaceTintColor: Colors.transparent,
-                  toolbarHeight: widget.headerHeight,
-                  titleSpacing: 0,
-                  titleTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                  title: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: widget.rowPadding.horizontal / 2),
-                    child: CustomHeader(
-                      columnDefs: _localColumnDefs,
-                      useExpanded: true,
-                      resizeHandler: widget.resizeHandler,
-                      onSortTap: _sortChanged,
-                      sortIconAscending: widget.sortIconAscending,
-                      sortIconDescending: widget.sortIconDescending,
-                      onDragHandlerLongPress: (id) async {
-                        if (widget.canResetColumnWidthOnLongPress) {
-                          final result = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('Reset Column Width'),
-                              content: Text('Do you want to reset the width of this column to default?'),
-                              actions: [
-                                TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  child: Text('Reset'),
-                                ),
-                              ],
-                            ),
-                          );
-                          if (result == true) {
-                            _updateColumnWidth(id, 0, null);
-                          }
-                        }
+  Widget _buildSliverAppbar() {
+    return SliverAppBar(
+      pinned: widget.config.pinHeader,
+      backgroundColor: Colors.grey.shade800,
+      forceElevated: false,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+      toolbarHeight: widget.config.headerHeight,
+      titleSpacing: 0,
+      titleTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(widget.config.borderRadiusHeader))),
+      title: Padding(
+        padding: EdgeInsets.symmetric(horizontal: widget.config.rowPadding.horizontal / 2),
+        child: CustomHeader(
+          columnDefs: _localColumnDefs,
+          useExpanded: true,
+          resizeHandler: widget.config.resizeHandler,
+          onSortTap: _sortChanged,
+          sortIconAscending: widget.config.sortIconAscending,
+          sortIconDescending: widget.config.sortIconDescending,
+          showRowClickHandler: widget.config.showRowClickHandler,
+          rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
+          onDragHandlerLongPress: (id) async {
+            if (widget.config.canResetColumnWidthOnLongPress) {
+              final result = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Reset Column Width'),
+                  content: Text('Do you want to reset the width of this column to default?'),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
                       },
-                      onDragUpdate: (delta, id, currentWidth) {
-                        _updateColumnWidth(id, delta, currentWidth);
-                      },
-                      // totalItems: widget.totalItems,
+                      child: Text('Reset'),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-              if (widget.totalItems != null && widget.totalItemsPosition == CustomListTotalCountPosition.bottom)
-                _buildTotalCount(),
-              SliverList.builder(
-                itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (index == widget.data.length) {
-                    // Show loading indicator at the end
-                    return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
-                  }
-                  final bool isEven = index % 2 == 0;
-                  return _buildRow(widget.data[index], isEven, widget.textIsSelectable);
-                },
-              ),
-            ],
-          ),
+              );
+              if (result == true) {
+                _updateColumnWidth(id, 0, null);
+              }
+            }
+          },
+          onDragUpdate: (delta, id, currentWidth) {
+            _updateColumnWidth(id, delta, currentWidth);
+          },
+          // totalItems: widget.totalItems,
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        debugPrint('Available width: ${constraints.maxWidth}, Total content width: $_totalWidth');
+        return Scrollbar(
+          controller: _horizontalController,
+          scrollbarOrientation: ScrollbarOrientation.bottom,
+          thumbVisibility: true,
+          trackVisibility: true,
+          child: SingleChildScrollView(
+            controller: _horizontalController,
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: _totalWidth.clamp(constraints.maxWidth, double.infinity),
+              child: CustomScrollView(
+                controller: _verticalController,
+                shrinkWrap: true,
+                slivers: [
+                  if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.top)
+                    _buildTotalCount(),
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
+                    sliver: _buildSliverAppbar(),
+                  ),
+                  if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.bottom)
+                    _buildTotalCount(),
+                  if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
+                    SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
+                  else
+                    SliverList.builder(
+                      itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index == widget.data.length) {
+                          // Show loading indicator at the end
+                          return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
+                        }
+                        final bool isEven = index % 2 == 0;
+                        return _buildRow(widget.data[index], isEven);
+                      },
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

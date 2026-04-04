@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:web_dynamic_list/column_definition.dart';
+import 'package:web_dynamic_list/column_definition_helper.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 
 final faker = Faker();
@@ -45,6 +46,12 @@ class GenerateFakeDataHelper {
     return rows;
   }
 }
+
+final ColumnDefinitionMap columnDefWithAllColumnsResizable = ColumnDefinitionHelper.generateColumnDefinitionMap([
+  ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: false),
+  ColumnDefinition(id: 'name', label: 'Name', width: null, isResizable: false),
+  ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: false),
+]);
 
 final ColumnDefinitionMap columnDefs = {
   'id': ColumnDefinition(id: 'id', label: 'ID', width: null),

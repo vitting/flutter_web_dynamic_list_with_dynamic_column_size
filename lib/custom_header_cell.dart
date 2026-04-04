@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_dynamic_list/enums.dart';
 
 class CustomHeaderCell extends StatefulWidget {
-  final void Function(double, String, double)? onDragUpdate;
+  final void Function(double delta, String id, double currentWidth)? onDragUpdate;
   final void Function(String id, ColumnSortState sortState)? onSortTap;
   final void Function(String id)? onDragHandlerLongPress;
   final String id;
