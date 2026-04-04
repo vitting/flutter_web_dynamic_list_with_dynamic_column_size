@@ -104,6 +104,43 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.blue,
+                      height: 50,
+                      child: const Center(child: Text('This is a header that is outside of the list')),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: CustomList(
+                      columnDefs: columnDefWithAllColumnsResizable,
+                      data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
+                      config: CustomListConfig(),
+                      // onLoadMore: _loadMoreData,
+                      // isLoading: false,
+                      // totalItems: _totalItems,
+                      onRowTap: (rowData, column) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
+                        debugPrint(column.toString());
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.blue,
+                      height: 50,
+                      child: const Center(child: Text('This is a header that is outside of the list')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Row(
               children: [
                 Expanded(

@@ -147,7 +147,7 @@ class _CustomListState extends State<CustomList> {
     }
   }
 
-  Widget _buildTotalCount() {
+  Widget get _buildTotalCount {
     return SliverPadding(
       padding: EdgeInsets.only(bottom: 4),
       sliver: SliverToBoxAdapter(
@@ -222,12 +222,10 @@ class _CustomListState extends State<CustomList> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        debugPrint('Available width: ${constraints.maxWidth}, Total content width: $_totalWidth');
         return Scrollbar(
           controller: _horizontalController,
           scrollbarOrientation: ScrollbarOrientation.bottom,
           thumbVisibility: true,
-          trackVisibility: true,
           child: SingleChildScrollView(
             controller: _horizontalController,
             scrollDirection: Axis.horizontal,
@@ -235,16 +233,15 @@ class _CustomListState extends State<CustomList> {
               width: _totalWidth.clamp(constraints.maxWidth, double.infinity),
               child: CustomScrollView(
                 controller: _verticalController,
-                shrinkWrap: true,
                 slivers: [
                   if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.top)
-                    _buildTotalCount(),
+                    _buildTotalCount,
                   SliverPadding(
                     padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
                     sliver: _buildSliverAppbar(),
                   ),
                   if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.bottom)
-                    _buildTotalCount(),
+                    _buildTotalCount,
                   if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
                     SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
                   else
