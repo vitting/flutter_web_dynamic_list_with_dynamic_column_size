@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:web_dynamic_list/custom_list.dart';
-import 'package:web_dynamic_list/custom_list_config.dart';
+import 'package:web_dynamic_list/config/custom_list_config.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 import 'package:web_dynamic_list/generate_fake_data_helper.dart';
 

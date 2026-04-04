@@ -1,4 +1,4 @@
-import 'package:web_dynamic_list/column_definition.dart';
+import 'package:web_dynamic_list/config/column_definition.dart';
 
 /// A typedef for the column definition map, which is a map where
 /// the key is the column ID and the value is the ColumnDefinition object for that column

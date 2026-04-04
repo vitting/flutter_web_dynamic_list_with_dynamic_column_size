@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide DataRow;
 import 'package:flutter/services.dart';
-import 'package:web_dynamic_list/custom_row_cell.dart';
+import 'package:web_dynamic_list/row/custom_row_cell.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 
 class CustomRow extends StatefulWidget {

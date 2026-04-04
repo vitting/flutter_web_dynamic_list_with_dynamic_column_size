@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' hide DataRow;
-import 'package:web_dynamic_list/custom_header.dart';
-import 'package:web_dynamic_list/custom_list_config.dart';
-import 'package:web_dynamic_list/custom_row.dart';
-import 'package:web_dynamic_list/custom_total_count.dart';
+import 'package:web_dynamic_list/header/custom_header.dart';
+import 'package:web_dynamic_list/config/custom_list_config.dart';
+import 'package:web_dynamic_list/row/custom_row.dart';
+import 'package:web_dynamic_list/total_count/custom_total_count.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 import 'package:web_dynamic_list/enums.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/custom_header_cell.dart';
+import 'package:web_dynamic_list/header/custom_header_cell.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 import 'package:web_dynamic_list/enums.dart';
 

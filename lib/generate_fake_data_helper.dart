@@ -1,6 +1,6 @@
 import 'package:faker/faker.dart';
-import 'package:web_dynamic_list/column_definition.dart';
-import 'package:web_dynamic_list/column_definition_helper.dart';
+import 'package:web_dynamic_list/config/column_definition.dart';
+import 'package:web_dynamic_list/helpers/column_definition_helper.dart';
 import 'package:web_dynamic_list/custom_type_definitions.dart';
 
 final faker = Faker();
