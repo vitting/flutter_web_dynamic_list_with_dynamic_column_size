@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTotalCount extends StatelessWidget {
-  final int total;
+  final int? total;
   final TextStyle textStyle;
   final TextAlign textAlign;
   final Color backgroundColor;
@@ -9,6 +9,7 @@ class CustomTotalCount extends StatelessWidget {
   final double verticalPadding;
   final double borderRadius;
   final String prefixText;
+  final double totalCountBottomSpacing;
   const CustomTotalCount({
     super.key,
     required this.total,
@@ -19,14 +20,22 @@ class CustomTotalCount extends StatelessWidget {
     this.prefixText = 'Total Items: ',
     this.horizontalPadding = 8,
     this.verticalPadding = 8,
+    this.totalCountBottomSpacing = 4,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
-      child: Text('$prefixText $total', textAlign: textAlign, style: textStyle),
+    return SliverPadding(
+      padding: EdgeInsets.only(bottom: totalCountBottomSpacing),
+      sliver: SliverToBoxAdapter(
+        child: total != null
+            ? Container(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+                decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
+                child: Text('$prefixText $total', textAlign: textAlign, style: textStyle),
+              )
+            : null,
+      ),
     );
   }
 }

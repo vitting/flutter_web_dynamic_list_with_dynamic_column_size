@@ -148,73 +148,56 @@ class _CustomListState extends State<CustomList> {
   }
 
   Widget get _buildTotalCount {
-    return SliverPadding(
-      padding: EdgeInsets.only(bottom: 4),
-      sliver: SliverToBoxAdapter(
-        child: widget.totalItems != null
-            ? CustomTotalCount(
-                total: widget.totalItems!,
-                borderRadius: widget.config.borderRadiusTotalCount,
-                backgroundColor: Colors.grey.shade800,
-                horizontalPadding: widget.config.rowPadding.horizontal / 2,
-              )
-            : null,
-      ),
+    return CustomTotalCount(
+      total: widget.totalItems!,
+      borderRadius: widget.config.borderRadiusTotalCount,
+      backgroundColor: Colors.grey.shade800,
+      horizontalPadding: widget.config.rowPadding.horizontal / 2,
+      totalCountBottomSpacing: widget.config.totalCountBottomSpacing,
     );
   }
 
   Widget _buildSliverAppbar() {
-    return SliverAppBar(
-      pinned: widget.config.pinHeader,
-      backgroundColor: Colors.grey.shade800,
-      forceElevated: false,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
-      toolbarHeight: widget.config.headerHeight,
-      titleSpacing: 0,
-      titleTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(widget.config.borderRadiusHeader))),
-      title: Padding(
-        padding: EdgeInsets.symmetric(horizontal: widget.config.rowPadding.horizontal / 2),
-        child: CustomHeader(
-          columnDefs: _localColumnDefs,
-          useExpanded: true,
-          resizeHandler: widget.config.resizeHandler,
-          onSortTap: _sortChanged,
-          sortIconAscending: widget.config.sortIconAscending,
-          sortIconDescending: widget.config.sortIconDescending,
-          showRowClickHandler: widget.config.showRowClickHandler,
-          rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
-          onDragHandlerLongPress: (id) async {
-            if (widget.config.canResetColumnWidthOnLongPress) {
-              final result = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('Reset Column Width'),
-                  content: Text('Do you want to reset the width of this column to default?'),
-                  actions: [
-                    TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                      child: Text('Reset'),
-                    ),
-                  ],
+    return CustomHeader(
+      columnDefs: _localColumnDefs,
+      useExpanded: true,
+      resizeHandler: widget.config.resizeHandler,
+      pinHeader: widget.config.pinHeader,
+      borderRadiusHeader: widget.config.borderRadiusHeader,
+      headerHeight: widget.config.headerHeight,
+      rowPadding: widget.config.rowPadding,
+      onSortTap: _sortChanged,
+      sortIconAscending: widget.config.sortIconAscending,
+      sortIconDescending: widget.config.sortIconDescending,
+      showRowClickHandler: widget.config.showRowClickHandler,
+      rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
+      onDragHandlerLongPress: (id) async {
+        if (widget.config.canResetColumnWidthOnLongPress) {
+          final result = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Reset Column Width'),
+              content: Text('Do you want to reset the width of this column to default?'),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text('Reset'),
                 ),
-              );
-              if (result == true) {
-                _updateColumnWidth(id, 0, null);
-              }
-            }
-          },
-          onDragUpdate: (delta, id, currentWidth) {
-            _updateColumnWidth(id, delta, currentWidth);
-          },
-          // totalItems: widget.totalItems,
-        ),
-      ),
+              ],
+            ),
+          );
+          if (result == true) {
+            _updateColumnWidth(id, 0, null);
+          }
+        }
+      },
+      onDragUpdate: (delta, id, currentWidth) {
+        _updateColumnWidth(id, delta, currentWidth);
+      },
+      // totalItems: widget.totalItems,
     );
   }
 

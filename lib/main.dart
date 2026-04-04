@@ -120,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       columnDefs: columnDefWithAllColumnsResizable,
                       data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
                       config: CustomListConfig(),
+
                       // onLoadMore: _loadMoreData,
                       // isLoading: false,
                       // totalItems: _totalItems,

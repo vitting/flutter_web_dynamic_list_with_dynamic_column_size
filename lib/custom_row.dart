@@ -110,7 +110,7 @@ class _CustomRowState extends State<CustomRow> {
               }),
               if (widget.showRowClickHandler && widget.rowClickHandlerIcon != null)
                 CustomRowCell(
-                  id: '_trigger_cell_vlist',
+                  id: '_trigger_cell_vlist_2000',
                   value: '',
                   width: widget.rowClickHandlerWidth,
                   icon: IconButton(

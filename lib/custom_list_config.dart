@@ -78,6 +78,9 @@ class CustomListConfig {
   /// If true, the text in the cells can be selected and copied by the user.
   final bool textIsSelectable;
 
+  /// The spacing below the total count display when [totalItems] is provided.
+  final double totalCountBottomSpacing;
+
   /// The position to show the total items count when [totalItems] is provided.
   /// This is used to determine where to display the total count of items in the list when [totalItems] is not null.
   final CustomListTotalCountPosition totalItemsPosition;
@@ -108,6 +111,7 @@ class CustomListConfig {
     this.rowClickHandlerIcon = const Icon(Symbols.arrow_forward_ios, size: 16),
     this.rowClickHandlerWidth = 45,
     this.triggerOnRowTapWhenRowClickHandlerIsShown = false,
+    this.totalCountBottomSpacing = 4,
   });
 
   CustomListConfig copyWith({
@@ -133,6 +137,7 @@ class CustomListConfig {
     bool? textIsSelectable,
     CustomListTotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
+    double? totalCountBottomSpacing,
   }) {
     return CustomListConfig(
       borderRadiusHeader: borderRadiusHeader ?? this.borderRadiusHeader,
@@ -158,6 +163,7 @@ class CustomListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
+      totalCountBottomSpacing: totalCountBottomSpacing ?? this.totalCountBottomSpacing,
     );
   }
 }
