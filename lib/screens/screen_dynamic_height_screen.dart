@@ -36,6 +36,7 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
                     child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
                       data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
+                      totalItems: _itemsPerPage,
                       config: VDataListConfig(),
                       // onLoadMore: _loadMoreData,
                       // isLoading: false,
@@ -73,6 +74,7 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
                     child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
                       data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
+                      totalItems: _itemsPerPage,
                       config: VDataListConfig(),
 
                       // onLoadMore: _loadMoreData,
@@ -162,7 +164,22 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
                   child: const Center(child: Text('This is a footer that is outside of the list')),
                 ),
                 config: VDataListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true, showRowClickHandler: true),
-                // onLoadMore: _loadMoreData,
+                totalItems: 200,
+                onLoadMore: () {
+                  debugPrint('****************Load more triggered');
+                  // Simulate loading more data
+                  Future.delayed(const Duration(seconds: 2), () {
+                    setState(() {
+                      _data = [
+                        ..._data,
+                        ...GenerateFakeDataHelper.generateData(
+                          _itemsPerPage,
+                          columnDefsWithColumnsThatArentResizable.keys.toList(),
+                        ),
+                      ];
+                    });
+                  });
+                },
                 // isLoading: false,
                 // totalItems: _totalItems,
                 onRowTap: (rowData, column) {

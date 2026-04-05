@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
 class VDataListConfig {
@@ -77,6 +78,9 @@ class VDataListConfig {
   /// Whether to show a tooltip with the full cell value when hovering over a cell.
   final bool showTooltip;
 
+  /// Whether to show the total count of items in the list when [totalItems] is provided.
+  final bool showTotalCount;
+
   /// The icon to show in the column header when the column is sorted in ascending order.
   /// This is used to provide a visual indication of the sort state of the column.
   final Widget sortIconAscending;
@@ -136,6 +140,7 @@ class VDataListConfig {
     this.resizeHandlerIcon = const Icon(Symbols.arrows_outward, size: 12),
     this.resizeHandlerMargin = const EdgeInsets.only(right: 8),
     this.resizeHandlerPadding = const EdgeInsets.all(4),
+    this.showTotalCount = false,
   });
 
   VDataListConfig copyWith({
@@ -169,6 +174,7 @@ class VDataListConfig {
     double? totalCountBottomSpacing,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
+    bool? showTotalCount,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -202,6 +208,7 @@ class VDataListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
+      showTotalCount: showTotalCount ?? this.showTotalCount,
     );
   }
 }

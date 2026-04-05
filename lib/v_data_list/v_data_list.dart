@@ -34,7 +34,7 @@ class VDataList extends StatefulWidget {
   final void Function()? onLoadMore;
 
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
-  final int? totalItems;
+  final int totalItems;
 
   /// An optional widget to display as the footer of the list when [showFooter] is true.
   /// This widget will be displayed below the list content and can be used to show additional information or actions related to the list.
@@ -52,7 +52,7 @@ class VDataList extends StatefulWidget {
     this.data = const [],
     this.onLoadMore,
     this.isLoading = false,
-    this.totalItems,
+    required this.totalItems,
     this.onRowTap,
     this.onColumnDefsChanged,
     this.onSortChanged,
@@ -73,6 +73,7 @@ class _VDataListState extends State<VDataList> {
   final ScrollController _horizontalController = ScrollController();
   late ColumnDefinitionMap _localColumnDefs;
   final ScrollController _verticalController = ScrollController();
+  bool _loadMoreData = false;
 
   @override
   void didUpdateWidget(VDataList oldWidget) {
@@ -80,6 +81,8 @@ class _VDataListState extends State<VDataList> {
     if (oldWidget.data.length != widget.data.length) {
       // Reset the load more trigger when new data is loaded
       _hasTriggeredLoadMore = false;
+      // Update the load more data flag based on the new data length and total items
+      _loadMoreData = widget.data.length < widget.totalItems;
     }
   }
 
@@ -95,6 +98,7 @@ class _VDataListState extends State<VDataList> {
     super.initState();
     _localColumnDefs = {...widget.columnDefs};
     _verticalController.addListener(_onScroll);
+    _loadMoreData = widget.data.length < widget.totalItems;
   }
 
   void _onScroll() {
@@ -102,7 +106,7 @@ class _VDataListState extends State<VDataList> {
       final scrollPosition = _verticalController.position;
       final scrollPercentage = scrollPosition.pixels / scrollPosition.maxScrollExtent;
 
-      if (scrollPercentage >= 0.5 && !_hasTriggeredLoadMore) {
+      if (scrollPercentage >= 0.5 && _loadMoreData && !_hasTriggeredLoadMore) {
         _hasTriggeredLoadMore = true;
         widget.onLoadMore!();
       }
@@ -183,7 +187,7 @@ class _VDataListState extends State<VDataList> {
 
   Widget get _buildTotalCount {
     return VDataListTotalCount(
-      total: widget.totalItems!,
+      total: widget.totalItems,
       borderRadius: widget.config.totalCountBorderRadius,
       horizontalPadding: widget.config.rowPadding.horizontal / 2,
       totalCountBottomSpacing: widget.config.totalCountBottomSpacing,
@@ -255,12 +259,12 @@ class _VDataListState extends State<VDataList> {
             shrinkWrap: true,
             controller: _verticalController,
             slivers: [
-              if (widget.totalItems != null && widget.config.totalItemsPosition == TotalCountPosition.top) _buildTotalCount,
+              if (widget.config.showTotalCount && widget.config.totalItemsPosition == TotalCountPosition.top) _buildTotalCount,
               SliverPadding(
                 padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
                 sliver: _buildSliverAppbar(),
               ),
-              if (widget.totalItems != null && widget.config.totalItemsPosition == TotalCountPosition.bottom) _buildTotalCount,
+              if (widget.config.showTotalCount && widget.config.totalItemsPosition == TotalCountPosition.bottom) _buildTotalCount,
               if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
                 SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
               else
