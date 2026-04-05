@@ -1,5 +1,5 @@
-name: web_dynamic_list
-description: "A new Flutter project."
+name: v_data_list
+description: "A Flutter package that provides a customizable and efficient data list widget for displaying large datasets with features like sorting, pagination, and dynamic column resizing."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1

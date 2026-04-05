@@ -1,10 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/v_data_list.dart';
-import 'package:web_dynamic_list/config/v_data_list_config.dart';
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
-import 'package:web_dynamic_list/generate_fake_data_helper.dart';
+import 'package:v_data_list/config/v_data_list_config.dart';
+import 'package:v_data_list/generate_fake_data_helper.dart';
+import 'package:v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 void main() {
   runApp(const WebListExampleApp());
@@ -18,7 +19,11 @@ class WebListExampleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Web List Example',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(
+        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        extensions: [VDataListTheme.defaultTheme],
+      ),
+
       home: const MyHomePage(title: 'Web List Example'),
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
@@ -37,7 +42,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late DataRowList _data;
+  late VDataListDataRowList _data;
   bool _isLoading = false;
   int _currentPage = 1;
   final int _itemsPerPage = 50;
@@ -214,6 +219,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                   debugPrint(column.toString());
+                },
+                onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('Copied value: $value'))));
                 },
               ),
             ),

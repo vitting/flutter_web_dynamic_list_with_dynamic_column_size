@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/theme/v_data_list_theme.dart';
 
 class VDataListTotalCount extends StatelessWidget {
   final int? total;
-  final TextStyle textStyle;
   final TextAlign textAlign;
-  final Color backgroundColor;
   final double horizontalPadding;
   final double verticalPadding;
   final BorderRadiusGeometry? borderRadius;
@@ -13,9 +12,7 @@ class VDataListTotalCount extends StatelessWidget {
   const VDataListTotalCount({
     super.key,
     required this.total,
-    this.textStyle = const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     this.textAlign = TextAlign.start,
-    this.backgroundColor = Colors.blue,
     this.borderRadius,
     this.prefixText = 'Total Items: ',
     this.horizontalPadding = 8,
@@ -25,14 +22,15 @@ class VDataListTotalCount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = VDataListTheme.of(context).totalCountTheme;
     return SliverPadding(
       padding: EdgeInsets.only(bottom: totalCountBottomSpacing),
       sliver: SliverToBoxAdapter(
         child: total != null
             ? Container(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-                decoration: BoxDecoration(color: backgroundColor, borderRadius: borderRadius),
-                child: Text('$prefixText $total', textAlign: textAlign, style: textStyle),
+                decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: borderRadius),
+                child: Text('$prefixText $total', textAlign: textAlign, style: theme.textStyle),
               )
             : null,
       ),

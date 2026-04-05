@@ -1,4 +1,4 @@
-import 'package:web_dynamic_list/config/column_definition.dart';
+import 'package:v_data_list/config/column_definition.dart';
 
 /// A typedef for the column definition map, which is a map where
 /// the key is the column ID and the value is the ColumnDefinition object for that column
@@ -11,7 +11,7 @@ typedef ColumnDefinitionMapEntry = MapEntry<String, ColumnDefinition>;
 
 /// A typedef for the data row, which is a map where the key is the
 /// column ID and the value is the cell value for that column in that row
-typedef DataRow = Map<String, String>;
+typedef VDataListDataRow = Map<String, String>;
 
 /// A typedef for the list of data rows, which is a list of DataRow objects
-typedef DataRowList = List<DataRow>;
+typedef VDataListDataRowList = List<VDataListDataRow>;

@@ -1,10 +1,10 @@
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 /// A helper class to generate a DataRowList from a ColumnDefinitionMap and an iterable of iterable of strings representing the data
 class DataRowHelper {
   /// Helper method to generate a DataRowList from a ColumnDefinitionMap and an iterable of iterable of strings representing the data
-  static DataRowList generateDataRowList(ColumnDefinitionMap columnDefs, Iterable<Iterable<String>> data) {
-    final List<DataRow> dataRowList = [];
+  static VDataListDataRowList generateDataRowList(ColumnDefinitionMap columnDefs, Iterable<Iterable<String>> data) {
+    final List<VDataListDataRow> dataRowList = [];
     for (var row in data) {
       final Map<String, String> dataRow = {};
       int index = 0;

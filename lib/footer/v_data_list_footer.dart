@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/theme/v_data_list_theme.dart';
 
 class VDataListFooter extends StatelessWidget {
   final EdgeInsetsGeometry? footerPadding;
@@ -9,10 +10,11 @@ class VDataListFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = VDataListTheme.of(context).footerTheme;
     return Container(
       padding: footerPadding,
       margin: footerMargin,
-      decoration: BoxDecoration(color: Colors.blue, borderRadius: footerBorderRadius),
+      decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: footerBorderRadius),
       child: child,
     );
   }

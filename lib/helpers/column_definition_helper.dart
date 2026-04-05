@@ -1,5 +1,5 @@
-import 'package:web_dynamic_list/config/column_definition.dart';
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
+import 'package:v_data_list/config/column_definition.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 /// A helper class to generate a ColumnDefinitionMap from a list of ColumnDefinition objects
 class ColumnDefinitionHelper {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/v_data_list_enums.dart';
+import 'package:v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list_enums.dart';
 
 class VDataListRowCell extends StatelessWidget {
   final String id;
@@ -10,7 +11,8 @@ class VDataListRowCell extends StatelessWidget {
   final double iconSpacing;
   final double columnSpacing;
   final void Function(String value)? onLongPressCell;
-  final CustomRowCellIconPlacement iconPlacement;
+  final RowCellIconPlacement iconPlacement;
+  final BorderRadiusGeometry? tooltipBorderRadius;
 
   const VDataListRowCell({
     super.key,
@@ -22,16 +24,13 @@ class VDataListRowCell extends StatelessWidget {
     this.icon,
     this.iconSpacing = 4,
     this.columnSpacing = 0,
-    this.iconPlacement = CustomRowCellIconPlacement.right,
+    this.iconPlacement = RowCellIconPlacement.right,
+    this.tooltipBorderRadius,
   });
 
   Widget _buildCellContent(BuildContext context) {
-    Widget widget = Text(
-      value,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(color: Colors.black),
-    );
+    final theme = VDataListTheme.of(context).rowTheme;
+    Widget widget = Text(value, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textStyle);
 
     if (onLongPressCell != null) {
       widget = GestureDetector(
@@ -43,17 +42,23 @@ class VDataListRowCell extends StatelessWidget {
     }
 
     if (showTooltip) {
-      widget = Tooltip(waitDuration: Duration(milliseconds: 500), message: value, child: widget);
+      widget = Tooltip(
+        waitDuration: Duration(milliseconds: 500),
+        message: value,
+        textStyle: theme.tooltipTextStyle,
+        decoration: BoxDecoration(color: theme.tooltipBackgroundColor, borderRadius: tooltipBorderRadius),
+        child: widget,
+      );
     }
 
     return Row(
       children: [
-        if (icon != null && iconPlacement == CustomRowCellIconPlacement.left) ...[
+        if (icon != null && iconPlacement == RowCellIconPlacement.left) ...[
           icon!,
           if (iconSpacing > 0) SizedBox(width: columnSpacing),
         ],
         Expanded(child: widget),
-        if (icon != null && iconPlacement == CustomRowCellIconPlacement.right) ...[
+        if (icon != null && iconPlacement == RowCellIconPlacement.right) ...[
           if (iconSpacing > 0) SizedBox(width: columnSpacing),
           icon!,
         ],

@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
-import 'package:web_dynamic_list/config/column_definition.dart';
-import 'package:web_dynamic_list/helpers/column_definition_helper.dart';
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
+import 'package:v_data_list/config/column_definition.dart';
+import 'package:v_data_list/helpers/column_definition_helper.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 final faker = Faker();
 
@@ -27,11 +27,11 @@ class GenerateFakeDataHelper {
     }
   }
 
-  static DataRowList generateData(int rowCount, List<String> columnIds) {
-    final List<DataRow> rows = [];
+  static VDataListDataRowList generateData(int rowCount, List<String> columnIds) {
+    final List<VDataListDataRow> rows = [];
 
     for (int i = 0; i < rowCount; i++) {
-      final DataRow rowData = {};
+      final VDataListDataRow rowData = {};
       for (var columnId in columnIds) {
         if (i == 0) {
           rowData[columnId] = 'first';

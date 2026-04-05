@@ -1,24 +1,50 @@
 import 'package:flutter/material.dart' hide DataRow;
-import 'package:web_dynamic_list/footer/v_data_list_footer.dart';
-import 'package:web_dynamic_list/header/v_data_list_header.dart';
-import 'package:web_dynamic_list/config/v_data_list_config.dart';
-import 'package:web_dynamic_list/row/v_data_list_row.dart';
-import 'package:web_dynamic_list/total_count/v_data_list_total_count.dart';
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
-import 'package:web_dynamic_list/v_data_list_enums.dart';
+import 'package:v_data_list/config/v_data_list_config.dart';
+import 'package:v_data_list/footer/v_data_list_footer.dart';
+import 'package:v_data_list/header/v_data_list_header.dart';
+import 'package:v_data_list/resize_handler/v_data_list_resizable_handler.dart';
+import 'package:v_data_list/row/v_data_list_row.dart';
+import 'package:v_data_list/total_count/v_data_list_total_count.dart';
+import 'package:v_data_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 class VDataList extends StatefulWidget {
-  final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;
+  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;
   final void Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
   final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefs)? onSortChanged;
-  final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
+  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
+  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressRow;
+  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)?
+  onLongPressRowCopyValue;
+
+  /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
+  /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
   final ColumnDefinitionMap columnDefs;
-  final DataRowList data;
-  final bool isLoading;
-  final VoidCallback? onLoadMore;
-  final int? totalItems;
+
+  /// The data to display in the list, where each DataRow represents a row of data and should contain keys that match the column definitions.
+  /// The list will display the values from the data rows according to the column definitions, and any updates to the data will be reflected in the list.
+  final VDataListDataRowList data;
+
+  /// The configuration for the list, which includes various settings for the appearance and behavior of the list such as header and row styling.
   final VDataListConfig config;
+
+  // TODO: Implement
+  final bool isLoading;
+  // TODO: Implement
+  final void Function()? onLoadMore;
+
+  /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
+  final int? totalItems;
+
+  /// An optional widget to display as the footer of the list when [showFooter] is true.
+  /// This widget will be displayed below the list content and can be used to show additional information or actions related to the list.
+  /// If null, no footer will be displayed.
   final Widget? footer;
+
+  /// If provided, this widget will be used as the resize handler for column resizing instead of the default [VDataListResizableHandler].
+  /// This allows for custom styling and behavior of the resize handler.
+  /// If null, the default [VDataListResizableHandler] will be used.
+  final Widget? resizeHandler;
 
   const VDataList({
     super.key,
@@ -33,6 +59,9 @@ class VDataList extends StatefulWidget {
     this.onLongPress,
     required this.config,
     this.footer,
+    this.resizeHandler,
+    this.onLongPressRow,
+    this.onLongPressRowCopyValue,
   });
 
   @override
@@ -121,7 +150,7 @@ class _VDataListState extends State<VDataList> {
     });
   }
 
-  Widget _buildRow(DataRow data, bool isEven) {
+  Widget _buildRow(VDataListDataRow data, bool isEven) {
     final rowContent = VDataListRow(
       columnDefs: _localColumnDefs,
       data: data,
@@ -131,7 +160,6 @@ class _VDataListState extends State<VDataList> {
         widget.onRowTap?.call(rowData, _localColumnDefs);
       },
       longPressToCopyCellValueToClipboard: widget.config.longPressToCopyCellValueToClipboard,
-      copyCellValueToClipboardMessage: widget.config.copyCellValueToClipboardMessage,
       rowPadding: widget.config.rowPadding,
       rowSpacing: widget.config.rowSpacing,
       borderRadius: widget.config.rowBorderRadius,
@@ -141,6 +169,9 @@ class _VDataListState extends State<VDataList> {
       rowClickHandlerIcon: widget.config.rowClickHandlerIcon,
       rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
       triggerOnRowTapWhenRowClickHandlerIsShown: widget.config.triggerOnRowTapWhenRowClickHandlerIsShown,
+      tooltipBorderRadius: widget.config.tooltipBorderRadius,
+      onLongPress: widget.onLongPressRow,
+      onLongPressCopy: widget.onLongPressRowCopyValue,
     );
 
     if (widget.config.textIsSelectable) {
@@ -154,7 +185,6 @@ class _VDataListState extends State<VDataList> {
     return VDataListTotalCount(
       total: widget.totalItems!,
       borderRadius: widget.config.totalCountBorderRadius,
-      backgroundColor: Colors.grey.shade800,
       horizontalPadding: widget.config.rowPadding.horizontal / 2,
       totalCountBottomSpacing: widget.config.totalCountBottomSpacing,
     );
@@ -164,7 +194,7 @@ class _VDataListState extends State<VDataList> {
     return VDataListHeader(
       columnDefs: _localColumnDefs,
       useExpanded: true,
-      resizeHandler: widget.config.resizeHandler,
+      resizeHandler: widget.resizeHandler ?? VDataListResizableHandler(icon: widget.config.resizeHandlerIcon),
       pinHeader: widget.config.pinHeader,
       borderRadiusHeader: widget.config.headerBorderRadius,
       headerPadding: widget.config.headerPadding,
@@ -217,14 +247,12 @@ class _VDataListState extends State<VDataList> {
           child: CustomScrollView(
             controller: _verticalController,
             slivers: [
-              if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.top)
-                _buildTotalCount,
+              if (widget.totalItems != null && widget.config.totalItemsPosition == TotalCountPosition.top) _buildTotalCount,
               SliverPadding(
                 padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
                 sliver: _buildSliverAppbar(),
               ),
-              if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.bottom)
-                _buildTotalCount,
+              if (widget.totalItems != null && widget.config.totalItemsPosition == TotalCountPosition.bottom) _buildTotalCount,
               if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
                 SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
               else

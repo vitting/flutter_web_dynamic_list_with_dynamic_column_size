@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-
-import 'package:web_dynamic_list/v_data_list_resizable_handler.dart';
-import 'package:web_dynamic_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list_enums.dart';
 
 class VDataListConfig {
   /// Whether long pressing a column resize handler should reset the column width dynamic width.
   final bool canResetColumnWidthOnLongPress;
-
-  /// An optional message to show when a cell value is copied to the clipboard.
-  /// If null, no message will be shown.
-  final String? copyCellValueToClipboardMessage;
 
   /// The border radius for the footer when [showFooter] is true.
   final BorderRadiusGeometry footerBorderRadius;
@@ -47,9 +41,8 @@ class VDataListConfig {
   /// If true, the header will remain visible at the top of the list when scrolling.
   final bool pinHeader;
 
-  /// The widget to use as the resize handler for resizable columns.
-  /// This widget will be displayed at the edge of resizable column headers and can be dragged to resize the column.
-  final Widget resizeHandler;
+  /// The Icon to use as the resize handler for column resizing.
+  final Widget? resizeHandlerIcon;
 
   /// The border radius for the data rows.
   final BorderRadiusGeometry rowBorderRadius;
@@ -90,6 +83,9 @@ class VDataListConfig {
   /// If true, the text in the cells can be selected and copied by the user.
   final bool textIsSelectable;
 
+  /// The border radius for the tooltip when [showTooltip] is true.
+  final BorderRadiusGeometry tooltipBorderRadius;
+
   /// The border radius for the total count display.
   final BorderRadiusGeometry totalCountBorderRadius;
 
@@ -98,13 +94,12 @@ class VDataListConfig {
 
   /// The position to show the total items count when [totalItems] is provided.
   /// This is used to determine where to display the total count of items in the list when [totalItems] is not null.
-  final CustomListTotalCountPosition totalItemsPosition;
+  final TotalCountPosition totalItemsPosition;
 
   /// Whether tapping the row should trigger the [onRowTap] callback even if [showRowClickHandler] is true.
   final bool triggerOnRowTapWhenRowClickHandlerIsShown;
 
   VDataListConfig({
-    this.copyCellValueToClipboardMessage = "Copied to clipboard",
     this.headerBottomSpacing = 4,
     this.longPressToCopyCellValueToClipboard = true,
     this.pinHeader = true,
@@ -112,11 +107,10 @@ class VDataListConfig {
     this.rowSpacing = 5,
     this.showTooltip = true,
     this.textIsSelectable = false,
-    this.totalItemsPosition = CustomListTotalCountPosition.top,
+    this.totalItemsPosition = TotalCountPosition.top,
     this.canResetColumnWidthOnLongPress = true,
     this.sortIconAscending = const Icon(Symbols.arrow_upward_alt, color: Colors.white, size: 16),
     this.sortIconDescending = const Icon(Symbols.arrow_downward_alt, color: Colors.white, size: 16),
-    this.resizeHandler = const VDataListResizableHandler(),
     this.noDataMessage = "No data available",
     this.headerBorderRadius = const BorderRadius.all(Radius.circular(8)),
     this.rowBorderRadius = const BorderRadius.all(Radius.circular(8)),
@@ -132,11 +126,12 @@ class VDataListConfig {
     this.footerBorderRadius = const BorderRadius.all(Radius.circular(8)),
     this.footerMargin = const EdgeInsets.symmetric(vertical: 4),
     this.footerPinned = false,
+    this.tooltipBorderRadius = const BorderRadius.all(Radius.circular(8)),
+    this.resizeHandlerIcon = const Icon(Symbols.arrows_outward, size: 12),
   });
 
   VDataListConfig copyWith({
     bool? canResetColumnWidthOnLongPress,
-    String? copyCellValueToClipboardMessage,
     BorderRadiusGeometry? footerBorderRadius,
     EdgeInsetsGeometry? footerMargin,
     EdgeInsetsGeometry? footerPadding,
@@ -147,7 +142,6 @@ class VDataListConfig {
     bool? longPressToCopyCellValueToClipboard,
     String? noDataMessage,
     bool? pinHeader,
-    Widget? resizeHandler,
     BorderRadiusGeometry? rowBorderRadius,
     Widget? rowClickHandlerIcon,
     double? rowClickHandlerWidth,
@@ -159,14 +153,15 @@ class VDataListConfig {
     Widget? sortIconAscending,
     Widget? sortIconDescending,
     bool? textIsSelectable,
+    BorderRadiusGeometry? tooltipBorderRadius,
     BorderRadiusGeometry? totalCountBorderRadius,
     double? totalCountBottomSpacing,
-    CustomListTotalCountPosition? totalItemsPosition,
+    TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
+    Widget? resizeHandlerIcon,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
-      copyCellValueToClipboardMessage: copyCellValueToClipboardMessage ?? this.copyCellValueToClipboardMessage,
       footerBorderRadius: footerBorderRadius ?? this.footerBorderRadius,
       footerMargin: footerMargin ?? this.footerMargin,
       footerPadding: footerPadding ?? this.footerPadding,
@@ -177,7 +172,6 @@ class VDataListConfig {
       longPressToCopyCellValueToClipboard: longPressToCopyCellValueToClipboard ?? this.longPressToCopyCellValueToClipboard,
       noDataMessage: noDataMessage ?? this.noDataMessage,
       pinHeader: pinHeader ?? this.pinHeader,
-      resizeHandler: resizeHandler ?? this.resizeHandler,
       rowBorderRadius: rowBorderRadius ?? this.rowBorderRadius,
       rowClickHandlerIcon: rowClickHandlerIcon ?? this.rowClickHandlerIcon,
       rowClickHandlerWidth: rowClickHandlerWidth ?? this.rowClickHandlerWidth,
@@ -189,11 +183,13 @@ class VDataListConfig {
       sortIconAscending: sortIconAscending ?? this.sortIconAscending,
       sortIconDescending: sortIconDescending ?? this.sortIconDescending,
       textIsSelectable: textIsSelectable ?? this.textIsSelectable,
+      tooltipBorderRadius: tooltipBorderRadius ?? this.tooltipBorderRadius,
       totalCountBorderRadius: totalCountBorderRadius ?? this.totalCountBorderRadius,
       totalCountBottomSpacing: totalCountBottomSpacing ?? this.totalCountBottomSpacing,
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
+      resizeHandlerIcon: resizeHandlerIcon ?? this.resizeHandlerIcon,
     );
   }
 }

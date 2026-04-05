@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart' hide DataRow;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:web_dynamic_list/row/v_data_list_row_cell.dart';
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
+import 'package:v_data_list/row/v_data_list_row_cell.dart';
+import 'package:v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 class VDataListRow extends StatefulWidget {
-  final Function(DataRow data)? onRowTap;
-  final void Function(String id, String value, DataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
+  final Function(VDataListDataRow data)? onRowTap;
+  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
+  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressCopy;
   final ColumnDefinitionMap columnDefs;
-  final String? copyCellValueToClipboardMessage;
-  final DataRow data;
+  final VDataListDataRow data;
   final bool isEven;
   final bool longPressToCopyCellValueToClipboard;
-  final EdgeInsetsGeometry rowPadding;
+  final EdgeInsetsGeometry? rowPadding;
   final double rowSpacing;
   final bool showEvenBackgroundColor;
   final bool showHoverBackgroundColor;
@@ -21,6 +22,7 @@ class VDataListRow extends StatefulWidget {
   final Widget? rowClickHandlerIcon;
   final double rowClickHandlerWidth;
   final bool triggerOnRowTapWhenRowClickHandlerIsShown;
+  final BorderRadiusGeometry? tooltipBorderRadius;
 
   const VDataListRow({
     super.key,
@@ -30,9 +32,8 @@ class VDataListRow extends StatefulWidget {
     this.onRowTap,
     this.showTooltip = false,
     this.longPressToCopyCellValueToClipboard = true,
-    this.copyCellValueToClipboardMessage,
     this.rowSpacing = 5,
-    this.rowPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+    this.rowPadding,
     this.showEvenBackgroundColor = true,
     this.showHoverBackgroundColor = true,
     this.onLongPress,
@@ -41,6 +42,8 @@ class VDataListRow extends StatefulWidget {
     this.rowClickHandlerIcon,
     this.rowClickHandlerWidth = 45,
     this.triggerOnRowTapWhenRowClickHandlerIsShown = false,
+    this.tooltipBorderRadius,
+    this.onLongPressCopy,
   });
 
   @override
@@ -52,6 +55,7 @@ class _VDataListRowState extends State<VDataListRow> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = VDataListTheme.of(context).rowTheme;
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onHover: (event) {
@@ -73,10 +77,10 @@ class _VDataListRowState extends State<VDataListRow> {
         child: Container(
           decoration: BoxDecoration(
             color: widget.showHoverBackgroundColor && _isHovered
-                ? Colors.grey.shade400
+                ? theme.hoverBackgroundColor
                 : widget.showEvenBackgroundColor && widget.isEven
-                ? Colors.grey.shade300
-                : Colors.grey.shade200,
+                ? theme.evenBackgroundColor
+                : theme.backgroundColor,
             borderRadius: widget.borderRadius,
           ),
           padding: widget.rowPadding,
@@ -90,6 +94,7 @@ class _VDataListRowState extends State<VDataListRow> {
                   value: widget.data[columnDef.id] ?? '',
                   width: columnDef.width,
                   showTooltip: widget.showTooltip,
+                  tooltipBorderRadius: widget.tooltipBorderRadius,
                   icon: columnDef.rowCellIcon,
                   iconPlacement: columnDef.rowCellIconPlacement,
                   iconSpacing: columnDef.rowCellIconSpacing,
@@ -97,11 +102,7 @@ class _VDataListRowState extends State<VDataListRow> {
                   onLongPressCell: (value) async {
                     if (widget.longPressToCopyCellValueToClipboard) {
                       await Clipboard.setData(ClipboardData(text: value));
-                      if (context.mounted && widget.copyCellValueToClipboardMessage != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Center(child: Text('${widget.copyCellValueToClipboardMessage}: $value'))),
-                        );
-                      }
+                      widget.onLongPressCopy?.call(columnDef.id, value, widget.data, widget.columnDefs);
                     }
 
                     widget.onLongPress?.call(columnDef.id, value, widget.data, widget.columnDefs);

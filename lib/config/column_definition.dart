@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-import 'package:web_dynamic_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list_enums.dart';
 
 class ColumnDefinition extends Equatable {
   /// The spacing to the right of the column.
@@ -27,7 +26,7 @@ class ColumnDefinition extends Equatable {
   final Widget? rowCellIcon;
 
   /// The spacing between the icon and the cell content when [rowCellIcon] is provided.
-  final CustomRowCellIconPlacement rowCellIconPlacement;
+  final RowCellIconPlacement rowCellIconPlacement;
 
   /// The spacing between the icon and the cell content when [rowCellIcon] is provided.
   final double rowCellIconSpacing;
@@ -54,7 +53,7 @@ class ColumnDefinition extends Equatable {
     this.rowCellIcon,
     this.rowCellIconSpacing = 0,
     this.columnSpacing = 0,
-    this.rowCellIconPlacement = CustomRowCellIconPlacement.right,
+    this.rowCellIconPlacement = RowCellIconPlacement.right,
     this.type = ColumnDefinitionType.text,
   });
 
@@ -98,7 +97,7 @@ class ColumnDefinition extends Equatable {
     bool? isResizable,
     String? label,
     Widget? rowCellIcon,
-    CustomRowCellIconPlacement? rowCellIconPlacement,
+    RowCellIconPlacement? rowCellIconPlacement,
     double? rowCellIconSpacing,
     ColumnSortState? sortState,
     double? width,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/header/v_data_list_header_cell.dart';
-import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
-import 'package:web_dynamic_list/v_data_list_enums.dart';
+import 'package:v_data_list/header/v_data_list_header_cell.dart';
+import 'package:v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list_type_definitions.dart';
 
 class VDataListHeader extends StatelessWidget {
   final void Function(double delta, String id, double currentWidth)? onDragUpdate;
@@ -39,11 +40,12 @@ class VDataListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = VDataListTheme.of(context).headerTheme;
     return PinnedHeaderSliver(
       child: Material(
         child: Container(
           padding: headerPadding,
-          decoration: BoxDecoration(color: Colors.grey.shade800, borderRadius: borderRadiusHeader),
+          decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: borderRadiusHeader),
           child: Row(
             children: [
               ...columnDefs.entries.map((entry) {
@@ -61,6 +63,7 @@ class VDataListHeader extends StatelessWidget {
                   sortIconDescending: sortIconDescending,
                   showSortIconsInHeader: showSortIconsInHeader,
                   resizeHandler: resizeHandler,
+                  textStyle: theme.textStyle,
                 );
               }),
               if (showRowClickHandler)

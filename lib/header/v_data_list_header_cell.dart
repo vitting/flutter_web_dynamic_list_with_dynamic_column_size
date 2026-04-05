@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list_enums.dart';
 
 class VDataListHeaderCell extends StatefulWidget {
   final void Function(double delta, String id, double currentWidth)? onDragUpdate;
@@ -14,6 +14,7 @@ class VDataListHeaderCell extends StatefulWidget {
   final Widget? sortIconDescending;
   final Widget? resizeHandler;
   final bool showSortIconsInHeader;
+  final TextStyle? textStyle;
 
   const VDataListHeaderCell({
     super.key,
@@ -29,10 +30,15 @@ class VDataListHeaderCell extends StatefulWidget {
     this.sortIconDescending,
     this.resizeHandler,
     this.showSortIconsInHeader = true,
+    this.textStyle,
   }) : assert(!isResizable || resizeHandler != null, 'resizeHandler must be provided if isResizable is true'),
        assert(
          showSortIconsInHeader == false || onSortTap != null,
          'if onSortTap is provided, showSortIconsInHeader must be true to trigger onSortTap when tapping the header cell',
+       ),
+       assert(
+         sortIconAscending != null && sortIconDescending != null,
+         'if showSortIconsInHeader is true, both sortIconAscending and sortIconDescending must be provided to show the correct sort icon based on the sortState',
        );
 
   @override
@@ -81,12 +87,7 @@ class _VDataListHeaderCellState extends State<VDataListHeaderCell> {
                             );
                           }
                         : null,
-                    child: Text(
-                      widget.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
+                    child: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: widget.textStyle),
                   ),
                   if (widget.showSortIconsInHeader &&
                       widget.sortState == ColumnSortState.ascending &&
