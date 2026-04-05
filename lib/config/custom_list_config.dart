@@ -24,9 +24,8 @@ class CustomListConfig {
   /// The spacing between the header and the first row.
   final double headerBottomSpacing;
 
-  /// The height of the header row.
-  /// This is used to calculate the height of the list and when pinning the header.
-  final double headerHeight;
+  /// The padding for the header row.
+  final EdgeInsetsGeometry headerPadding;
 
   /// Whether long pressing a cell should copy its value to the clipboard.
   /// If true, long pressing a cell will copy its value to the clipboard and
@@ -63,6 +62,9 @@ class CustomListConfig {
   /// If [triggerOnRowTapWhenRowClickHandlerIsShown] is true, tapping the row click handler will also trigger the [onRowTap] callback for the row.
   final bool showRowClickHandler;
 
+  /// Whether to show sort icons in the header when a column is sorted.
+  final bool showSortIconsInHeader;
+
   /// Whether to show a tooltip with the full cell value when hovering over a cell.
   final bool showTooltip;
 
@@ -91,7 +93,6 @@ class CustomListConfig {
   CustomListConfig({
     this.copyCellValueToClipboardMessage = "Copied to clipboard",
     this.headerBottomSpacing = 4,
-    this.headerHeight = 40,
     this.longPressToCopyCellValueToClipboard = true,
     this.pinHeader = true,
     this.rowPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -100,8 +101,8 @@ class CustomListConfig {
     this.textIsSelectable = false,
     this.totalItemsPosition = CustomListTotalCountPosition.top,
     this.canResetColumnWidthOnLongPress = true,
-    this.sortIconAscending = const Icon(Symbols.arrow_upward_alt, color: Colors.white),
-    this.sortIconDescending = const Icon(Symbols.arrow_downward_alt, color: Colors.white),
+    this.sortIconAscending = const Icon(Symbols.arrow_upward_alt, color: Colors.white, size: 16),
+    this.sortIconDescending = const Icon(Symbols.arrow_downward_alt, color: Colors.white, size: 16),
     this.resizeHandler = const CustomResizableHandler(),
     this.noDataMessage = "No data available",
     this.borderRadiusHeader = 8,
@@ -112,6 +113,8 @@ class CustomListConfig {
     this.rowClickHandlerWidth = 45,
     this.triggerOnRowTapWhenRowClickHandlerIsShown = false,
     this.totalCountBottomSpacing = 4,
+    this.headerPadding = const EdgeInsets.all(8),
+    this.showSortIconsInHeader = true,
   });
 
   CustomListConfig copyWith({
@@ -121,7 +124,7 @@ class CustomListConfig {
     bool? canResetColumnWidthOnLongPress,
     String? copyCellValueToClipboardMessage,
     double? headerBottomSpacing,
-    double? headerHeight,
+    EdgeInsetsGeometry? headerPadding,
     bool? longPressToCopyCellValueToClipboard,
     String? noDataMessage,
     bool? pinHeader,
@@ -131,13 +134,14 @@ class CustomListConfig {
     EdgeInsetsGeometry? rowPadding,
     double? rowSpacing,
     bool? showRowClickHandler,
+    bool? showSortIconsInHeader,
     bool? showTooltip,
     Widget? sortIconAscending,
     Widget? sortIconDescending,
     bool? textIsSelectable,
+    double? totalCountBottomSpacing,
     CustomListTotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    double? totalCountBottomSpacing,
   }) {
     return CustomListConfig(
       borderRadiusHeader: borderRadiusHeader ?? this.borderRadiusHeader,
@@ -146,7 +150,7 @@ class CustomListConfig {
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
       copyCellValueToClipboardMessage: copyCellValueToClipboardMessage ?? this.copyCellValueToClipboardMessage,
       headerBottomSpacing: headerBottomSpacing ?? this.headerBottomSpacing,
-      headerHeight: headerHeight ?? this.headerHeight,
+      headerPadding: headerPadding ?? this.headerPadding,
       longPressToCopyCellValueToClipboard: longPressToCopyCellValueToClipboard ?? this.longPressToCopyCellValueToClipboard,
       noDataMessage: noDataMessage ?? this.noDataMessage,
       pinHeader: pinHeader ?? this.pinHeader,
@@ -156,14 +160,15 @@ class CustomListConfig {
       rowPadding: rowPadding ?? this.rowPadding,
       rowSpacing: rowSpacing ?? this.rowSpacing,
       showRowClickHandler: showRowClickHandler ?? this.showRowClickHandler,
+      showSortIconsInHeader: showSortIconsInHeader ?? this.showSortIconsInHeader,
       showTooltip: showTooltip ?? this.showTooltip,
       sortIconAscending: sortIconAscending ?? this.sortIconAscending,
       sortIconDescending: sortIconDescending ?? this.sortIconDescending,
       textIsSelectable: textIsSelectable ?? this.textIsSelectable,
+      totalCountBottomSpacing: totalCountBottomSpacing ?? this.totalCountBottomSpacing,
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      totalCountBottomSpacing: totalCountBottomSpacing ?? this.totalCountBottomSpacing,
     );
   }
 }

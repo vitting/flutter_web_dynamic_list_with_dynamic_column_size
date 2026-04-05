@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CustomList(
                 columnDefs: columnDefs,
                 data: _data,
-                config: CustomListConfig(),
+                config: CustomListConfig().copyWith(showSortIconsInHeader: false),
                 // onLoadMore: _loadMoreData,
                 // isLoading: false,
                 // totalItems: _totalItems,

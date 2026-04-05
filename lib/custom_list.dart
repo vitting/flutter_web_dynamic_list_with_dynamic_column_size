@@ -164,11 +164,11 @@ class _CustomListState extends State<CustomList> {
       resizeHandler: widget.config.resizeHandler,
       pinHeader: widget.config.pinHeader,
       borderRadiusHeader: widget.config.borderRadiusHeader,
-      headerHeight: widget.config.headerHeight,
-      rowPadding: widget.config.rowPadding,
+      headerPadding: widget.config.headerPadding,
       onSortTap: _sortChanged,
       sortIconAscending: widget.config.sortIconAscending,
       sortIconDescending: widget.config.sortIconDescending,
+      showSortIconsInHeader: widget.config.showSortIconsInHeader,
       showRowClickHandler: widget.config.showRowClickHandler,
       rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
       onDragHandlerLongPress: (id) async {

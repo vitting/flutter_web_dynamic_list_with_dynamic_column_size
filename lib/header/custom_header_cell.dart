@@ -13,6 +13,7 @@ class CustomHeaderCell extends StatefulWidget {
   final Widget? sortIconAscending;
   final Widget? sortIconDescending;
   final Widget? resizeHandler;
+  final bool showSortIconsInHeader;
 
   const CustomHeaderCell({
     super.key,
@@ -27,7 +28,12 @@ class CustomHeaderCell extends StatefulWidget {
     this.sortIconAscending,
     this.sortIconDescending,
     this.resizeHandler,
-  });
+    this.showSortIconsInHeader = true,
+  }) : assert(!isResizable || resizeHandler != null, 'resizeHandler must be provided if isResizable is true'),
+       assert(
+         showSortIconsInHeader == false || onSortTap != null,
+         'if onSortTap is provided, showSortIconsInHeader must be true to trigger onSortTap when tapping the header cell',
+       );
 
   @override
   State<CustomHeaderCell> createState() => _CustomHeaderCellState();
@@ -65,17 +71,30 @@ class _CustomHeaderCellState extends State<CustomHeaderCell> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      widget.onSortTap?.call(
-                        widget.id,
-                        widget.sortState == ColumnSortState.ascending ? ColumnSortState.descending : ColumnSortState.ascending,
-                      );
-                    },
-                    child: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    onTap: widget.onSortTap != null && widget.showSortIconsInHeader
+                        ? () {
+                            widget.onSortTap?.call(
+                              widget.id,
+                              widget.sortState == ColumnSortState.ascending
+                                  ? ColumnSortState.descending
+                                  : ColumnSortState.ascending,
+                            );
+                          }
+                        : null,
+                    child: Text(
+                      widget.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  if (widget.sortState == ColumnSortState.ascending && widget.sortIconAscending != null)
+                  if (widget.showSortIconsInHeader &&
+                      widget.sortState == ColumnSortState.ascending &&
+                      widget.sortIconAscending != null)
                     widget.sortIconAscending!,
-                  if (widget.sortState == ColumnSortState.descending && widget.sortIconDescending != null)
+                  if (widget.showSortIconsInHeader &&
+                      widget.sortState == ColumnSortState.descending &&
+                      widget.sortIconDescending != null)
                     widget.sortIconDescending!,
                 ],
               ),
