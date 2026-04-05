@@ -212,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 50,
                   child: const Center(child: Text('This is a footer that is outside of the list')),
                 ),
-                config: VDataListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true),
+                config: VDataListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true, showRowClickHandler: true),
                 // onLoadMore: _loadMoreData,
                 // isLoading: false,
                 // totalItems: _totalItems,

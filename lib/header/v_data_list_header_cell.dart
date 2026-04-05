@@ -31,15 +31,7 @@ class VDataListHeaderCell extends StatefulWidget {
     this.resizeHandler,
     this.showSortIconsInHeader = true,
     this.textStyle,
-  }) : assert(!isResizable || resizeHandler != null, 'resizeHandler must be provided if isResizable is true'),
-       assert(
-         showSortIconsInHeader == false || onSortTap != null,
-         'if onSortTap is provided, showSortIconsInHeader must be true to trigger onSortTap when tapping the header cell',
-       ),
-       assert(
-         sortIconAscending != null && sortIconDescending != null,
-         'if showSortIconsInHeader is true, both sortIconAscending and sortIconDescending must be provided to show the correct sort icon based on the sortState',
-       );
+  });
 
   @override
   State<VDataListHeaderCell> createState() => _VDataListHeaderCellState();
