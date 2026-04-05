@@ -9,6 +9,8 @@ class VDataListTotalCount extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final String prefixText;
   final double totalCountBottomSpacing;
+  final bool showAsPinned;
+  final Widget? child;
   const VDataListTotalCount({
     super.key,
     required this.total,
@@ -18,22 +20,41 @@ class VDataListTotalCount extends StatelessWidget {
     this.horizontalPadding = 8,
     this.verticalPadding = 8,
     this.totalCountBottomSpacing = 4,
+    this.showAsPinned = false,
+    this.child,
   });
+
+  Widget _buildTotalCount(BuildContext context) {
+    final theme = VDataListTheme.of(context).totalCountTheme;
+    final backgroundColor = VDataListTheme.of(context).backgroundColor;
+
+    Widget totalCountWidget = Container(
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+      decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: borderRadius),
+      child: child ?? Text('$prefixText $total', textAlign: textAlign, style: theme.textStyle),
+    );
+
+    if (showAsPinned) {
+      totalCountWidget = PinnedHeaderSliver(
+        child: Column(
+          children: [
+            Row(children: [Expanded(child: totalCountWidget)]),
+            Container(height: totalCountBottomSpacing, color: backgroundColor),
+          ],
+        ),
+      );
+    } else {
+      totalCountWidget = SliverPadding(
+        padding: EdgeInsets.only(bottom: totalCountBottomSpacing),
+        sliver: SliverToBoxAdapter(child: total != null ? totalCountWidget : null),
+      );
+    }
+
+    return totalCountWidget;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = VDataListTheme.of(context).totalCountTheme;
-    return SliverPadding(
-      padding: EdgeInsets.only(bottom: totalCountBottomSpacing),
-      sliver: SliverToBoxAdapter(
-        child: total != null
-            ? Container(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-                decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: borderRadius),
-                child: Text('$prefixText $total', textAlign: textAlign, style: theme.textStyle),
-              )
-            : null,
-      ),
-    );
+    return _buildTotalCount(context);
   }
 }

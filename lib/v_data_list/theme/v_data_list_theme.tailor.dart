@@ -10,6 +10,7 @@ part of 'v_data_list_theme.dart';
 // **************************************************************************
 
 mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
+  Color get backgroundColor;
   HeaderTheme get headerTheme;
   FooterTheme get footerTheme;
   RowTheme get rowTheme;
@@ -18,6 +19,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
 
   @override
   VDataListTheme copyWith({
+    Color? backgroundColor,
     HeaderTheme? headerTheme,
     FooterTheme? footerTheme,
     RowTheme? rowTheme,
@@ -25,6 +27,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
     ResizeHandlerTheme? resizeHandlerTheme,
   }) {
     return VDataListTheme(
+      backgroundColor: backgroundColor ?? this.backgroundColor,
       headerTheme: headerTheme ?? this.headerTheme,
       footerTheme: footerTheme ?? this.footerTheme,
       rowTheme: rowTheme ?? this.rowTheme,
@@ -40,6 +43,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
   ) {
     if (other is! VDataListTheme) return this as VDataListTheme;
     return VDataListTheme(
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
       headerTheme: headerTheme.lerp(other.headerTheme, t),
       footerTheme: footerTheme.lerp(other.footerTheme, t),
       rowTheme: rowTheme.lerp(other.rowTheme, t),
@@ -53,6 +57,10 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is VDataListTheme &&
+            const DeepCollectionEquality().equals(
+              backgroundColor,
+              other.backgroundColor,
+            ) &&
             const DeepCollectionEquality().equals(
               headerTheme,
               other.headerTheme,
@@ -76,6 +84,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
   int get hashCode {
     return Object.hash(
       runtimeType.hashCode,
+      const DeepCollectionEquality().hash(backgroundColor),
       const DeepCollectionEquality().hash(headerTheme),
       const DeepCollectionEquality().hash(footerTheme),
       const DeepCollectionEquality().hash(rowTheme),
@@ -88,6 +97,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
 extension VDataListThemeBuildContextProps on BuildContext {
   VDataListTheme get vDataListTheme =>
       Theme.of(this).extension<VDataListTheme>()!;
+  Color get backgroundColor => vDataListTheme.backgroundColor;
   HeaderTheme get headerTheme => vDataListTheme.headerTheme;
   FooterTheme get footerTheme => vDataListTheme.footerTheme;
   RowTheme get rowTheme => vDataListTheme.rowTheme;

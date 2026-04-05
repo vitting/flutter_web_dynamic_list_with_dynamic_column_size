@@ -81,6 +81,9 @@ class VDataListConfig {
   /// Whether to show the total count of items in the list when [totalItems] is provided.
   final bool showTotalCount;
 
+  /// Whether to show the total count of items in the list when [totalItems] is provided and pin it to the top of the list.
+  final bool showTotalCountPinned;
+
   /// The icon to show in the column header when the column is sorted in ascending order.
   /// This is used to provide a visual indication of the sort state of the column.
   final Widget sortIconAscending;
@@ -141,6 +144,7 @@ class VDataListConfig {
     this.resizeHandlerMargin = const EdgeInsets.only(right: 8),
     this.resizeHandlerPadding = const EdgeInsets.all(4),
     this.showTotalCount = false,
+    this.showTotalCountPinned = false,
   });
 
   VDataListConfig copyWith({
@@ -166,6 +170,7 @@ class VDataListConfig {
     bool? showRowClickHandler,
     bool? showSortIconsInHeader,
     bool? showTooltip,
+    bool? showTotalCount,
     Widget? sortIconAscending,
     Widget? sortIconDescending,
     bool? textIsSelectable,
@@ -174,7 +179,7 @@ class VDataListConfig {
     double? totalCountBottomSpacing,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    bool? showTotalCount,
+    bool? showTotalCountPinned,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -199,6 +204,7 @@ class VDataListConfig {
       showRowClickHandler: showRowClickHandler ?? this.showRowClickHandler,
       showSortIconsInHeader: showSortIconsInHeader ?? this.showSortIconsInHeader,
       showTooltip: showTooltip ?? this.showTooltip,
+      showTotalCount: showTotalCount ?? this.showTotalCount,
       sortIconAscending: sortIconAscending ?? this.sortIconAscending,
       sortIconDescending: sortIconDescending ?? this.sortIconDescending,
       textIsSelectable: textIsSelectable ?? this.textIsSelectable,
@@ -208,7 +214,7 @@ class VDataListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      showTotalCount: showTotalCount ?? this.showTotalCount,
+      showTotalCountPinned: showTotalCountPinned ?? this.showTotalCountPinned,
     );
   }
 }

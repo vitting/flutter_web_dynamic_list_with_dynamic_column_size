@@ -11,7 +11,11 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     required this.rowTheme,
     required this.totalCountTheme,
     required this.resizeHandlerTheme,
+    required this.backgroundColor,
   });
+
+  @override
+  final Color backgroundColor;
 
   @override
   final HeaderTheme headerTheme;
@@ -34,6 +38,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     rowTheme: RowTheme.defaultTheme,
     totalCountTheme: TotalCountTheme.defaultTheme,
     resizeHandlerTheme: ResizeHandlerTheme.defaultTheme,
+    backgroundColor: Colors.white,
   );
 
   static VDataListTheme of(BuildContext context) {

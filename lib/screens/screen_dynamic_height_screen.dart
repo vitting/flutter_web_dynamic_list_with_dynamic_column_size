@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/helpers/data_row_helper.dart';
 import 'package:v_data_list/v_data_list/v_data_list.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
@@ -15,6 +17,7 @@ class ScreenDynamicHeightScreen extends StatefulWidget {
 class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
   final int _itemsPerPage = 50;
   late VDataListDataRowList _data;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -163,25 +166,31 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
                   height: 50,
                   child: const Center(child: Text('This is a footer that is outside of the list')),
                 ),
-                config: VDataListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true, showRowClickHandler: true),
+                config: VDataListConfig().copyWith(
+                  showSortIconsInHeader: false,
+                  footerPinned: true,
+                  showRowClickHandler: true,
+                  showTotalCount: true,
+                  showTotalCountPinned: true,
+                  totalItemsPosition: TotalCountPosition.top,
+                ),
                 totalItems: 200,
                 onLoadMore: () {
-                  debugPrint('****************Load more triggered');
                   // Simulate loading more data
+                  setState(() {
+                    _isLoading = true;
+                  });
                   Future.delayed(const Duration(seconds: 2), () {
                     setState(() {
-                      _data = [
-                        ..._data,
-                        ...GenerateFakeDataHelper.generateData(
-                          _itemsPerPage,
-                          columnDefsWithColumnsThatArentResizable.keys.toList(),
-                        ),
-                      ];
+                      _data = DataRowHelper.loadMoreData(
+                        _data,
+                        GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList()),
+                      );
+                      _isLoading = false;
                     });
                   });
                 },
-                // isLoading: false,
-                // totalItems: _totalItems,
+                isLoading: _isLoading,
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                   debugPrint(column.toString());

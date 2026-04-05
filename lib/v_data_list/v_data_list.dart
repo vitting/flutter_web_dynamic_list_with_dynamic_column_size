@@ -4,6 +4,7 @@ import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
+import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/total_count/v_data_list_total_count.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
@@ -46,6 +47,9 @@ class VDataList extends StatefulWidget {
   /// If null, the default [VDataListResizableHandler] will be used.
   final Widget? resizeHandler;
 
+  /// An optional widget to display in the total count area when [showTotalCount] is true.
+  final Widget? totalCount;
+
   const VDataList({
     super.key,
     required this.columnDefs,
@@ -62,6 +66,7 @@ class VDataList extends StatefulWidget {
     this.resizeHandler,
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
+    this.totalCount,
   });
 
   @override
@@ -191,6 +196,8 @@ class _VDataListState extends State<VDataList> {
       borderRadius: widget.config.totalCountBorderRadius,
       horizontalPadding: widget.config.rowPadding.horizontal / 2,
       totalCountBottomSpacing: widget.config.totalCountBottomSpacing,
+      showAsPinned: widget.config.showTotalCountPinned,
+      child: widget.totalCount,
     );
   }
 
@@ -313,9 +320,10 @@ class _VDataListState extends State<VDataList> {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundColor = VDataListTheme.of(context).backgroundColor;
     return LayoutBuilder(
       builder: (context, constraints) {
-        return _buildBody(constraints);
+        return Material(color: backgroundColor, child: _buildBody(constraints));
       },
     );
   }
