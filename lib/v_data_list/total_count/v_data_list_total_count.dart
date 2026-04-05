@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 
 class VDataListTotalCount extends StatelessWidget {
   final int? total;

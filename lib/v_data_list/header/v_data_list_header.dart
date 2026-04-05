@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:v_data_list/header/v_data_list_header_cell.dart';
-import 'package:v_data_list/theme/v_data_list_theme.dart';
-import 'package:v_data_list/v_data_list_enums.dart';
-import 'package:v_data_list/v_data_list_type_definitions.dart';
+import 'package:v_data_list/v_data_list/header/v_data_list_header_cell.dart';
+import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataListHeader extends StatelessWidget {
   final void Function(double delta, String id, double currentWidth)? onDragUpdate;

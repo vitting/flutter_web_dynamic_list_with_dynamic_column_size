@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:v_data_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
 class VDataListConfig {
   /// Whether long pressing a column resize handler should reset the column width dynamic width.

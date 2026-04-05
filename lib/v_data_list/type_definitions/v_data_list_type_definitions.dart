@@ -1,4 +1,4 @@
-import 'package:v_data_list/config/column_definition.dart';
+import 'package:v_data_list/v_data_list/config/column_definition.dart';
 
 /// A typedef for the column definition map, which is a map where
 /// the key is the column ID and the value is the ColumnDefinition object for that column

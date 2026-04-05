@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart' hide DataRow;
-import 'package:v_data_list/config/v_data_list_config.dart';
-import 'package:v_data_list/footer/v_data_list_footer.dart';
-import 'package:v_data_list/header/v_data_list_header.dart';
-import 'package:v_data_list/resize_handler/v_data_list_resizable_handler.dart';
-import 'package:v_data_list/row/v_data_list_row.dart';
-import 'package:v_data_list/total_count/v_data_list_total_count.dart';
-import 'package:v_data_list/v_data_list_enums.dart';
-import 'package:v_data_list/v_data_list_type_definitions.dart';
+import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
+import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
+import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
+import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
+import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
+import 'package:v_data_list/v_data_list/total_count/v_data_list_total_count.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataList extends StatefulWidget {
   final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:v_data_list/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
 class VDataListHeaderCell extends StatefulWidget {
   final void Function(double delta, String id, double currentWidth)? onDragUpdate;
