@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CustomFooter extends StatelessWidget {
+class VDataListFooter extends StatelessWidget {
   final EdgeInsetsGeometry? footerPadding;
   final BorderRadiusGeometry? footerBorderRadius;
   final EdgeInsetsGeometry? footerMargin;
   final Widget? child;
-  const CustomFooter({super.key, this.footerPadding, this.footerBorderRadius, this.footerMargin, this.child});
+  const VDataListFooter({super.key, this.footerPadding, this.footerBorderRadius, this.footerMargin, this.child});
 
   @override
   Widget build(BuildContext context) {

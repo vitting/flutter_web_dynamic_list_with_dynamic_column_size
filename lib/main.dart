@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/custom_list.dart';
-import 'package:web_dynamic_list/config/custom_list_config.dart';
-import 'package:web_dynamic_list/custom_type_definitions.dart';
+import 'package:web_dynamic_list/v_data_list.dart';
+import 'package:web_dynamic_list/config/v_data_list_config.dart';
+import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
 import 'package:web_dynamic_list/generate_fake_data_helper.dart';
 
 void main() {
@@ -79,10 +79,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: CustomList(
+                    child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
                       data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
-                      config: CustomListConfig(),
+                      config: VDataListConfig(),
                       // onLoadMore: _loadMoreData,
                       // isLoading: false,
                       // totalItems: _totalItems,
@@ -116,10 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
 
                   Expanded(
-                    child: CustomList(
+                    child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
                       data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
-                      config: CustomListConfig(),
+                      config: VDataListConfig(),
 
                       // onLoadMore: _loadMoreData,
                       // isLoading: false,
@@ -199,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Expanded(
-              child: CustomList(
+              child: VDataList(
                 columnDefs: columnDefs,
                 data: _data,
                 footer: Container(
@@ -207,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 50,
                   child: const Center(child: Text('This is a footer that is outside of the list')),
                 ),
-                config: CustomListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true),
+                config: VDataListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true),
                 // onLoadMore: _loadMoreData,
                 // isLoading: false,
                 // totalItems: _totalItems,

@@ -1,4 +1,4 @@
-import 'package:web_dynamic_list/custom_type_definitions.dart';
+import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
 
 /// A helper class to generate a DataRowList from a ColumnDefinitionMap and an iterable of iterable of strings representing the data
 class DataRowHelper {

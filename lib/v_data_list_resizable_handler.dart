@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-class CustomResizableHandler extends StatelessWidget {
-  const CustomResizableHandler({super.key});
+class VDataListResizableHandler extends StatelessWidget {
+  const VDataListResizableHandler({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart' hide DataRow;
-import 'package:web_dynamic_list/footer/custom_footer.dart';
-import 'package:web_dynamic_list/header/custom_header.dart';
-import 'package:web_dynamic_list/config/custom_list_config.dart';
-import 'package:web_dynamic_list/row/custom_row.dart';
-import 'package:web_dynamic_list/total_count/custom_total_count.dart';
-import 'package:web_dynamic_list/custom_type_definitions.dart';
-import 'package:web_dynamic_list/enums.dart';
+import 'package:web_dynamic_list/footer/v_data_list_footer.dart';
+import 'package:web_dynamic_list/header/v_data_list_header.dart';
+import 'package:web_dynamic_list/config/v_data_list_config.dart';
+import 'package:web_dynamic_list/row/v_data_list_row.dart';
+import 'package:web_dynamic_list/total_count/v_data_list_total_count.dart';
+import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
+import 'package:web_dynamic_list/v_data_list_enums.dart';
 
-class CustomList extends StatefulWidget {
+class VDataList extends StatefulWidget {
   final void Function(DataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;
   final void Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
   final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefs)? onSortChanged;
@@ -17,10 +17,10 @@ class CustomList extends StatefulWidget {
   final bool isLoading;
   final VoidCallback? onLoadMore;
   final int? totalItems;
-  final CustomListConfig config;
+  final VDataListConfig config;
   final Widget? footer;
 
-  const CustomList({
+  const VDataList({
     super.key,
     required this.columnDefs,
     this.data = const [],
@@ -36,17 +36,17 @@ class CustomList extends StatefulWidget {
   });
 
   @override
-  State<CustomList> createState() => _CustomListState();
+  State<VDataList> createState() => _VDataListState();
 }
 
-class _CustomListState extends State<CustomList> {
+class _VDataListState extends State<VDataList> {
   bool _hasTriggeredLoadMore = false;
   final ScrollController _horizontalController = ScrollController();
   late ColumnDefinitionMap _localColumnDefs;
   final ScrollController _verticalController = ScrollController();
 
   @override
-  void didUpdateWidget(CustomList oldWidget) {
+  void didUpdateWidget(VDataList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.data.length != widget.data.length) {
       // Reset the load more trigger when new data is loaded
@@ -122,7 +122,7 @@ class _CustomListState extends State<CustomList> {
   }
 
   Widget _buildRow(DataRow data, bool isEven) {
-    final rowContent = CustomRow(
+    final rowContent = VDataListRow(
       columnDefs: _localColumnDefs,
       data: data,
       isEven: isEven,
@@ -151,7 +151,7 @@ class _CustomListState extends State<CustomList> {
   }
 
   Widget get _buildTotalCount {
-    return CustomTotalCount(
+    return VDataListTotalCount(
       total: widget.totalItems!,
       borderRadius: widget.config.totalCountBorderRadius,
       backgroundColor: Colors.grey.shade800,
@@ -161,7 +161,7 @@ class _CustomListState extends State<CustomList> {
   }
 
   Widget _buildSliverAppbar() {
-    return CustomHeader(
+    return VDataListHeader(
       columnDefs: _localColumnDefs,
       useExpanded: true,
       resizeHandler: widget.config.resizeHandler,
@@ -241,7 +241,7 @@ class _CustomListState extends State<CustomList> {
                 ),
               if (widget.footer != null && widget.config.footerPinned == false)
                 SliverToBoxAdapter(
-                  child: CustomFooter(
+                  child: VDataListFooter(
                     footerBorderRadius: widget.config.footerBorderRadius,
                     footerPadding: widget.config.footerPadding,
                     footerMargin: widget.config.footerMargin,
@@ -258,7 +258,7 @@ class _CustomListState extends State<CustomList> {
       body = Column(
         children: [
           Expanded(child: body),
-          CustomFooter(
+          VDataListFooter(
             footerBorderRadius: widget.config.footerBorderRadius,
             footerPadding: widget.config.footerPadding,
             footerMargin: widget.config.footerMargin,

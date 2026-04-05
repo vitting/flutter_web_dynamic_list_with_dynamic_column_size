@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTotalCount extends StatelessWidget {
+class VDataListTotalCount extends StatelessWidget {
   final int? total;
   final TextStyle textStyle;
   final TextAlign textAlign;
@@ -10,7 +10,7 @@ class CustomTotalCount extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final String prefixText;
   final double totalCountBottomSpacing;
-  const CustomTotalCount({
+  const VDataListTotalCount({
     super.key,
     required this.total,
     this.textStyle = const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

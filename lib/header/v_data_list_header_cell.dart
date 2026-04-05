@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/enums.dart';
+import 'package:web_dynamic_list/v_data_list_enums.dart';
 
-class CustomHeaderCell extends StatefulWidget {
+class VDataListHeaderCell extends StatefulWidget {
   final void Function(double delta, String id, double currentWidth)? onDragUpdate;
   final void Function(String id, ColumnSortState sortState)? onSortTap;
   final void Function(String id)? onDragHandlerLongPress;
@@ -15,7 +15,7 @@ class CustomHeaderCell extends StatefulWidget {
   final Widget? resizeHandler;
   final bool showSortIconsInHeader;
 
-  const CustomHeaderCell({
+  const VDataListHeaderCell({
     super.key,
     required this.id,
     required this.title,
@@ -36,10 +36,10 @@ class CustomHeaderCell extends StatefulWidget {
        );
 
   @override
-  State<CustomHeaderCell> createState() => _CustomHeaderCellState();
+  State<VDataListHeaderCell> createState() => _VDataListHeaderCellState();
 }
 
-class _CustomHeaderCellState extends State<CustomHeaderCell> {
+class _VDataListHeaderCellState extends State<VDataListHeaderCell> {
   bool _isDragging = false;
   bool _isHovering = false;
   @override

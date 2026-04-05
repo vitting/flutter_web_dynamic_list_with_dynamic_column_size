@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'package:web_dynamic_list/enums.dart';
+import 'package:web_dynamic_list/v_data_list_enums.dart';
 
 class ColumnDefinition extends Equatable {
   /// The spacing to the right of the column.

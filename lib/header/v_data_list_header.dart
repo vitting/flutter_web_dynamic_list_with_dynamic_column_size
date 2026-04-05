@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/header/custom_header_cell.dart';
-import 'package:web_dynamic_list/custom_type_definitions.dart';
-import 'package:web_dynamic_list/enums.dart';
+import 'package:web_dynamic_list/header/v_data_list_header_cell.dart';
+import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
+import 'package:web_dynamic_list/v_data_list_enums.dart';
 
-class CustomHeader extends StatelessWidget {
+class VDataListHeader extends StatelessWidget {
   final void Function(double delta, String id, double currentWidth)? onDragUpdate;
   final void Function(String id, ColumnSortState sortState)? onSortTap;
   final void Function(String id)? onDragHandlerLongPress;
@@ -19,7 +19,7 @@ class CustomHeader extends StatelessWidget {
   final EdgeInsetsGeometry? headerPadding;
   final bool showSortIconsInHeader;
 
-  const CustomHeader({
+  const VDataListHeader({
     super.key,
     this.useExpanded = false,
     this.onDragUpdate,
@@ -48,7 +48,7 @@ class CustomHeader extends StatelessWidget {
             children: [
               ...columnDefs.entries.map((entry) {
                 final columnDef = entry.value;
-                return CustomHeaderCell(
+                return VDataListHeaderCell(
                   id: columnDef.id,
                   title: columnDef.label,
                   width: columnDef.width,
@@ -64,7 +64,7 @@ class CustomHeader extends StatelessWidget {
                 );
               }),
               if (showRowClickHandler)
-                CustomHeaderCell(
+                VDataListHeaderCell(
                   id: '_trigger_cell_vlist_2000',
                   title: '',
                   width: rowClickHandlerWidth,

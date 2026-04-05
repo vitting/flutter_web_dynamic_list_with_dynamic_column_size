@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' hide DataRow;
 import 'package:flutter/services.dart';
-import 'package:web_dynamic_list/row/custom_row_cell.dart';
-import 'package:web_dynamic_list/custom_type_definitions.dart';
+import 'package:web_dynamic_list/row/v_data_list_row_cell.dart';
+import 'package:web_dynamic_list/v_data_list_type_definitions.dart';
 
-class CustomRow extends StatefulWidget {
+class VDataListRow extends StatefulWidget {
   final Function(DataRow data)? onRowTap;
   final void Function(String id, String value, DataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final ColumnDefinitionMap columnDefs;
@@ -22,7 +22,7 @@ class CustomRow extends StatefulWidget {
   final double rowClickHandlerWidth;
   final bool triggerOnRowTapWhenRowClickHandlerIsShown;
 
-  const CustomRow({
+  const VDataListRow({
     super.key,
     required this.columnDefs,
     required this.data,
@@ -44,10 +44,10 @@ class CustomRow extends StatefulWidget {
   });
 
   @override
-  State<CustomRow> createState() => _CustomRowState();
+  State<VDataListRow> createState() => _VDataListRowState();
 }
 
-class _CustomRowState extends State<CustomRow> {
+class _VDataListRowState extends State<VDataListRow> {
   bool _isHovered = false;
 
   @override
@@ -85,7 +85,7 @@ class _CustomRowState extends State<CustomRow> {
             children: [
               ...widget.columnDefs.entries.map((entry) {
                 final columnDef = entry.value;
-                return CustomRowCell(
+                return VDataListRowCell(
                   id: columnDef.id,
                   value: widget.data[columnDef.id] ?? '',
                   width: columnDef.width,
@@ -109,7 +109,7 @@ class _CustomRowState extends State<CustomRow> {
                 );
               }),
               if (widget.showRowClickHandler && widget.rowClickHandlerIcon != null)
-                CustomRowCell(
+                VDataListRowCell(
                   id: '_trigger_cell_vlist_2000',
                   value: '',
                   width: widget.rowClickHandlerWidth,

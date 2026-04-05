@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'package:web_dynamic_list/custom_resizable_handler.dart';
-import 'package:web_dynamic_list/enums.dart';
+import 'package:web_dynamic_list/v_data_list_resizable_handler.dart';
+import 'package:web_dynamic_list/v_data_list_enums.dart';
 
-class CustomListConfig {
+class VDataListConfig {
   /// Whether long pressing a column resize handler should reset the column width dynamic width.
   final bool canResetColumnWidthOnLongPress;
 
@@ -103,7 +103,7 @@ class CustomListConfig {
   /// Whether tapping the row should trigger the [onRowTap] callback even if [showRowClickHandler] is true.
   final bool triggerOnRowTapWhenRowClickHandlerIsShown;
 
-  CustomListConfig({
+  VDataListConfig({
     this.copyCellValueToClipboardMessage = "Copied to clipboard",
     this.headerBottomSpacing = 4,
     this.longPressToCopyCellValueToClipboard = true,
@@ -116,7 +116,7 @@ class CustomListConfig {
     this.canResetColumnWidthOnLongPress = true,
     this.sortIconAscending = const Icon(Symbols.arrow_upward_alt, color: Colors.white, size: 16),
     this.sortIconDescending = const Icon(Symbols.arrow_downward_alt, color: Colors.white, size: 16),
-    this.resizeHandler = const CustomResizableHandler(),
+    this.resizeHandler = const VDataListResizableHandler(),
     this.noDataMessage = "No data available",
     this.headerBorderRadius = const BorderRadius.all(Radius.circular(8)),
     this.rowBorderRadius = const BorderRadius.all(Radius.circular(8)),
@@ -134,12 +134,13 @@ class CustomListConfig {
     this.footerPinned = false,
   });
 
-  CustomListConfig copyWith({
+  VDataListConfig copyWith({
     bool? canResetColumnWidthOnLongPress,
     String? copyCellValueToClipboardMessage,
     BorderRadiusGeometry? footerBorderRadius,
     EdgeInsetsGeometry? footerMargin,
     EdgeInsetsGeometry? footerPadding,
+    bool? footerPinned,
     BorderRadiusGeometry? headerBorderRadius,
     double? headerBottomSpacing,
     EdgeInsetsGeometry? headerPadding,
@@ -162,14 +163,14 @@ class CustomListConfig {
     double? totalCountBottomSpacing,
     CustomListTotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    bool? footerPinned,
   }) {
-    return CustomListConfig(
+    return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
       copyCellValueToClipboardMessage: copyCellValueToClipboardMessage ?? this.copyCellValueToClipboardMessage,
       footerBorderRadius: footerBorderRadius ?? this.footerBorderRadius,
       footerMargin: footerMargin ?? this.footerMargin,
       footerPadding: footerPadding ?? this.footerPadding,
+      footerPinned: footerPinned ?? this.footerPinned,
       headerBorderRadius: headerBorderRadius ?? this.headerBorderRadius,
       headerBottomSpacing: headerBottomSpacing ?? this.headerBottomSpacing,
       headerPadding: headerPadding ?? this.headerPadding,
@@ -193,7 +194,6 @@ class CustomListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      footerPinned: footerPinned ?? this.footerPinned,
     );
   }
 }

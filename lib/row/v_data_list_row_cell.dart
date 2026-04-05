@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:web_dynamic_list/enums.dart';
+import 'package:web_dynamic_list/v_data_list_enums.dart';
 
-class CustomRowCell extends StatelessWidget {
+class VDataListRowCell extends StatelessWidget {
   final String id;
   final String value;
   final bool showTooltip;
@@ -12,7 +12,7 @@ class CustomRowCell extends StatelessWidget {
   final void Function(String value)? onLongPressCell;
   final CustomRowCellIconPlacement iconPlacement;
 
-  const CustomRowCell({
+  const VDataListRowCell({
     super.key,
     required this.id,
     required this.value,
