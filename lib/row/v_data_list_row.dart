@@ -57,7 +57,9 @@ class _VDataListRowState extends State<VDataListRow> {
   Widget build(BuildContext context) {
     final theme = VDataListTheme.of(context).rowTheme;
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
+      cursor: widget.showRowClickHandler && !widget.triggerOnRowTapWhenRowClickHandlerIsShown
+          ? MouseCursor.defer
+          : SystemMouseCursors.click,
       onHover: (event) {
         setState(() {
           _isHovered = true;
