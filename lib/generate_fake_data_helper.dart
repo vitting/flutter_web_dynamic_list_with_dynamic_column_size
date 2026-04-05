@@ -33,13 +33,7 @@ class GenerateFakeDataHelper {
     for (int i = 0; i < rowCount; i++) {
       final VDataListDataRow rowData = {};
       for (var columnId in columnIds) {
-        if (i == 0) {
-          rowData[columnId] = 'first';
-        } else if (i == rowCount - 1) {
-          rowData[columnId] = 'last';
-        } else {
-          rowData[columnId] = _getValueForColumn(columnId);
-        }
+        rowData[columnId] = _getValueForColumn(columnId);
       }
       rows.add(Map.from(rowData));
     }

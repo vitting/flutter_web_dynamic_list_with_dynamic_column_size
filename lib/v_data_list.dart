@@ -46,8 +46,6 @@ class VDataList extends StatefulWidget {
   /// If null, the default [VDataListResizableHandler] will be used.
   final Widget? resizeHandler;
 
-  final String? listId;
-
   const VDataList({
     super.key,
     required this.columnDefs,
@@ -64,7 +62,6 @@ class VDataList extends StatefulWidget {
     this.resizeHandler,
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
-    this.listId,
   });
 
   @override
@@ -314,7 +311,6 @@ class _VDataListState extends State<VDataList> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        debugPrint('${widget.listId} - LayoutBuilder constraints: ${constraints.maxHeight}');
         return _buildBody(constraints);
       },
     );
