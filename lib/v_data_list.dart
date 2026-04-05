@@ -46,6 +46,8 @@ class VDataList extends StatefulWidget {
   /// If null, the default [VDataListResizableHandler] will be used.
   final Widget? resizeHandler;
 
+  final String? listId;
+
   const VDataList({
     super.key,
     required this.columnDefs,
@@ -62,6 +64,7 @@ class VDataList extends StatefulWidget {
     this.resizeHandler,
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
+    this.listId,
   });
 
   @override
@@ -194,7 +197,13 @@ class _VDataListState extends State<VDataList> {
     return VDataListHeader(
       columnDefs: _localColumnDefs,
       useExpanded: true,
-      resizeHandler: widget.resizeHandler ?? VDataListResizableHandler(icon: widget.config.resizeHandlerIcon),
+      resizeHandler:
+          widget.resizeHandler ??
+          VDataListResizableHandler(
+            icon: widget.config.resizeHandlerIcon,
+            margin: widget.config.resizeHandlerMargin,
+            padding: widget.config.resizeHandlerPadding,
+          ),
       pinHeader: widget.config.pinHeader,
       borderRadiusHeader: widget.config.headerBorderRadius,
       headerPadding: widget.config.headerPadding,
@@ -244,7 +253,9 @@ class _VDataListState extends State<VDataList> {
         scrollDirection: Axis.horizontal,
         child: SizedBox(
           width: _totalWidth.clamp(constraints.maxWidth, double.infinity),
+
           child: CustomScrollView(
+            shrinkWrap: true,
             controller: _verticalController,
             slivers: [
               if (widget.totalItems != null && widget.config.totalItemsPosition == TotalCountPosition.top) _buildTotalCount,
@@ -303,6 +314,7 @@ class _VDataListState extends State<VDataList> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        debugPrint('${widget.listId} - LayoutBuilder constraints: ${constraints.maxHeight}');
         return _buildBody(constraints);
       },
     );

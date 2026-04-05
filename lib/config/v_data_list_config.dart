@@ -44,6 +44,12 @@ class VDataListConfig {
   /// The Icon to use as the resize handler for column resizing.
   final Widget? resizeHandlerIcon;
 
+  /// The margin for the resize handler when a column is resizable.
+  final EdgeInsetsGeometry? resizeHandlerMargin;
+
+  /// The padding for the resize handler when a column is resizable.
+  final EdgeInsetsGeometry? resizeHandlerPadding;
+
   /// The border radius for the data rows.
   final BorderRadiusGeometry rowBorderRadius;
 
@@ -128,6 +134,8 @@ class VDataListConfig {
     this.footerPinned = false,
     this.tooltipBorderRadius = const BorderRadius.all(Radius.circular(8)),
     this.resizeHandlerIcon = const Icon(Symbols.arrows_outward, size: 12),
+    this.resizeHandlerMargin = const EdgeInsets.only(right: 8),
+    this.resizeHandlerPadding = const EdgeInsets.all(4),
   });
 
   VDataListConfig copyWith({
@@ -142,6 +150,9 @@ class VDataListConfig {
     bool? longPressToCopyCellValueToClipboard,
     String? noDataMessage,
     bool? pinHeader,
+    Widget? resizeHandlerIcon,
+    EdgeInsetsGeometry? resizeHandlerMargin,
+    EdgeInsetsGeometry? resizeHandlerPadding,
     BorderRadiusGeometry? rowBorderRadius,
     Widget? rowClickHandlerIcon,
     double? rowClickHandlerWidth,
@@ -158,7 +169,6 @@ class VDataListConfig {
     double? totalCountBottomSpacing,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    Widget? resizeHandlerIcon,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -172,6 +182,9 @@ class VDataListConfig {
       longPressToCopyCellValueToClipboard: longPressToCopyCellValueToClipboard ?? this.longPressToCopyCellValueToClipboard,
       noDataMessage: noDataMessage ?? this.noDataMessage,
       pinHeader: pinHeader ?? this.pinHeader,
+      resizeHandlerIcon: resizeHandlerIcon ?? this.resizeHandlerIcon,
+      resizeHandlerMargin: resizeHandlerMargin ?? this.resizeHandlerMargin,
+      resizeHandlerPadding: resizeHandlerPadding ?? this.resizeHandlerPadding,
       rowBorderRadius: rowBorderRadius ?? this.rowBorderRadius,
       rowClickHandlerIcon: rowClickHandlerIcon ?? this.rowClickHandlerIcon,
       rowClickHandlerWidth: rowClickHandlerWidth ?? this.rowClickHandlerWidth,
@@ -189,7 +202,6 @@ class VDataListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      resizeHandlerIcon: resizeHandlerIcon ?? this.resizeHandlerIcon,
     );
   }
 }
