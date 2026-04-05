@@ -7,7 +7,7 @@ class CustomTotalCount extends StatelessWidget {
   final Color backgroundColor;
   final double horizontalPadding;
   final double verticalPadding;
-  final double borderRadius;
+  final BorderRadiusGeometry? borderRadius;
   final String prefixText;
   final double totalCountBottomSpacing;
   const CustomTotalCount({
@@ -16,7 +16,7 @@ class CustomTotalCount extends StatelessWidget {
     this.textStyle = const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
     this.textAlign = TextAlign.start,
     this.backgroundColor = Colors.blue,
-    this.borderRadius = 8,
+    this.borderRadius,
     this.prefixText = 'Total Items: ',
     this.horizontalPadding = 8,
     this.verticalPadding = 8,
@@ -31,7 +31,7 @@ class CustomTotalCount extends StatelessWidget {
         child: total != null
             ? Container(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-                decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.all(Radius.circular(borderRadius))),
+                decoration: BoxDecoration(color: backgroundColor, borderRadius: borderRadius),
                 child: Text('$prefixText $total', textAlign: textAlign, style: textStyle),
               )
             : null,

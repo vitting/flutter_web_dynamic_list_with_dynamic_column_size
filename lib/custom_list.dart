@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide DataRow;
+import 'package:web_dynamic_list/footer/custom_footer.dart';
 import 'package:web_dynamic_list/header/custom_header.dart';
 import 'package:web_dynamic_list/config/custom_list_config.dart';
 import 'package:web_dynamic_list/row/custom_row.dart';
@@ -17,6 +18,7 @@ class CustomList extends StatefulWidget {
   final VoidCallback? onLoadMore;
   final int? totalItems;
   final CustomListConfig config;
+  final Widget? footer;
 
   const CustomList({
     super.key,
@@ -30,6 +32,7 @@ class CustomList extends StatefulWidget {
     this.onSortChanged,
     this.onLongPress,
     required this.config,
+    this.footer,
   });
 
   @override
@@ -131,7 +134,7 @@ class _CustomListState extends State<CustomList> {
       copyCellValueToClipboardMessage: widget.config.copyCellValueToClipboardMessage,
       rowPadding: widget.config.rowPadding,
       rowSpacing: widget.config.rowSpacing,
-      borderRadius: widget.config.borderRadiusRow,
+      borderRadius: widget.config.rowBorderRadius,
       showEvenBackgroundColor: true,
       showHoverBackgroundColor: true,
       showRowClickHandler: widget.config.showRowClickHandler,
@@ -150,7 +153,7 @@ class _CustomListState extends State<CustomList> {
   Widget get _buildTotalCount {
     return CustomTotalCount(
       total: widget.totalItems!,
-      borderRadius: widget.config.borderRadiusTotalCount,
+      borderRadius: widget.config.totalCountBorderRadius,
       backgroundColor: Colors.grey.shade800,
       horizontalPadding: widget.config.rowPadding.horizontal / 2,
       totalCountBottomSpacing: widget.config.totalCountBottomSpacing,
@@ -163,7 +166,7 @@ class _CustomListState extends State<CustomList> {
       useExpanded: true,
       resizeHandler: widget.config.resizeHandler,
       pinHeader: widget.config.pinHeader,
-      borderRadiusHeader: widget.config.borderRadiusHeader,
+      borderRadiusHeader: widget.config.headerBorderRadius,
       headerPadding: widget.config.headerPadding,
       onSortTap: _sortChanged,
       sortIconAscending: widget.config.sortIconAscending,
@@ -201,49 +204,78 @@ class _CustomListState extends State<CustomList> {
     );
   }
 
+  Widget _buildBody(BoxConstraints constraints) {
+    Widget body = Scrollbar(
+      controller: _horizontalController,
+      scrollbarOrientation: ScrollbarOrientation.bottom,
+      thumbVisibility: true,
+      child: SingleChildScrollView(
+        controller: _horizontalController,
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: _totalWidth.clamp(constraints.maxWidth, double.infinity),
+          child: CustomScrollView(
+            controller: _verticalController,
+            slivers: [
+              if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.top)
+                _buildTotalCount,
+              SliverPadding(
+                padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
+                sliver: _buildSliverAppbar(),
+              ),
+              if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.bottom)
+                _buildTotalCount,
+              if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
+                SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
+              else
+                SliverList.builder(
+                  itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == widget.data.length) {
+                      // Show loading indicator at the end
+                      return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
+                    }
+                    final bool isEven = index % 2 == 0;
+                    return _buildRow(widget.data[index], isEven);
+                  },
+                ),
+              if (widget.footer != null && widget.config.footerPinned == false)
+                SliverToBoxAdapter(
+                  child: CustomFooter(
+                    footerBorderRadius: widget.config.footerBorderRadius,
+                    footerPadding: widget.config.footerPadding,
+                    footerMargin: widget.config.footerMargin,
+                    child: widget.footer,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (widget.footer != null && widget.config.footerPinned) {
+      body = Column(
+        children: [
+          Expanded(child: body),
+          CustomFooter(
+            footerBorderRadius: widget.config.footerBorderRadius,
+            footerPadding: widget.config.footerPadding,
+            footerMargin: widget.config.footerMargin,
+            child: widget.footer,
+          ),
+        ],
+      );
+    }
+
+    return body;
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Scrollbar(
-          controller: _horizontalController,
-          scrollbarOrientation: ScrollbarOrientation.bottom,
-          thumbVisibility: true,
-          child: SingleChildScrollView(
-            controller: _horizontalController,
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: _totalWidth.clamp(constraints.maxWidth, double.infinity),
-              child: CustomScrollView(
-                controller: _verticalController,
-                slivers: [
-                  if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.top)
-                    _buildTotalCount,
-                  SliverPadding(
-                    padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
-                    sliver: _buildSliverAppbar(),
-                  ),
-                  if (widget.totalItems != null && widget.config.totalItemsPosition == CustomListTotalCountPosition.bottom)
-                    _buildTotalCount,
-                  if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
-                    SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
-                  else
-                    SliverList.builder(
-                      itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index == widget.data.length) {
-                          // Show loading indicator at the end
-                          return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
-                        }
-                        final bool isEven = index % 2 == 0;
-                        return _buildRow(widget.data[index], isEven);
-                      },
-                    ),
-                ],
-              ),
-            ),
-          ),
-        );
+        return _buildBody(constraints);
       },
     );
   }

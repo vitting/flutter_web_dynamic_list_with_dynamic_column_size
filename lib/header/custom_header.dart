@@ -15,7 +15,7 @@ class CustomHeader extends StatelessWidget {
   final bool showRowClickHandler;
   final double rowClickHandlerWidth;
   final bool pinHeader;
-  final double borderRadiusHeader;
+  final BorderRadiusGeometry? borderRadiusHeader;
   final EdgeInsetsGeometry headerPadding;
   final bool showSortIconsInHeader;
 
@@ -32,7 +32,7 @@ class CustomHeader extends StatelessWidget {
     this.showRowClickHandler = false,
     this.rowClickHandlerWidth = 45,
     this.pinHeader = true,
-    this.borderRadiusHeader = 8,
+    this.borderRadiusHeader,
     this.headerPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.showSortIconsInHeader = true,
   });
@@ -43,10 +43,7 @@ class CustomHeader extends StatelessWidget {
       child: Material(
         child: Container(
           padding: headerPadding,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade800,
-            borderRadius: BorderRadius.all(Radius.circular(borderRadiusHeader)),
-          ),
+          decoration: BoxDecoration(color: Colors.grey.shade800, borderRadius: borderRadiusHeader),
           child: Row(
             children: [
               ...columnDefs.entries.map((entry) {

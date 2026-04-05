@@ -202,7 +202,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CustomList(
                 columnDefs: columnDefs,
                 data: _data,
-                config: CustomListConfig().copyWith(showSortIconsInHeader: false),
+                footer: Container(
+                  color: Colors.purple,
+                  height: 50,
+                  child: const Center(child: Text('This is a footer that is outside of the list')),
+                ),
+                config: CustomListConfig().copyWith(showSortIconsInHeader: false, footerPinned: true),
                 // onLoadMore: _loadMoreData,
                 // isLoading: false,
                 // totalItems: _totalItems,

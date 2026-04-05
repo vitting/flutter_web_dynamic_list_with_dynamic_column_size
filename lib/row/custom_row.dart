@@ -16,7 +16,7 @@ class CustomRow extends StatefulWidget {
   final bool showEvenBackgroundColor;
   final bool showHoverBackgroundColor;
   final bool showTooltip;
-  final double borderRadius;
+  final BorderRadiusGeometry? borderRadius;
   final bool showRowClickHandler;
   final Widget? rowClickHandlerIcon;
   final double rowClickHandlerWidth;
@@ -36,7 +36,7 @@ class CustomRow extends StatefulWidget {
     this.showEvenBackgroundColor = true,
     this.showHoverBackgroundColor = true,
     this.onLongPress,
-    this.borderRadius = 8,
+    this.borderRadius,
     this.showRowClickHandler = false,
     this.rowClickHandlerIcon,
     this.rowClickHandlerWidth = 45,
@@ -77,7 +77,7 @@ class _CustomRowState extends State<CustomRow> {
                 : widget.showEvenBackgroundColor && widget.isEven
                 ? Colors.grey.shade300
                 : Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(widget.borderRadius),
+            borderRadius: widget.borderRadius,
           ),
           padding: widget.rowPadding,
           margin: EdgeInsets.only(bottom: widget.rowSpacing),
