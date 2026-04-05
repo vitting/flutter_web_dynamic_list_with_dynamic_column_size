@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:web_dynamic_list/enums.dart';
 
 class CustomRowCell extends StatelessWidget {
@@ -49,10 +48,16 @@ class CustomRowCell extends StatelessWidget {
 
     return Row(
       children: [
-        if (icon != null && iconPlacement == CustomRowCellIconPlacement.left) ...[icon!, if (iconSpacing > 0) Gap(iconSpacing)],
+        if (icon != null && iconPlacement == CustomRowCellIconPlacement.left) ...[
+          icon!,
+          if (iconSpacing > 0) SizedBox(width: columnSpacing),
+        ],
         Expanded(child: widget),
-        if (icon != null && iconPlacement == CustomRowCellIconPlacement.right) ...[if (iconSpacing > 0) Gap(iconSpacing), icon!],
-        if (columnSpacing > 0) Gap(columnSpacing),
+        if (icon != null && iconPlacement == CustomRowCellIconPlacement.right) ...[
+          if (iconSpacing > 0) SizedBox(width: columnSpacing),
+          icon!,
+        ],
+        if (columnSpacing > 0) SizedBox(width: columnSpacing),
       ],
     );
   }

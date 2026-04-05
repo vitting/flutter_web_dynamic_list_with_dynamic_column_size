@@ -13,7 +13,6 @@ dependencies:
   faker: ^2.2.0
   flutter:
     sdk: flutter
-  gap: ^3.0.1
   material_symbols_icons: ^4.2928.0
   theme_extensions_builder_annotation: ^7.3.0
 

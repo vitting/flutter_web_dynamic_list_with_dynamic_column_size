@@ -16,7 +16,7 @@ class CustomHeader extends StatelessWidget {
   final double rowClickHandlerWidth;
   final bool pinHeader;
   final BorderRadiusGeometry? borderRadiusHeader;
-  final EdgeInsetsGeometry headerPadding;
+  final EdgeInsetsGeometry? headerPadding;
   final bool showSortIconsInHeader;
 
   const CustomHeader({
@@ -33,7 +33,7 @@ class CustomHeader extends StatelessWidget {
     this.rowClickHandlerWidth = 45,
     this.pinHeader = true,
     this.borderRadiusHeader,
-    this.headerPadding = const EdgeInsets.symmetric(horizontal: 8),
+    this.headerPadding,
     this.showSortIconsInHeader = true,
   });
 
