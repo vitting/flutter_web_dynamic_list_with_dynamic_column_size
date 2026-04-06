@@ -28,6 +28,7 @@ class _PaginationExampleState extends State<PaginationExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Pagination example')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -47,7 +48,7 @@ class _PaginationExampleState extends State<PaginationExample> {
             ),
             Expanded(
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefs: columnDefsWithColumnsThatArentResizable,
                 data: _data,
                 config: VDataListConfig().copyWith(showPagination: true, paginationPinned: _pinned),
                 totalItems: _totalItems,
@@ -55,7 +56,7 @@ class _PaginationExampleState extends State<PaginationExample> {
                 paginationItemsPerPage: _itemsPerPage,
                 onPaginationIndexChanged: (page, totalItems, pageSize) {
                   // Simulate loading data for the selected page
-                  Future.delayed(const Duration(seconds: 2), () {
+                  Future.delayed(const Duration(seconds: 1), () {
                     setState(() {
                       _currentPage = page;
                       _data = [...GenerateFakeDataHelper.generateData(pageSize, columnDefs.keys.toList())];

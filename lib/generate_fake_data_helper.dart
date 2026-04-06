@@ -48,21 +48,61 @@ final ColumnDefinitionMap columnDefWithAllColumnsResizable = ColumnDefinitionHel
 ]);
 
 final ColumnDefinitionMap columnDefs = {
-  'id': ColumnDefinition(id: 'id', label: 'ID', width: null),
-  'name': ColumnDefinition(id: 'name', label: 'Name', width: null),
-  'email': ColumnDefinition(id: 'email', label: 'Email', width: null),
-  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null),
-  'street': ColumnDefinition(id: 'street', label: 'Street', width: null),
-  'city': ColumnDefinition(id: 'city', label: 'City', width: null),
-  'country': ColumnDefinition(id: 'country', label: 'Country', width: null),
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: true),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: null, isResizable: true),
+  'email': ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: true),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null, isResizable: true),
+  'street': ColumnDefinition(id: 'street', label: 'Street', width: null, isResizable: true),
+  'city': ColumnDefinition(id: 'city', label: 'City', width: null, isResizable: true),
+  'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: true),
+};
+
+final ColumnDefinitionMap columnDefsWithWidthResizable = {
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: 120, isResizable: true),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: 120, isResizable: true),
+  'email': ColumnDefinition(id: 'email', label: 'Email', width: 120, isResizable: true),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: 120, isResizable: true),
+  'street': ColumnDefinition(id: 'street', label: 'Street', width: 120, isResizable: true),
+  'city': ColumnDefinition(id: 'city', label: 'City', width: 120, isResizable: true),
+  'country': ColumnDefinition(id: 'country', label: 'Country', width: 120, isResizable: true),
+};
+
+final ColumnDefinitionMap columnDefsWithWidthNotResizable = {
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: 120, isResizable: false),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: 120, isResizable: false),
+  'email': ColumnDefinition(id: 'email', label: 'Email', width: 120, isResizable: false),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: 120, isResizable: false),
+  'street': ColumnDefinition(id: 'street', label: 'Street', width: 120, isResizable: false),
+  'city': ColumnDefinition(id: 'city', label: 'City', width: 120, isResizable: false),
+  'country': ColumnDefinition(id: 'country', label: 'Country', width: 120, isResizable: false),
+};
+
+final ColumnDefinitionMap columnDefsSomeWithWidth = {
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: true),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: 120, isResizable: true),
+  'email': ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: true),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: 120, isResizable: true),
+  'street': ColumnDefinition(id: 'street', label: 'Street', width: null, isResizable: true),
+  'city': ColumnDefinition(id: 'city', label: 'City', width: 120, isResizable: true),
+  'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: true),
+};
+
+final ColumnDefinitionMap columnDefsSomeResizable = {
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: false),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: null, isResizable: true),
+  'email': ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: false),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null, isResizable: true),
+  'street': ColumnDefinition(id: 'street', label: 'Street', width: null, isResizable: false),
+  'city': ColumnDefinition(id: 'city', label: 'City', width: null, isResizable: true),
+  'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: false),
 };
 
 final ColumnDefinitionMap columnDefsWithColumnsThatArentResizable = {
-  'id': ColumnDefinition(id: 'id', label: 'ID', width: 100, isResizable: false),
-  'name': ColumnDefinition(id: 'name', label: 'Name', width: null),
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: false),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: null, isResizable: false),
   'email': ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: false),
-  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null, isResizable: false),
   'street': ColumnDefinition(id: 'street', label: 'Street', width: null, isResizable: false),
-  'city': ColumnDefinition(id: 'city', label: 'City', width: null),
+  'city': ColumnDefinition(id: 'city', label: 'City', width: null, isResizable: false),
   'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: false),
 };

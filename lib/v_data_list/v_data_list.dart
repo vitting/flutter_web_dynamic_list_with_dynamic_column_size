@@ -107,6 +107,10 @@ class _VDataListState extends State<VDataList> {
       // Update the load more data flag based on the new data length and total items
       _loadMoreData = widget.data.length < widget.totalItems;
     }
+
+    if (oldWidget.columnDefs != widget.columnDefs) {
+      _localColumnDefs = {...widget.columnDefs};
+    }
   }
 
   @override

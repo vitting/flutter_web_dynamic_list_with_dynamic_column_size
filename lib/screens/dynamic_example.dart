@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
-import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
-import 'package:v_data_list/v_data_list/helpers/data_row_helper.dart';
 import 'package:v_data_list/v_data_list/v_data_list.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
-class ScreenDynamicHeightScreen extends StatefulWidget {
-  static const String routeName = '/dynamic-height';
-  const ScreenDynamicHeightScreen({super.key});
+class DynamicExample extends StatefulWidget {
+  static const String routeName = '/dynamic-example';
+  const DynamicExample({super.key});
 
   @override
-  State<ScreenDynamicHeightScreen> createState() => _ScreenDynamicHeightScreenState();
+  State<DynamicExample> createState() => _DynamicExampleState();
 }
 
-class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
-  final int _itemsPerPage = 50;
+class _DynamicExampleState extends State<DynamicExample> {
+  final int _itemsPerPage = 20;
   late VDataListDataRowList _data;
-  bool _isLoading = false;
-  int _currentPage = 0;
 
   @override
   void initState() {
@@ -29,6 +25,7 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Dynamic example')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -162,50 +159,8 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
               child: VDataList(
                 columnDefs: columnDefs,
                 data: _data,
-                // footer: Container(
-                //   color: Colors.purple,
-                //   height: 50,
-                //   child: const Center(child: Text('This is a footer that is outside of the list')),
-                // ),
-                config: VDataListConfig().copyWith(
-                  showSortIconsInHeader: false,
-                  footerPinned: true,
-                  showRowClickHandler: true,
-                  showTotalCount: true,
-                  showTotalCountPinned: true,
-                  totalItemsPosition: TotalCountPosition.top,
-                  showPagination: true,
-                  paginationPinned: true,
-                ),
-                paginationItemsPerPage: _itemsPerPage,
-                onPaginationIndexChanged: (page, totalItems, pageSize) {
-                  // Simulate loading data for the selected page
-                  Future.delayed(const Duration(seconds: 2), () {
-                    setState(() {
-                      _currentPage = page;
-                      _data = [...GenerateFakeDataHelper.generateData(pageSize, columnDefs.keys.toList())];
-                    });
-                  });
-                },
-                totalItems: 2000,
-                isLoading: _isLoading,
-                paginationCurrentPage: _currentPage,
-                // onLoadMore: () {
-                //   // Simulate loading more data
-                //   setState(() {
-                //     _isLoading = true;
-                //   });
-                //   Future.delayed(const Duration(seconds: 2), () {
-                //     setState(() {
-                //       _data = DataRowHelper.loadMoreData(
-                //         _data,
-                //         GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList()),
-                //       );
-                //       _isLoading = false;
-                //     });
-                //   });
-                // },
-                // isLoading: _isLoading,
+                config: VDataListConfig(),
+                totalItems: 20,
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                   debugPrint(column.toString());
