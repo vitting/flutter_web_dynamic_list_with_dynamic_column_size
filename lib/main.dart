@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/lazy_load_example.dart';
+import 'package:v_data_list/screens/pagination_example.dart';
 import 'package:v_data_list/screens/screen_dynamic_height_screen.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 
@@ -25,8 +27,10 @@ class WebListExampleApp extends StatelessWidget {
         dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown},
       ),
       routes: {
-        '/': (context) => const ScreenDynamicHeightScreen(),
+        '/': (context) => const PaginationExample(),
         ScreenDynamicHeightScreen.routeName: (context) => const ScreenDynamicHeightScreen(),
+        LazyLoadExample.routeName: (context) => const LazyLoadExample(),
+        PaginationExample.routeName: (context) => const PaginationExample(),
       },
     );
   }
