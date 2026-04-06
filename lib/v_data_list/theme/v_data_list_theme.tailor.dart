@@ -16,6 +16,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
   RowTheme get rowTheme;
   TotalCountTheme get totalCountTheme;
   ResizeHandlerTheme get resizeHandlerTheme;
+  PaginationTheme get paginationTheme;
 
   @override
   VDataListTheme copyWith({
@@ -25,6 +26,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
     RowTheme? rowTheme,
     TotalCountTheme? totalCountTheme,
     ResizeHandlerTheme? resizeHandlerTheme,
+    PaginationTheme? paginationTheme,
   }) {
     return VDataListTheme(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -33,6 +35,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       rowTheme: rowTheme ?? this.rowTheme,
       totalCountTheme: totalCountTheme ?? this.totalCountTheme,
       resizeHandlerTheme: resizeHandlerTheme ?? this.resizeHandlerTheme,
+      paginationTheme: paginationTheme ?? this.paginationTheme,
     );
   }
 
@@ -49,6 +52,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       rowTheme: rowTheme.lerp(other.rowTheme, t),
       totalCountTheme: totalCountTheme.lerp(other.totalCountTheme, t),
       resizeHandlerTheme: resizeHandlerTheme.lerp(other.resizeHandlerTheme, t),
+      paginationTheme: paginationTheme.lerp(other.paginationTheme, t),
     );
   }
 
@@ -77,6 +81,10 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
             const DeepCollectionEquality().equals(
               resizeHandlerTheme,
               other.resizeHandlerTheme,
+            ) &&
+            const DeepCollectionEquality().equals(
+              paginationTheme,
+              other.paginationTheme,
             ));
   }
 
@@ -90,6 +98,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       const DeepCollectionEquality().hash(rowTheme),
       const DeepCollectionEquality().hash(totalCountTheme),
       const DeepCollectionEquality().hash(resizeHandlerTheme),
+      const DeepCollectionEquality().hash(paginationTheme),
     );
   }
 }
@@ -104,6 +113,7 @@ extension VDataListThemeBuildContextProps on BuildContext {
   TotalCountTheme get totalCountTheme => vDataListTheme.totalCountTheme;
   ResizeHandlerTheme get resizeHandlerTheme =>
       vDataListTheme.resizeHandlerTheme;
+  PaginationTheme get paginationTheme => vDataListTheme.paginationTheme;
 }
 
 mixin _$HeaderThemeTailorMixin on ThemeExtension<HeaderTheme> {
@@ -369,6 +379,131 @@ mixin _$ResizeHandlerThemeTailorMixin on ThemeExtension<ResizeHandlerTheme> {
     return Object.hash(
       runtimeType.hashCode,
       const DeepCollectionEquality().hash(backgroundColor),
+    );
+  }
+}
+
+mixin _$PaginationThemeTailorMixin on ThemeExtension<PaginationTheme> {
+  TextStyle get textStyle;
+  TextStyle get selectedTextStyle;
+  Color get backgroundColor;
+  Color get selectedItemBackgroundColor;
+  Color get itemBackgroundColor;
+  Color get hoverBackgroundColor;
+  TextStyle get hoverTextStyle;
+  TextStyle get hoverSelectedTextStyle;
+
+  @override
+  PaginationTheme copyWith({
+    TextStyle? textStyle,
+    TextStyle? selectedTextStyle,
+    Color? backgroundColor,
+    Color? selectedItemBackgroundColor,
+    Color? itemBackgroundColor,
+    Color? hoverBackgroundColor,
+    TextStyle? hoverTextStyle,
+    TextStyle? hoverSelectedTextStyle,
+  }) {
+    return PaginationTheme(
+      textStyle: textStyle ?? this.textStyle,
+      selectedTextStyle: selectedTextStyle ?? this.selectedTextStyle,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      selectedItemBackgroundColor:
+          selectedItemBackgroundColor ?? this.selectedItemBackgroundColor,
+      itemBackgroundColor: itemBackgroundColor ?? this.itemBackgroundColor,
+      hoverBackgroundColor: hoverBackgroundColor ?? this.hoverBackgroundColor,
+      hoverTextStyle: hoverTextStyle ?? this.hoverTextStyle,
+      hoverSelectedTextStyle:
+          hoverSelectedTextStyle ?? this.hoverSelectedTextStyle,
+    );
+  }
+
+  @override
+  PaginationTheme lerp(
+    covariant ThemeExtension<PaginationTheme>? other,
+    double t,
+  ) {
+    if (other is! PaginationTheme) return this as PaginationTheme;
+    return PaginationTheme(
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
+      selectedTextStyle: TextStyle.lerp(
+        selectedTextStyle,
+        other.selectedTextStyle,
+        t,
+      )!,
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+      selectedItemBackgroundColor: Color.lerp(
+        selectedItemBackgroundColor,
+        other.selectedItemBackgroundColor,
+        t,
+      )!,
+      itemBackgroundColor: Color.lerp(
+        itemBackgroundColor,
+        other.itemBackgroundColor,
+        t,
+      )!,
+      hoverBackgroundColor: Color.lerp(
+        hoverBackgroundColor,
+        other.hoverBackgroundColor,
+        t,
+      )!,
+      hoverTextStyle: TextStyle.lerp(hoverTextStyle, other.hoverTextStyle, t)!,
+      hoverSelectedTextStyle: TextStyle.lerp(
+        hoverSelectedTextStyle,
+        other.hoverSelectedTextStyle,
+        t,
+      )!,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is PaginationTheme &&
+            const DeepCollectionEquality().equals(textStyle, other.textStyle) &&
+            const DeepCollectionEquality().equals(
+              selectedTextStyle,
+              other.selectedTextStyle,
+            ) &&
+            const DeepCollectionEquality().equals(
+              backgroundColor,
+              other.backgroundColor,
+            ) &&
+            const DeepCollectionEquality().equals(
+              selectedItemBackgroundColor,
+              other.selectedItemBackgroundColor,
+            ) &&
+            const DeepCollectionEquality().equals(
+              itemBackgroundColor,
+              other.itemBackgroundColor,
+            ) &&
+            const DeepCollectionEquality().equals(
+              hoverBackgroundColor,
+              other.hoverBackgroundColor,
+            ) &&
+            const DeepCollectionEquality().equals(
+              hoverTextStyle,
+              other.hoverTextStyle,
+            ) &&
+            const DeepCollectionEquality().equals(
+              hoverSelectedTextStyle,
+              other.hoverSelectedTextStyle,
+            ));
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      runtimeType.hashCode,
+      const DeepCollectionEquality().hash(textStyle),
+      const DeepCollectionEquality().hash(selectedTextStyle),
+      const DeepCollectionEquality().hash(backgroundColor),
+      const DeepCollectionEquality().hash(selectedItemBackgroundColor),
+      const DeepCollectionEquality().hash(itemBackgroundColor),
+      const DeepCollectionEquality().hash(hoverBackgroundColor),
+      const DeepCollectionEquality().hash(hoverTextStyle),
+      const DeepCollectionEquality().hash(hoverSelectedTextStyle),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide DataRow;
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
+import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
@@ -29,9 +30,12 @@ class VDataList extends StatefulWidget {
   /// The configuration for the list, which includes various settings for the appearance and behavior of the list such as header and row styling.
   final VDataListConfig config;
 
-  // TODO: Implement
+  /// A flag indicating whether the list is currently loading more data,
+  /// which can be used to show a loading indicator at the end of the list when more data is being loaded.
   final bool isLoading;
-  // TODO: Implement
+
+  /// An optional callback that is triggered when the user scrolls to the end of the list,
+  /// which can be used to load more data into the list.
   final void Function()? onLoadMore;
 
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
@@ -50,6 +54,17 @@ class VDataList extends StatefulWidget {
   /// An optional widget to display in the total count area when [showTotalCount] is true.
   final Widget? totalCount;
 
+  /// An optional total count of items to display in the pagination widget when [showPagination] is true.
+  final int? paginationItemsPerPage;
+
+  /// An optional current page index to display in the pagination widget when [showPagination] is true.
+  /// This should be a zero-based index, where 0 represents the first page.
+  /// If null, the pagination widget will default to showing the first page as selected.
+  final int? paginationCurrentPage;
+
+  /// An optional callback that is triggered when the pagination index changes, providing the new page index, total items, and page size.
+  final void Function(int page, int totalItems, int pageSize)? onPaginationIndexChanged;
+
   const VDataList({
     super.key,
     required this.columnDefs,
@@ -67,6 +82,9 @@ class VDataList extends StatefulWidget {
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
     this.totalCount,
+    this.paginationItemsPerPage,
+    this.onPaginationIndexChanged,
+    this.paginationCurrentPage,
   });
 
   @override
@@ -286,15 +304,12 @@ class _VDataListState extends State<VDataList> {
                     return _buildRow(widget.data[index], isEven);
                   },
                 ),
-              if (widget.footer != null && widget.config.footerPinned == false)
-                SliverToBoxAdapter(
-                  child: VDataListFooter(
-                    footerBorderRadius: widget.config.footerBorderRadius,
-                    footerPadding: widget.config.footerPadding,
-                    footerMargin: widget.config.footerMargin,
-                    child: widget.footer,
-                  ),
-                ),
+              if (widget.footer != null && widget.config.footerPinned == false) SliverToBoxAdapter(child: _buildFooter()),
+              if (widget.config.showPagination &&
+                  widget.paginationItemsPerPage != null &&
+                  widget.paginationCurrentPage != null &&
+                  widget.config.paginationPinned == false)
+                SliverToBoxAdapter(child: _buildPagination()),
             ],
           ),
         ),
@@ -305,17 +320,43 @@ class _VDataListState extends State<VDataList> {
       body = Column(
         children: [
           Expanded(child: body),
-          VDataListFooter(
-            footerBorderRadius: widget.config.footerBorderRadius,
-            footerPadding: widget.config.footerPadding,
-            footerMargin: widget.config.footerMargin,
-            child: widget.footer,
-          ),
+          _buildFooter(),
+        ],
+      );
+    }
+
+    if (widget.config.showPagination &&
+        widget.paginationItemsPerPage != null &&
+        widget.paginationCurrentPage != null &&
+        widget.config.paginationPinned) {
+      body = Column(
+        children: [
+          Expanded(child: body),
+          _buildPagination(),
         ],
       );
     }
 
     return body;
+  }
+
+  Widget _buildFooter() {
+    return VDataListFooter(
+      footerBorderRadius: widget.config.footerBorderRadius,
+      footerPadding: widget.config.footerPadding,
+      footerMargin: widget.config.footerMargin,
+      child: widget.footer,
+    );
+  }
+
+  Widget _buildPagination() {
+    return VDataListPagination(
+      config: widget.config,
+      currentSelectedIndex: widget.paginationCurrentPage ?? 0,
+      onPaginationIndexChanged: widget.onPaginationIndexChanged,
+      pageSize: widget.paginationItemsPerPage!,
+      totalItems: widget.totalItems,
+    );
   }
 
   @override

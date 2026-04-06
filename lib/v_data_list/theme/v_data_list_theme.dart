@@ -12,6 +12,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     required this.totalCountTheme,
     required this.resizeHandlerTheme,
     required this.backgroundColor,
+    required this.paginationTheme,
   });
 
   @override
@@ -32,12 +33,16 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
   @override
   final ResizeHandlerTheme resizeHandlerTheme;
 
+  @override
+  final PaginationTheme paginationTheme;
+
   static VDataListTheme get defaultTheme => VDataListTheme(
     headerTheme: HeaderTheme.defaultTheme,
     footerTheme: FooterTheme.defaultTheme,
     rowTheme: RowTheme.defaultTheme,
     totalCountTheme: TotalCountTheme.defaultTheme,
     resizeHandlerTheme: ResizeHandlerTheme.defaultTheme,
+    paginationTheme: PaginationTheme.defaultTheme,
     backgroundColor: Colors.white,
   );
 
@@ -139,4 +144,53 @@ class ResizeHandlerTheme extends ThemeExtension<ResizeHandlerTheme> with _$Resiz
   final Color backgroundColor;
 
   static ResizeHandlerTheme get defaultTheme => ResizeHandlerTheme(backgroundColor: Colors.grey[300]!);
+}
+
+@tailorMixinComponent
+class PaginationTheme extends ThemeExtension<PaginationTheme> with _$PaginationThemeTailorMixin {
+  const PaginationTheme({
+    required this.textStyle,
+    required this.backgroundColor,
+    required this.selectedItemBackgroundColor,
+    required this.selectedTextStyle,
+    required this.itemBackgroundColor,
+    required this.hoverBackgroundColor,
+    required this.hoverTextStyle,
+    required this.hoverSelectedTextStyle,
+  });
+
+  @override
+  final TextStyle textStyle;
+
+  @override
+  final TextStyle selectedTextStyle;
+
+  @override
+  final Color backgroundColor;
+
+  @override
+  final Color selectedItemBackgroundColor;
+
+  @override
+  final Color itemBackgroundColor;
+
+  @override
+  final Color hoverBackgroundColor;
+
+  @override
+  final TextStyle hoverTextStyle;
+
+  @override
+  final TextStyle hoverSelectedTextStyle;
+
+  static PaginationTheme get defaultTheme => PaginationTheme(
+    backgroundColor: Colors.blue,
+    textStyle: const TextStyle(color: Colors.white),
+    selectedTextStyle: const TextStyle(color: Colors.black),
+    selectedItemBackgroundColor: Colors.grey[300]!,
+    itemBackgroundColor: Colors.blue,
+    hoverBackgroundColor: Colors.lightBlue,
+    hoverTextStyle: const TextStyle(color: Colors.white),
+    hoverSelectedTextStyle: const TextStyle(color: Colors.black),
+  );
 }

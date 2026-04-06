@@ -38,6 +38,18 @@ class VDataListConfig {
   /// If null, no message will be shown when the list is empty.
   final String? noDataMessage;
 
+  /// The border radius for the pagination controls when [showPagination] is true.
+  final BorderRadiusGeometry paginationBorderRadius;
+
+  /// The margin for the pagination controls when [showPagination] is true.
+  final EdgeInsetsGeometry paginationMargin;
+
+  /// The padding for the pagination controls when [showPagination] is true.
+  final EdgeInsetsGeometry paginationPadding;
+
+  /// Whether to show pagination controls below the list when [totalItems] and [itemsPerPage] are provided.
+  final bool paginationPinned;
+
   /// Whether the header should be pinned to the top of the list when scrolling.
   /// If true, the header will remain visible at the top of the list when scrolling.
   final bool pinHeader;
@@ -66,6 +78,9 @@ class VDataListConfig {
   /// The spacing between rows in the list.
   /// This is used to create visual separation between rows.
   final double rowSpacing;
+
+  /// Whether to show pagination controls below the list when [totalItems] and [itemsPerPage] are provided.
+  final bool showPagination;
 
   /// Whether to show a row click handler in each row at the end of the row.
   /// If true, a click handler will be shown in each row that can be tapped to trigger the [onRowTap] callback for that row.
@@ -145,6 +160,11 @@ class VDataListConfig {
     this.resizeHandlerPadding = const EdgeInsets.all(4),
     this.showTotalCount = false,
     this.showTotalCountPinned = false,
+    this.paginationBorderRadius = const BorderRadius.all(Radius.circular(8)),
+    this.paginationMargin = const EdgeInsets.symmetric(vertical: 4),
+    this.paginationPadding = const EdgeInsets.all(8),
+    this.paginationPinned = false,
+    this.showPagination = false,
   });
 
   VDataListConfig copyWith({
@@ -171,6 +191,7 @@ class VDataListConfig {
     bool? showSortIconsInHeader,
     bool? showTooltip,
     bool? showTotalCount,
+    bool? showTotalCountPinned,
     Widget? sortIconAscending,
     Widget? sortIconDescending,
     bool? textIsSelectable,
@@ -179,7 +200,11 @@ class VDataListConfig {
     double? totalCountBottomSpacing,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    bool? showTotalCountPinned,
+    BorderRadiusGeometry? paginationBorderRadius,
+    EdgeInsetsGeometry? paginationMargin,
+    EdgeInsetsGeometry? paginationPadding,
+    bool? paginationPinned,
+    bool? showPagination,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -205,6 +230,7 @@ class VDataListConfig {
       showSortIconsInHeader: showSortIconsInHeader ?? this.showSortIconsInHeader,
       showTooltip: showTooltip ?? this.showTooltip,
       showTotalCount: showTotalCount ?? this.showTotalCount,
+      showTotalCountPinned: showTotalCountPinned ?? this.showTotalCountPinned,
       sortIconAscending: sortIconAscending ?? this.sortIconAscending,
       sortIconDescending: sortIconDescending ?? this.sortIconDescending,
       textIsSelectable: textIsSelectable ?? this.textIsSelectable,
@@ -214,7 +240,11 @@ class VDataListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      showTotalCountPinned: showTotalCountPinned ?? this.showTotalCountPinned,
+      paginationBorderRadius: paginationBorderRadius ?? this.paginationBorderRadius,
+      paginationMargin: paginationMargin ?? this.paginationMargin,
+      paginationPadding: paginationPadding ?? this.paginationPadding,
+      paginationPinned: paginationPinned ?? this.paginationPinned,
+      showPagination: showPagination ?? this.showPagination,
     );
   }
 }

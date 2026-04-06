@@ -18,6 +18,7 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
   final int _itemsPerPage = 50;
   late VDataListDataRowList _data;
   bool _isLoading = false;
+  int _currentPage = 0;
 
   @override
   void initState() {
@@ -161,11 +162,11 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
               child: VDataList(
                 columnDefs: columnDefs,
                 data: _data,
-                footer: Container(
-                  color: Colors.purple,
-                  height: 50,
-                  child: const Center(child: Text('This is a footer that is outside of the list')),
-                ),
+                // footer: Container(
+                //   color: Colors.purple,
+                //   height: 50,
+                //   child: const Center(child: Text('This is a footer that is outside of the list')),
+                // ),
                 config: VDataListConfig().copyWith(
                   showSortIconsInHeader: false,
                   footerPinned: true,
@@ -173,24 +174,38 @@ class _ScreenDynamicHeightScreenState extends State<ScreenDynamicHeightScreen> {
                   showTotalCount: true,
                   showTotalCountPinned: true,
                   totalItemsPosition: TotalCountPosition.top,
+                  showPagination: true,
+                  paginationPinned: true,
                 ),
-                totalItems: 200,
-                onLoadMore: () {
-                  // Simulate loading more data
-                  setState(() {
-                    _isLoading = true;
-                  });
+                paginationItemsPerPage: _itemsPerPage,
+                onPaginationIndexChanged: (page, totalItems, pageSize) {
+                  // Simulate loading data for the selected page
                   Future.delayed(const Duration(seconds: 2), () {
                     setState(() {
-                      _data = DataRowHelper.loadMoreData(
-                        _data,
-                        GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList()),
-                      );
-                      _isLoading = false;
+                      _currentPage = page;
+                      _data = [...GenerateFakeDataHelper.generateData(pageSize, columnDefs.keys.toList())];
                     });
                   });
                 },
+                totalItems: 2000,
                 isLoading: _isLoading,
+                paginationCurrentPage: _currentPage,
+                // onLoadMore: () {
+                //   // Simulate loading more data
+                //   setState(() {
+                //     _isLoading = true;
+                //   });
+                //   Future.delayed(const Duration(seconds: 2), () {
+                //     setState(() {
+                //       _data = DataRowHelper.loadMoreData(
+                //         _data,
+                //         GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList()),
+                //       );
+                //       _isLoading = false;
+                //     });
+                //   });
+                // },
+                // isLoading: _isLoading,
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                   debugPrint(column.toString());
