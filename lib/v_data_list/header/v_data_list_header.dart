@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header_cell.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
@@ -9,33 +10,17 @@ class VDataListHeader extends StatelessWidget {
   final void Function(String id, ColumnSortState sortState)? onSortTap;
   final void Function(String id)? onDragHandlerLongPress;
   final ColumnDefinitionMap columnDefs;
-  final bool useExpanded;
-  final Widget? sortIconAscending;
-  final Widget? sortIconDescending;
   final Widget? resizeHandler;
-  final bool showRowClickHandler;
-  final double rowClickHandlerWidth;
-  final bool pinHeader;
-  final BorderRadiusGeometry? borderRadiusHeader;
-  final EdgeInsetsGeometry? headerPadding;
-  final bool showSortIconsInHeader;
+  final VDataListConfig config;
 
   const VDataListHeader({
     super.key,
-    this.useExpanded = false,
+    required this.config,
     this.onDragUpdate,
     this.columnDefs = const {},
     this.onSortTap,
     this.onDragHandlerLongPress,
-    this.sortIconAscending,
-    this.sortIconDescending,
     this.resizeHandler,
-    this.showRowClickHandler = false,
-    this.rowClickHandlerWidth = 45,
-    this.pinHeader = true,
-    this.borderRadiusHeader,
-    this.headerPadding,
-    this.showSortIconsInHeader = true,
   });
 
   @override
@@ -44,8 +29,8 @@ class VDataListHeader extends StatelessWidget {
     return PinnedHeaderSliver(
       child: Material(
         child: Container(
-          padding: headerPadding,
-          decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: borderRadiusHeader),
+          padding: config.headerPadding,
+          decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: config.headerBorderRadius),
           child: Row(
             children: [
               ...columnDefs.entries.map((entry) {
@@ -59,18 +44,18 @@ class VDataListHeader extends StatelessWidget {
                   onSortTap: onSortTap,
                   sortState: columnDef.sortState,
                   onDragHandlerLongPress: onDragHandlerLongPress,
-                  sortIconAscending: sortIconAscending,
-                  sortIconDescending: sortIconDescending,
-                  showSortIconsInHeader: showSortIconsInHeader,
+                  sortIconAscending: config.sortIconAscending,
+                  sortIconDescending: config.sortIconDescending,
+                  showSortIconsInHeader: config.showSortIconsInHeader,
                   resizeHandler: resizeHandler,
                   textStyle: theme.textStyle,
                 );
               }),
-              if (showRowClickHandler)
+              if (config.showRowClickHandler)
                 VDataListHeaderCell(
                   id: '_trigger_cell_vlist_2000',
                   title: '',
-                  width: rowClickHandlerWidth,
+                  width: config.rowClickHandlerWidth,
                   isResizable: false,
                   showSortIconsInHeader: false,
                 ),

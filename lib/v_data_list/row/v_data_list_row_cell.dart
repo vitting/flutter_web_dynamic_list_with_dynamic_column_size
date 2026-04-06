@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
 class VDataListRowCell extends StatelessWidget {
   final String id;
   final String value;
-  final bool showTooltip;
   final double? width;
   final Widget? icon;
   final double iconSpacing;
   final double columnSpacing;
   final void Function(String value)? onLongPressCell;
   final RowCellIconPlacement iconPlacement;
-  final BorderRadiusGeometry? tooltipBorderRadius;
+  final VDataListConfig config;
 
   const VDataListRowCell({
     super.key,
     required this.id,
     required this.value,
+    required this.config,
     this.width,
-    this.showTooltip = false,
     this.onLongPressCell,
     this.icon,
     this.iconSpacing = 4,
     this.columnSpacing = 0,
     this.iconPlacement = RowCellIconPlacement.right,
-    this.tooltipBorderRadius,
   });
 
   Widget _buildCellContent(BuildContext context) {
@@ -41,12 +40,12 @@ class VDataListRowCell extends StatelessWidget {
       );
     }
 
-    if (showTooltip) {
+    if (config.showTooltip) {
       widget = Tooltip(
         waitDuration: Duration(milliseconds: 500),
         message: value,
         textStyle: theme.tooltipTextStyle,
-        decoration: BoxDecoration(color: theme.tooltipBackgroundColor, borderRadius: tooltipBorderRadius),
+        decoration: BoxDecoration(color: theme.tooltipBackgroundColor, borderRadius: config.tooltipBorderRadius),
         child: widget,
       );
     }

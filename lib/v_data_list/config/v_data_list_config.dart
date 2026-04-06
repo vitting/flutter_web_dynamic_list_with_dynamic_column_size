@@ -87,6 +87,12 @@ class VDataListConfig {
   /// If [triggerOnRowTapWhenRowClickHandlerIsShown] is true, tapping the row click handler will also trigger the [onRowTap] callback for the row.
   final bool showRowClickHandler;
 
+  /// Whether to show a different background color for even rows to create a striped effect.
+  final bool showRowEvenBackgroundColor;
+
+  /// Whether to show a hover background color for rows when hovering over them.
+  final bool showRowHoverColor;
+
   /// Whether to show sort icons in the header when a column is sorted.
   final bool showSortIconsInHeader;
 
@@ -119,6 +125,9 @@ class VDataListConfig {
 
   /// The spacing below the total count display when [totalItems] is provided.
   final double totalCountBottomSpacing;
+
+  /// The padding for the total count display when [totalItems] is provided.
+  final EdgeInsetsGeometry? totalCountPadding;
 
   /// The position to show the total items count when [totalItems] is provided.
   /// This is used to determine where to display the total count of items in the list when [totalItems] is not null.
@@ -165,6 +174,9 @@ class VDataListConfig {
     this.paginationPadding = const EdgeInsets.all(8),
     this.paginationPinned = false,
     this.showPagination = false,
+    this.totalCountPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+    this.showRowHoverColor = true,
+    this.showRowEvenBackgroundColor = true,
   });
 
   VDataListConfig copyWith({
@@ -178,6 +190,10 @@ class VDataListConfig {
     EdgeInsetsGeometry? headerPadding,
     bool? longPressToCopyCellValueToClipboard,
     String? noDataMessage,
+    BorderRadiusGeometry? paginationBorderRadius,
+    EdgeInsetsGeometry? paginationMargin,
+    EdgeInsetsGeometry? paginationPadding,
+    bool? paginationPinned,
     bool? pinHeader,
     Widget? resizeHandlerIcon,
     EdgeInsetsGeometry? resizeHandlerMargin,
@@ -187,6 +203,7 @@ class VDataListConfig {
     double? rowClickHandlerWidth,
     EdgeInsetsGeometry? rowPadding,
     double? rowSpacing,
+    bool? showPagination,
     bool? showRowClickHandler,
     bool? showSortIconsInHeader,
     bool? showTooltip,
@@ -198,13 +215,11 @@ class VDataListConfig {
     BorderRadiusGeometry? tooltipBorderRadius,
     BorderRadiusGeometry? totalCountBorderRadius,
     double? totalCountBottomSpacing,
+    EdgeInsetsGeometry? totalCountPadding,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    BorderRadiusGeometry? paginationBorderRadius,
-    EdgeInsetsGeometry? paginationMargin,
-    EdgeInsetsGeometry? paginationPadding,
-    bool? paginationPinned,
-    bool? showPagination,
+    bool? showRowHoverColor,
+    bool? showRowEvenBackgroundColor,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -217,6 +232,10 @@ class VDataListConfig {
       headerPadding: headerPadding ?? this.headerPadding,
       longPressToCopyCellValueToClipboard: longPressToCopyCellValueToClipboard ?? this.longPressToCopyCellValueToClipboard,
       noDataMessage: noDataMessage ?? this.noDataMessage,
+      paginationBorderRadius: paginationBorderRadius ?? this.paginationBorderRadius,
+      paginationMargin: paginationMargin ?? this.paginationMargin,
+      paginationPadding: paginationPadding ?? this.paginationPadding,
+      paginationPinned: paginationPinned ?? this.paginationPinned,
       pinHeader: pinHeader ?? this.pinHeader,
       resizeHandlerIcon: resizeHandlerIcon ?? this.resizeHandlerIcon,
       resizeHandlerMargin: resizeHandlerMargin ?? this.resizeHandlerMargin,
@@ -226,6 +245,7 @@ class VDataListConfig {
       rowClickHandlerWidth: rowClickHandlerWidth ?? this.rowClickHandlerWidth,
       rowPadding: rowPadding ?? this.rowPadding,
       rowSpacing: rowSpacing ?? this.rowSpacing,
+      showPagination: showPagination ?? this.showPagination,
       showRowClickHandler: showRowClickHandler ?? this.showRowClickHandler,
       showSortIconsInHeader: showSortIconsInHeader ?? this.showSortIconsInHeader,
       showTooltip: showTooltip ?? this.showTooltip,
@@ -237,14 +257,12 @@ class VDataListConfig {
       tooltipBorderRadius: tooltipBorderRadius ?? this.tooltipBorderRadius,
       totalCountBorderRadius: totalCountBorderRadius ?? this.totalCountBorderRadius,
       totalCountBottomSpacing: totalCountBottomSpacing ?? this.totalCountBottomSpacing,
+      totalCountPadding: totalCountPadding ?? this.totalCountPadding,
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      paginationBorderRadius: paginationBorderRadius ?? this.paginationBorderRadius,
-      paginationMargin: paginationMargin ?? this.paginationMargin,
-      paginationPadding: paginationPadding ?? this.paginationPadding,
-      paginationPinned: paginationPinned ?? this.paginationPinned,
-      showPagination: showPagination ?? this.showPagination,
+      showRowHoverColor: showRowHoverColor ?? this.showRowHoverColor,
+      showRowEvenBackgroundColor: showRowEvenBackgroundColor ?? this.showRowEvenBackgroundColor,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row_cell.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
@@ -10,39 +11,17 @@ class VDataListRow extends StatefulWidget {
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressCopy;
   final ColumnDefinitionMap columnDefs;
   final VDataListDataRow data;
+  final VDataListConfig config;
   final bool isEven;
-  final bool longPressToCopyCellValueToClipboard;
-  final EdgeInsetsGeometry? rowPadding;
-  final double rowSpacing;
-  final bool showEvenBackgroundColor;
-  final bool showHoverBackgroundColor;
-  final bool showTooltip;
-  final BorderRadiusGeometry? borderRadius;
-  final bool showRowClickHandler;
-  final Widget? rowClickHandlerIcon;
-  final double rowClickHandlerWidth;
-  final bool triggerOnRowTapWhenRowClickHandlerIsShown;
-  final BorderRadiusGeometry? tooltipBorderRadius;
 
   const VDataListRow({
     super.key,
     required this.columnDefs,
     required this.data,
+    required this.config,
     this.isEven = false,
     this.onRowTap,
-    this.showTooltip = false,
-    this.longPressToCopyCellValueToClipboard = true,
-    this.rowSpacing = 5,
-    this.rowPadding,
-    this.showEvenBackgroundColor = true,
-    this.showHoverBackgroundColor = true,
     this.onLongPress,
-    this.borderRadius,
-    this.showRowClickHandler = false,
-    this.rowClickHandlerIcon,
-    this.rowClickHandlerWidth = 45,
-    this.triggerOnRowTapWhenRowClickHandlerIsShown = false,
-    this.tooltipBorderRadius,
     this.onLongPressCopy,
   });
 
@@ -57,7 +36,7 @@ class _VDataListRowState extends State<VDataListRow> {
   Widget build(BuildContext context) {
     final theme = VDataListTheme.of(context).rowTheme;
     return MouseRegion(
-      cursor: widget.showRowClickHandler && !widget.triggerOnRowTapWhenRowClickHandlerIsShown
+      cursor: widget.config.showRowClickHandler && !widget.config.triggerOnRowTapWhenRowClickHandlerIsShown
           ? MouseCursor.defer
           : SystemMouseCursors.click,
       onHover: (event) {
@@ -71,22 +50,22 @@ class _VDataListRowState extends State<VDataListRow> {
         });
       },
       child: GestureDetector(
-        onTap: widget.showRowClickHandler && !widget.triggerOnRowTapWhenRowClickHandlerIsShown
+        onTap: widget.config.showRowClickHandler && !widget.config.triggerOnRowTapWhenRowClickHandlerIsShown
             ? null
             : () {
                 widget.onRowTap?.call(widget.data);
               },
         child: Container(
           decoration: BoxDecoration(
-            color: widget.showHoverBackgroundColor && _isHovered
+            color: widget.config.showRowHoverColor && _isHovered
                 ? theme.hoverBackgroundColor
-                : widget.showEvenBackgroundColor && widget.isEven
+                : widget.config.showRowEvenBackgroundColor && widget.isEven
                 ? theme.evenBackgroundColor
                 : theme.backgroundColor,
-            borderRadius: widget.borderRadius,
+            borderRadius: widget.config.rowBorderRadius,
           ),
-          padding: widget.rowPadding,
-          margin: EdgeInsets.only(bottom: widget.rowSpacing),
+          padding: widget.config.rowPadding,
+          margin: EdgeInsets.only(bottom: widget.config.rowSpacing),
           child: Row(
             children: [
               ...widget.columnDefs.entries.map((entry) {
@@ -95,14 +74,13 @@ class _VDataListRowState extends State<VDataListRow> {
                   id: columnDef.id,
                   value: widget.data[columnDef.id] ?? '',
                   width: columnDef.width,
-                  showTooltip: widget.showTooltip,
-                  tooltipBorderRadius: widget.tooltipBorderRadius,
                   icon: columnDef.rowCellIcon,
                   iconPlacement: columnDef.rowCellIconPlacement,
                   iconSpacing: columnDef.rowCellIconSpacing,
                   columnSpacing: columnDef.columnSpacing,
+                  config: widget.config,
                   onLongPressCell: (value) async {
-                    if (widget.longPressToCopyCellValueToClipboard) {
+                    if (widget.config.longPressToCopyCellValueToClipboard) {
                       await Clipboard.setData(ClipboardData(text: value));
                       widget.onLongPressCopy?.call(columnDef.id, value, widget.data, widget.columnDefs);
                     }
@@ -111,16 +89,17 @@ class _VDataListRowState extends State<VDataListRow> {
                   },
                 );
               }),
-              if (widget.showRowClickHandler && widget.rowClickHandlerIcon != null)
+              if (widget.config.showRowClickHandler)
                 VDataListRowCell(
                   id: '_trigger_cell_vlist_2000',
                   value: '',
-                  width: widget.rowClickHandlerWidth,
+                  config: widget.config,
+                  width: widget.config.rowClickHandlerWidth,
                   icon: IconButton(
                     onPressed: () {
                       widget.onRowTap?.call(widget.data);
                     },
-                    icon: widget.rowClickHandlerIcon!,
+                    icon: widget.config.rowClickHandlerIcon,
                   ),
                 ),
             ],

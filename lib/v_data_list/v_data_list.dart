@@ -185,22 +185,11 @@ class _VDataListState extends State<VDataList> {
     final rowContent = VDataListRow(
       columnDefs: _localColumnDefs,
       data: data,
+      config: widget.config,
       isEven: isEven,
-      showTooltip: widget.config.showTooltip,
       onRowTap: (rowData) {
         widget.onRowTap?.call(rowData, _localColumnDefs);
       },
-      longPressToCopyCellValueToClipboard: widget.config.longPressToCopyCellValueToClipboard,
-      rowPadding: widget.config.rowPadding,
-      rowSpacing: widget.config.rowSpacing,
-      borderRadius: widget.config.rowBorderRadius,
-      showEvenBackgroundColor: true,
-      showHoverBackgroundColor: true,
-      showRowClickHandler: widget.config.showRowClickHandler,
-      rowClickHandlerIcon: widget.config.rowClickHandlerIcon,
-      rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
-      triggerOnRowTapWhenRowClickHandlerIsShown: widget.config.triggerOnRowTapWhenRowClickHandlerIsShown,
-      tooltipBorderRadius: widget.config.tooltipBorderRadius,
       onLongPress: widget.onLongPressRow,
       onLongPressCopy: widget.onLongPressRowCopyValue,
     );
@@ -213,36 +202,15 @@ class _VDataListState extends State<VDataList> {
   }
 
   Widget get _buildTotalCount {
-    return VDataListTotalCount(
-      total: widget.totalItems,
-      borderRadius: widget.config.totalCountBorderRadius,
-      horizontalPadding: widget.config.rowPadding.horizontal / 2,
-      totalCountBottomSpacing: widget.config.totalCountBottomSpacing,
-      showAsPinned: widget.config.showTotalCountPinned,
-      child: widget.totalCount,
-    );
+    return VDataListTotalCount(total: widget.totalItems, config: widget.config, child: widget.totalCount);
   }
 
   Widget _buildSliverAppbar() {
     return VDataListHeader(
+      config: widget.config,
       columnDefs: _localColumnDefs,
-      useExpanded: true,
-      resizeHandler:
-          widget.resizeHandler ??
-          VDataListResizableHandler(
-            icon: widget.config.resizeHandlerIcon,
-            margin: widget.config.resizeHandlerMargin,
-            padding: widget.config.resizeHandlerPadding,
-          ),
-      pinHeader: widget.config.pinHeader,
-      borderRadiusHeader: widget.config.headerBorderRadius,
-      headerPadding: widget.config.headerPadding,
+      resizeHandler: widget.resizeHandler ?? VDataListResizableHandler(config: widget.config),
       onSortTap: _sortChanged,
-      sortIconAscending: widget.config.sortIconAscending,
-      sortIconDescending: widget.config.sortIconDescending,
-      showSortIconsInHeader: widget.config.showSortIconsInHeader,
-      showRowClickHandler: widget.config.showRowClickHandler,
-      rowClickHandlerWidth: widget.config.rowClickHandlerWidth,
       onDragHandlerLongPress: (id) async {
         if (widget.config.canResetColumnWidthOnLongPress) {
           final result = await showDialog<bool>(
@@ -345,12 +313,7 @@ class _VDataListState extends State<VDataList> {
   }
 
   Widget _buildFooter() {
-    return VDataListFooter(
-      footerBorderRadius: widget.config.footerBorderRadius,
-      footerPadding: widget.config.footerPadding,
-      footerMargin: widget.config.footerMargin,
-      child: widget.footer,
-    );
+    return VDataListFooter(config: widget.config, child: widget.footer);
   }
 
   Widget _buildPagination() {
