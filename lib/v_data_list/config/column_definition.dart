@@ -53,7 +53,7 @@ class ColumnDefinition extends Equatable {
     this.rowCellIcon,
     this.rowCellIconSpacing = 0,
     this.columnSpacing = 0,
-    this.rowCellIconPlacement = RowCellIconPlacement.right,
+    this.rowCellIconPlacement = RowCellIconPlacement.left,
     this.type = ColumnDefinitionType.text,
   });
 

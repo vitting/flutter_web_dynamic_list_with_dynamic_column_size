@@ -5,6 +5,8 @@ import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
 import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
+import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
+import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/total_count/v_data_list_total_count.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
@@ -19,32 +21,44 @@ class VDataList extends StatefulWidget {
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)?
   onLongPressRowCopyValue;
 
+  /// An optional callback that is triggered when the user scrolls to the end of the list,
+  /// which can be used to load more data into the list.
+  final void Function()? onLoadMore;
+
+  /// An optional callback that is triggered when the pagination index changes, providing the new page index, total items, and page size.
+  final void Function(int page, int totalItems, int pageSize)? onPaginationIndexChanged;
+
+  /// An cell Style builder to override the default cell style for specific cells based on the column id and cell data.
+  /// This allows for dynamic styling of cells based on their content or column.
+  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? cellStyleBuilder;
+
   /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
   /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
   final ColumnDefinitionMap columnDefs;
+
+  /// The configuration for the list, which includes various settings for the appearance and behavior of the list such as header and row styling.
+  final VDataListConfig config;
 
   /// The data to display in the list, where each DataRow represents a row of data and should contain keys that match the column definitions.
   /// The list will display the values from the data rows according to the column definitions, and any updates to the data will be reflected in the list.
   final VDataListDataRowList data;
 
-  /// The configuration for the list, which includes various settings for the appearance and behavior of the list such as header and row styling.
-  final VDataListConfig config;
+  /// An optional widget to display as the footer of the list when [showFooter] is true.
+  /// This widget will be displayed below the list content and can be used to show additional information or actions related to the list.
+  /// If null, no footer will be displayed.
+  final Widget? footer;
 
   /// A flag indicating whether the list is currently loading more data,
   /// which can be used to show a loading indicator at the end of the list when more data is being loaded.
   final bool isLoading;
 
-  /// An optional callback that is triggered when the user scrolls to the end of the list,
-  /// which can be used to load more data into the list.
-  final void Function()? onLoadMore;
+  /// An optional current page index to display in the pagination widget when [showPagination] is true.
+  /// This should be a zero-based index, where 0 represents the first page.
+  /// If null, the pagination widget will default to showing the first page as selected.
+  final int? paginationCurrentPage;
 
-  /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
-  final int totalItems;
-
-  /// An optional widget to display as the footer of the list when [showFooter] is true.
-  /// This widget will be displayed below the list content and can be used to show additional information or actions related to the list.
-  /// If null, no footer will be displayed.
-  final Widget? footer;
+  /// An optional total count of items to display in the pagination widget when [showPagination] is true.
+  final int? paginationItemsPerPage;
 
   /// If provided, this widget will be used as the resize handler for column resizing instead of the default [VDataListResizableHandler].
   /// This allows for custom styling and behavior of the resize handler.
@@ -54,16 +68,8 @@ class VDataList extends StatefulWidget {
   /// An optional widget to display in the total count area when [showTotalCount] is true.
   final Widget? totalCount;
 
-  /// An optional total count of items to display in the pagination widget when [showPagination] is true.
-  final int? paginationItemsPerPage;
-
-  /// An optional current page index to display in the pagination widget when [showPagination] is true.
-  /// This should be a zero-based index, where 0 represents the first page.
-  /// If null, the pagination widget will default to showing the first page as selected.
-  final int? paginationCurrentPage;
-
-  /// An optional callback that is triggered when the pagination index changes, providing the new page index, total items, and page size.
-  final void Function(int page, int totalItems, int pageSize)? onPaginationIndexChanged;
+  /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
+  final int totalItems;
 
   const VDataList({
     super.key,
@@ -85,6 +91,7 @@ class VDataList extends StatefulWidget {
     this.paginationItemsPerPage,
     this.onPaginationIndexChanged,
     this.paginationCurrentPage,
+    this.cellStyleBuilder,
   });
 
   @override
@@ -94,9 +101,9 @@ class VDataList extends StatefulWidget {
 class _VDataListState extends State<VDataList> {
   bool _hasTriggeredLoadMore = false;
   final ScrollController _horizontalController = ScrollController();
+  bool _loadMoreData = false;
   late ColumnDefinitionMap _localColumnDefs;
   final ScrollController _verticalController = ScrollController();
-  bool _loadMoreData = false;
 
   @override
   void didUpdateWidget(VDataList oldWidget) {
@@ -187,6 +194,7 @@ class _VDataListState extends State<VDataList> {
       data: data,
       config: widget.config,
       isEven: isEven,
+      cellStyleBuilder: widget.cellStyleBuilder,
       onRowTap: (rowData) {
         widget.onRowTap?.call(rowData, _localColumnDefs);
       },

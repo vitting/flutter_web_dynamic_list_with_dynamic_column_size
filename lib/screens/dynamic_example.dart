@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/helpers/data_row_helper.dart';
+import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/v_data_list.dart';
-import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class DynamicExample extends StatefulWidget {
   static const String routeName = '/dynamic-example';
@@ -13,13 +16,33 @@ class DynamicExample extends StatefulWidget {
 }
 
 class _DynamicExampleState extends State<DynamicExample> {
-  final int _itemsPerPage = 20;
-  late VDataListDataRowList _data;
+  final int _totalItems = 20;
 
-  @override
-  void initState() {
-    super.initState();
-    _data = GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefsWithColumnsThatArentResizable.keys.toList());
+  VDataListRowCellStyle? _getStyleForAnimal(String animal) {
+    switch (animal) {
+      case 'Dog':
+        return VDataListRowCellStyle(backgroundColor: Colors.brown[200], icon: Icon(Symbols.sound_detection_dog_barking));
+      case 'Cat':
+        return VDataListRowCellStyle(icon: Icon(Symbols.pets), fontWeight: FontWeight.w700);
+      case 'Fish':
+        return VDataListRowCellStyle(backgroundColor: Colors.blue[200]);
+      case 'Horse':
+        return VDataListRowCellStyle(
+          backgroundColor: Colors.brown[400],
+          icon: Icon(Symbols.chess_knight),
+          iconPlacement: RowCellIconPlacement.right,
+        );
+      case 'Owl':
+        return VDataListRowCellStyle(backgroundColor: Colors.grey[500], icon: Icon(Symbols.owl));
+      case 'Mouse':
+        return VDataListRowCellStyle(backgroundColor: Colors.grey[200], icon: Icon(Symbols.pest_control_rodent));
+      case 'Chicken':
+        return VDataListRowCellStyle(backgroundColor: Colors.yellow[200], icon: Icon(Symbols.egg));
+      case 'Bug':
+        return VDataListRowCellStyle(backgroundColor: Colors.green[200], icon: Icon(Symbols.bug_report));
+      default:
+        return null;
+    }
   }
 
   @override
@@ -36,8 +59,8 @@ class _DynamicExampleState extends State<DynamicExample> {
                   Expanded(
                     child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
-                      data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
-                      totalItems: _itemsPerPage,
+                      data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
+                      totalItems: _totalItems,
                       config: VDataListConfig(),
                       // onLoadMore: _loadMoreData,
                       // isLoading: false,
@@ -74,8 +97,8 @@ class _DynamicExampleState extends State<DynamicExample> {
                   Expanded(
                     child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
-                      data: GenerateFakeDataHelper.generateData(_itemsPerPage, columnDefWithAllColumnsResizable.keys.toList()),
-                      totalItems: _itemsPerPage,
+                      data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
+                      totalItems: _totalItems,
                       config: VDataListConfig(),
 
                       // onLoadMore: _loadMoreData,
@@ -158,15 +181,22 @@ class _DynamicExampleState extends State<DynamicExample> {
             Expanded(
               child: VDataList(
                 columnDefs: columnDefs,
-                data: _data,
+                data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
                 config: VDataListConfig(),
-                totalItems: 20,
+                totalItems: _totalItems,
                 onRowTap: (rowData, column) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
+                  final rowDataMap = DataRowHelper.getRowDataAsMap(rowData);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowDataMap'))));
                   debugPrint(column.toString());
                 },
                 onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('Copied value: $value'))));
+                },
+                cellStyleBuilder: (context, id, cellData) {
+                  if (cellData.additionalData != null && cellData.additionalData!.containsKey('animal')) {
+                    return _getStyleForAnimal(cellData.additionalData!['animal']);
+                  }
+                  return null;
                 },
               ),
             ),

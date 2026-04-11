@@ -1,29 +1,35 @@
+import 'dart:math';
+
 import 'package:faker/faker.dart';
 import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/helpers/column_definition_helper.dart';
+import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 final faker = Faker();
 
 class GenerateFakeDataHelper {
-  static String _getValueForColumn(String columnId) {
+  static VDataListRowCellData _getValueForColumn(String columnId, bool isEvenRow) {
     switch (columnId) {
       case 'id':
-        return faker.guid.guid();
+        return VDataListRowCellData(value: faker.guid.guid());
       case 'name':
-        return faker.person.name();
+        return VDataListRowCellData(
+          value: faker.person.name(),
+          additionalData: isEvenRow ? {'animal': generateRandomAnimalFromArray()} : null,
+        );
       case 'email':
-        return faker.internet.email();
+        return VDataListRowCellData(value: faker.internet.email());
       case 'phone':
-        return faker.phoneNumber.us();
+        return VDataListRowCellData(value: faker.phoneNumber.us());
       case 'street':
-        return faker.address.streetAddress();
+        return VDataListRowCellData(value: faker.address.streetAddress());
       case 'city':
-        return faker.address.city();
+        return VDataListRowCellData(value: faker.address.city());
       case 'country':
-        return faker.address.country();
+        return VDataListRowCellData(value: faker.address.country());
       default:
-        return '';
+        return VDataListRowCellData(value: '');
     }
   }
 
@@ -32,12 +38,19 @@ class GenerateFakeDataHelper {
 
     for (int i = 0; i < rowCount; i++) {
       final VDataListDataRow rowData = {};
+      final isEvenRow = i % 2 == 0;
       for (var columnId in columnIds) {
-        rowData[columnId] = _getValueForColumn(columnId);
+        rowData[columnId] = _getValueForColumn(columnId, isEvenRow);
       }
       rows.add(Map.from(rowData));
     }
     return rows;
+  }
+
+  static String generateRandomAnimalFromArray() {
+    const animals = ['Dog', 'Cat', 'Fish', 'Horse', 'Owl', 'Mouse', 'Chicken', 'Bug'];
+    final random = Random();
+    return animals[random.nextInt(animals.length)];
   }
 }
 
