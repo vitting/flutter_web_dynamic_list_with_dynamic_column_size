@@ -21,11 +21,11 @@ class _DynamicExampleState extends State<DynamicExample> {
   VDataListRowCellStyle? _getStyleForAnimal(String animal) {
     switch (animal) {
       case 'Dog':
-        return VDataListRowCellStyle(backgroundColor: Colors.brown[200], icon: Icon(Symbols.sound_detection_dog_barking));
+        return VDataListRowCellStyle(textColor: Colors.brown[200], icon: Icon(Symbols.sound_detection_dog_barking));
       case 'Cat':
         return VDataListRowCellStyle(icon: Icon(Symbols.pets), fontWeight: FontWeight.w700);
       case 'Fish':
-        return VDataListRowCellStyle(backgroundColor: Colors.blue[200]);
+        return VDataListRowCellStyle(textColor: Colors.blue[200]);
       case 'Horse':
         return VDataListRowCellStyle(
           backgroundColor: Colors.brown[400],
@@ -35,11 +35,11 @@ class _DynamicExampleState extends State<DynamicExample> {
       case 'Owl':
         return VDataListRowCellStyle(backgroundColor: Colors.grey[500], icon: Icon(Symbols.owl));
       case 'Mouse':
-        return VDataListRowCellStyle(backgroundColor: Colors.grey[200], icon: Icon(Symbols.pest_control_rodent));
+        return VDataListRowCellStyle(textColor: Colors.grey[200], icon: Icon(Symbols.pest_control_rodent));
       case 'Chicken':
-        return VDataListRowCellStyle(backgroundColor: Colors.yellow[200], icon: Icon(Symbols.egg));
+        return VDataListRowCellStyle(textColor: Colors.yellow[200], icon: Icon(Symbols.egg));
       case 'Bug':
-        return VDataListRowCellStyle(backgroundColor: Colors.green[200], icon: Icon(Symbols.bug_report));
+        return VDataListRowCellStyle(textColor: Colors.green[200], icon: Icon(Symbols.bug_report));
       default:
         return null;
     }
