@@ -181,7 +181,7 @@ class _DynamicExampleState extends State<DynamicExample> {
             Expanded(
               child: VDataList(
                 columnDefs: columnDefs,
-                data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
+                data: GenerateFakeDataHelper.generateData(_totalItems, columnDefs.keys.toList()),
                 config: VDataListConfig(),
                 totalItems: _totalItems,
                 onRowTap: (rowData, column) {
@@ -192,7 +192,7 @@ class _DynamicExampleState extends State<DynamicExample> {
                 onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('Copied value: $value'))));
                 },
-                cellStyleBuilder: (context, id, cellData) {
+                rowCellStyleBuilder: (context, id, cellData) {
                   if (cellData.additionalData != null && cellData.additionalData!.containsKey('animal')) {
                     return _getStyleForAnimal(cellData.additionalData!['animal']);
                   }

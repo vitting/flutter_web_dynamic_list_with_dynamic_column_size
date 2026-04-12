@@ -11,7 +11,7 @@ class VDataListRow extends StatefulWidget {
   final Function(VDataListDataRow data)? onRowTap;
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressCopy;
-  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? cellStyleBuilder;
+  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? rowCellStyleBuilder;
   final ColumnDefinitionMap columnDefs;
   final VDataListDataRow data;
   final VDataListConfig config;
@@ -26,7 +26,7 @@ class VDataListRow extends StatefulWidget {
     this.onRowTap,
     this.onLongPress,
     this.onLongPressCopy,
-    this.cellStyleBuilder,
+    this.rowCellStyleBuilder,
   });
 
   @override
@@ -75,7 +75,7 @@ class _VDataListRowState extends State<VDataListRow> {
               ...widget.columnDefs.entries.map((entry) {
                 final columnDef = entry.value;
                 final data = widget.data[columnDef.id] ?? VDataListRowCellData(value: '');
-                final cellStyle = widget.cellStyleBuilder?.call(context, columnDef.id, data);
+                final cellStyle = widget.rowCellStyleBuilder?.call(context, columnDef.id, data);
                 return VDataListRowCell(
                   id: columnDef.id,
                   data: data,

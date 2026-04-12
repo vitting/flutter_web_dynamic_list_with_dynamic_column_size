@@ -30,7 +30,7 @@ class VDataList extends StatefulWidget {
 
   /// An cell Style builder to override the default cell style for specific cells based on the column id and cell data.
   /// This allows for dynamic styling of cells based on their content or column.
-  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? cellStyleBuilder;
+  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? rowCellStyleBuilder;
 
   /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
   /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
@@ -91,7 +91,7 @@ class VDataList extends StatefulWidget {
     this.paginationItemsPerPage,
     this.onPaginationIndexChanged,
     this.paginationCurrentPage,
-    this.cellStyleBuilder,
+    this.rowCellStyleBuilder,
   });
 
   @override
@@ -194,7 +194,7 @@ class _VDataListState extends State<VDataList> {
       data: data,
       config: widget.config,
       isEven: isEven,
-      cellStyleBuilder: widget.cellStyleBuilder,
+      rowCellStyleBuilder: widget.rowCellStyleBuilder,
       onRowTap: (rowData) {
         widget.onRowTap?.call(rowData, _localColumnDefs);
       },
