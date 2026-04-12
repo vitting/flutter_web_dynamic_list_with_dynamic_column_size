@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
 class ColumnDefinition extends Equatable {
@@ -21,6 +22,9 @@ class ColumnDefinition extends Equatable {
   /// This is displayed in the column header and can be used to identify the column.
   final String label;
 
+  /// Whether the resize handler of this column is pinned or not.
+  final bool resizableHandlerPinned;
+
   /// An optional icon to display in each cell of this column.
   /// This can be used to add visual cues to the cells in this column.
   final Widget? rowCellIcon;
@@ -36,13 +40,13 @@ class ColumnDefinition extends Equatable {
   /// header and can be used to sort the data in the rows when the column header is tapped.
   final ColumnSortState sortState;
 
+  /// The type of the column, which can be used to determine how to render the cells in this column.
+  final ColumnDefinitionType type;
+
   /// The width of the column.
   /// If null, the column will auto-size based on its content.
   /// If not null, the column will have a fixed width.
   final double? width;
-
-  /// The type of the column, which can be used to determine how to render the cells in this column.
-  final ColumnDefinitionType type;
 
   const ColumnDefinition({
     required this.id,
@@ -55,6 +59,7 @@ class ColumnDefinition extends Equatable {
     this.columnSpacing = 0,
     this.rowCellIconPlacement = RowCellIconPlacement.left,
     this.type = ColumnDefinitionType.text,
+    this.resizableHandlerPinned = false,
   });
 
   @override
@@ -69,11 +74,12 @@ class ColumnDefinition extends Equatable {
     columnSpacing,
     rowCellIconPlacement,
     type,
+    resizableHandlerPinned,
   ];
 
   @override
   String toString() {
-    return 'ColumnDefinition(columnSpacing: $columnSpacing, id: $id, isResizable: $isResizable, label: $label, rowCellIcon: $rowCellIcon, rowCellIconPlacement: $rowCellIconPlacement, rowCellIconSpacing: $rowCellIconSpacing, sortState: $sortState, width: $width, type: $type)';
+    return 'ColumnDefinition(columnSpacing: $columnSpacing, id: $id, isResizable: $isResizable, label: $label, rowCellIcon: $rowCellIcon, rowCellIconPlacement: $rowCellIconPlacement, rowCellIconSpacing: $rowCellIconSpacing, sortState: $sortState, width: $width, type: $type, resizableHandlerPinned: $resizableHandlerPinned)';
   }
 
   ColumnDefinition setWidth(double? newWidth) {
@@ -88,6 +94,7 @@ class ColumnDefinition extends Equatable {
       rowCellIconPlacement: rowCellIconPlacement,
       columnSpacing: columnSpacing,
       type: type,
+      resizableHandlerPinned: resizableHandlerPinned,
     );
   }
 
@@ -102,6 +109,7 @@ class ColumnDefinition extends Equatable {
     ColumnSortState? sortState,
     double? width,
     ColumnDefinitionType? type,
+    bool? resizableHandlerPinned,
   }) {
     return ColumnDefinition(
       columnSpacing: columnSpacing ?? this.columnSpacing,
@@ -114,6 +122,7 @@ class ColumnDefinition extends Equatable {
       sortState: sortState ?? this.sortState,
       width: width ?? this.width,
       type: type ?? this.type,
+      resizableHandlerPinned: resizableHandlerPinned ?? this.resizableHandlerPinned,
     );
   }
 }

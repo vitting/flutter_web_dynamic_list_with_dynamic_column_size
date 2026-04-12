@@ -15,6 +15,7 @@ class VDataListHeaderCell extends StatefulWidget {
   final Widget? resizeHandler;
   final bool showSortIconsInHeader;
   final TextStyle? textStyle;
+  final bool resizableHandlerPinned;
 
   const VDataListHeaderCell({
     super.key,
@@ -31,6 +32,7 @@ class VDataListHeaderCell extends StatefulWidget {
     this.resizeHandler,
     this.showSortIconsInHeader = true,
     this.textStyle,
+    this.resizableHandlerPinned = false,
   });
 
   @override
@@ -47,14 +49,14 @@ class _VDataListHeaderCellState extends State<VDataListHeaderCell> {
       child: SizedBox(
         width: widget.width,
         child: MouseRegion(
-          onHover: widget.isResizable
+          onHover: widget.isResizable && !widget.resizableHandlerPinned
               ? (event) {
                   setState(() {
                     _isHovering = true;
                   });
                 }
               : null,
-          onExit: widget.isResizable
+          onExit: widget.isResizable && !widget.resizableHandlerPinned
               ? (event) {
                   if (!_isDragging) {
                     setState(() {
@@ -113,7 +115,9 @@ class _VDataListHeaderCellState extends State<VDataListHeaderCell> {
                 onLongPress: () {
                   widget.onDragHandlerLongPress?.call(widget.id);
                 },
-                child: widget.isResizable && _isHovering ? widget.resizeHandler : SizedBox.shrink(),
+                child: widget.isResizable && (_isHovering || widget.resizableHandlerPinned)
+                    ? widget.resizeHandler
+                    : SizedBox.shrink(),
               ),
             ],
           ),
