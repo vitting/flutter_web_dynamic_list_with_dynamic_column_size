@@ -17,6 +17,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
   TotalCountTheme get totalCountTheme;
   ResizeHandlerTheme get resizeHandlerTheme;
   PaginationTheme get paginationTheme;
+  NoDataTheme get noDataTheme;
 
   @override
   VDataListTheme copyWith({
@@ -27,6 +28,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
     TotalCountTheme? totalCountTheme,
     ResizeHandlerTheme? resizeHandlerTheme,
     PaginationTheme? paginationTheme,
+    NoDataTheme? noDataTheme,
   }) {
     return VDataListTheme(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -36,6 +38,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       totalCountTheme: totalCountTheme ?? this.totalCountTheme,
       resizeHandlerTheme: resizeHandlerTheme ?? this.resizeHandlerTheme,
       paginationTheme: paginationTheme ?? this.paginationTheme,
+      noDataTheme: noDataTheme ?? this.noDataTheme,
     );
   }
 
@@ -53,6 +56,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       totalCountTheme: totalCountTheme.lerp(other.totalCountTheme, t),
       resizeHandlerTheme: resizeHandlerTheme.lerp(other.resizeHandlerTheme, t),
       paginationTheme: paginationTheme.lerp(other.paginationTheme, t),
+      noDataTheme: noDataTheme.lerp(other.noDataTheme, t),
     );
   }
 
@@ -85,6 +89,10 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
             const DeepCollectionEquality().equals(
               paginationTheme,
               other.paginationTheme,
+            ) &&
+            const DeepCollectionEquality().equals(
+              noDataTheme,
+              other.noDataTheme,
             ));
   }
 
@@ -99,6 +107,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       const DeepCollectionEquality().hash(totalCountTheme),
       const DeepCollectionEquality().hash(resizeHandlerTheme),
       const DeepCollectionEquality().hash(paginationTheme),
+      const DeepCollectionEquality().hash(noDataTheme),
     );
   }
 }
@@ -114,6 +123,7 @@ extension VDataListThemeBuildContextProps on BuildContext {
   ResizeHandlerTheme get resizeHandlerTheme =>
       vDataListTheme.resizeHandlerTheme;
   PaginationTheme get paginationTheme => vDataListTheme.paginationTheme;
+  NoDataTheme get noDataTheme => vDataListTheme.noDataTheme;
 }
 
 mixin _$HeaderThemeTailorMixin on ThemeExtension<HeaderTheme> {
@@ -504,6 +514,49 @@ mixin _$PaginationThemeTailorMixin on ThemeExtension<PaginationTheme> {
       const DeepCollectionEquality().hash(hoverBackgroundColor),
       const DeepCollectionEquality().hash(hoverTextStyle),
       const DeepCollectionEquality().hash(hoverSelectedTextStyle),
+    );
+  }
+}
+
+mixin _$NoDataThemeTailorMixin on ThemeExtension<NoDataTheme> {
+  TextStyle get textStyle;
+  Color get backgroundColor;
+
+  @override
+  NoDataTheme copyWith({TextStyle? textStyle, Color? backgroundColor}) {
+    return NoDataTheme(
+      textStyle: textStyle ?? this.textStyle,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+    );
+  }
+
+  @override
+  NoDataTheme lerp(covariant ThemeExtension<NoDataTheme>? other, double t) {
+    if (other is! NoDataTheme) return this as NoDataTheme;
+    return NoDataTheme(
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is NoDataTheme &&
+            const DeepCollectionEquality().equals(textStyle, other.textStyle) &&
+            const DeepCollectionEquality().equals(
+              backgroundColor,
+              other.backgroundColor,
+            ));
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      runtimeType.hashCode,
+      const DeepCollectionEquality().hash(textStyle),
+      const DeepCollectionEquality().hash(backgroundColor),
     );
   }
 }

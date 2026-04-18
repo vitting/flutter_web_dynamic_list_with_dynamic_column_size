@@ -56,6 +56,7 @@ class VDataListHeader extends StatelessWidget {
                   width: config.rowClickHandlerWidth,
                   isResizable: false,
                   showSortIconsInHeader: false,
+                  resizableHandlerPinned: false,
                 ),
             ],
           ),

@@ -64,7 +64,7 @@ final ColumnDefinitionMap columnDefs = {
   'id': ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: true),
   'name': ColumnDefinition(id: 'name', label: 'Name', width: null, isResizable: true),
   'email': ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: true),
-  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null, isResizable: true, resizableHandlerPinned: true),
+  'phone': ColumnDefinition(id: 'phone', label: 'Phone', width: null, isResizable: true),
   'street': ColumnDefinition(id: 'street', label: 'Street', width: null, isResizable: true),
   'city': ColumnDefinition(id: 'city', label: 'City', width: null, isResizable: true),
   'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: true),

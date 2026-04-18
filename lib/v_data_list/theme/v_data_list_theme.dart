@@ -13,6 +13,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     required this.resizeHandlerTheme,
     required this.backgroundColor,
     required this.paginationTheme,
+    required this.noDataTheme,
   });
 
   @override
@@ -36,6 +37,9 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
   @override
   final PaginationTheme paginationTheme;
 
+  @override
+  final NoDataTheme noDataTheme;
+
   static VDataListTheme get defaultTheme => VDataListTheme(
     headerTheme: HeaderTheme.defaultTheme,
     footerTheme: FooterTheme.defaultTheme,
@@ -43,6 +47,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     totalCountTheme: TotalCountTheme.defaultTheme,
     resizeHandlerTheme: ResizeHandlerTheme.defaultTheme,
     paginationTheme: PaginationTheme.defaultTheme,
+    noDataTheme: NoDataTheme.defaultTheme,
     backgroundColor: Colors.white,
   );
 
@@ -192,5 +197,21 @@ class PaginationTheme extends ThemeExtension<PaginationTheme> with _$PaginationT
     hoverBackgroundColor: Colors.lightBlue,
     hoverTextStyle: const TextStyle(color: Colors.white),
     hoverSelectedTextStyle: const TextStyle(color: Colors.black),
+  );
+}
+
+@tailorMixinComponent
+class NoDataTheme extends ThemeExtension<NoDataTheme> with _$NoDataThemeTailorMixin {
+  const NoDataTheme({required this.textStyle, required this.backgroundColor});
+
+  @override
+  final TextStyle textStyle;
+
+  @override
+  final Color backgroundColor;
+
+  static NoDataTheme get defaultTheme => const NoDataTheme(
+    textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    backgroundColor: Colors.white,
   );
 }

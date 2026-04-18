@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row_cell.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
@@ -102,6 +103,7 @@ class _VDataListRowState extends State<VDataListRow> {
                   data: VDataListRowCellData(value: ''),
                   config: widget.config,
                   width: widget.config.rowClickHandlerWidth,
+                  iconPlacement: RowCellIconPlacement.right,
                   icon: IconButton(
                     onPressed: () {
                       widget.onRowTap?.call(widget.data);

@@ -75,9 +75,9 @@ class VDataListRowCell extends StatelessWidget {
 
     widget = Row(
       children: [
-        if (_hasIcon && _isIconOnLeft) ...[cellStyle!.icon ?? icon!, if (iconSpacing > 0) SizedBox(width: columnSpacing)],
+        if (_hasIcon && _isIconOnLeft) ...[cellStyle?.icon ?? icon!, if (iconSpacing > 0) SizedBox(width: columnSpacing)],
         Expanded(child: widget),
-        if (_hasIcon && _isIconOnRight) ...[if (iconSpacing > 0) SizedBox(width: columnSpacing), cellStyle!.icon ?? icon!],
+        if (_hasIcon && _isIconOnRight) ...[if (iconSpacing > 0) SizedBox(width: columnSpacing), cellStyle?.icon ?? icon!],
         if (columnSpacing > 0) SizedBox(width: columnSpacing),
       ],
     );

@@ -29,6 +29,11 @@ class VDataListConfig {
   /// The padding for the header row.
   final EdgeInsetsGeometry headerPadding;
 
+  /// The scroll distance from the bottom of the list at which to trigger the [onLoadMore] callback when infinite scrolling is enabled.
+  /// The range is a value between 0 and 1, where 0 means the callback will be triggered as soon as the user scrolls past the current loaded items,
+  /// and 1 means the callback will be triggered when the user is at the very bottom of the list.
+  final double loadMoreThresholdScrollDistance;
+
   /// Whether long pressing a cell should copy its value to the clipboard.
   /// If true, long pressing a cell will copy its value to the clipboard and
   /// show a snackbar with the [copyCellValueToClipboardMessage] if not null.
@@ -136,6 +141,9 @@ class VDataListConfig {
   /// Whether tapping the row should trigger the [onRowTap] callback even if [showRowClickHandler] is true.
   final bool triggerOnRowTapWhenRowClickHandlerIsShown;
 
+  /// The border radius for the no data widget when there is no data to display in the list.
+  final BorderRadiusGeometry noDataBorderRadius;
+
   VDataListConfig({
     this.headerBottomSpacing = 4,
     this.longPressToCopyCellValueToClipboard = true,
@@ -177,6 +185,8 @@ class VDataListConfig {
     this.totalCountPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     this.showRowHoverColor = true,
     this.showRowEvenBackgroundColor = true,
+    this.loadMoreThresholdScrollDistance = 0.5,
+    this.noDataBorderRadius = const BorderRadius.all(Radius.circular(8)),
   });
 
   VDataListConfig copyWith({
@@ -188,6 +198,7 @@ class VDataListConfig {
     BorderRadiusGeometry? headerBorderRadius,
     double? headerBottomSpacing,
     EdgeInsetsGeometry? headerPadding,
+    double? loadMoreThresholdScrollDistance,
     bool? longPressToCopyCellValueToClipboard,
     String? noDataMessage,
     BorderRadiusGeometry? paginationBorderRadius,
@@ -205,6 +216,8 @@ class VDataListConfig {
     double? rowSpacing,
     bool? showPagination,
     bool? showRowClickHandler,
+    bool? showRowEvenBackgroundColor,
+    bool? showRowHoverColor,
     bool? showSortIconsInHeader,
     bool? showTooltip,
     bool? showTotalCount,
@@ -218,8 +231,7 @@ class VDataListConfig {
     EdgeInsetsGeometry? totalCountPadding,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    bool? showRowHoverColor,
-    bool? showRowEvenBackgroundColor,
+    BorderRadiusGeometry? noDataBorderRadius,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -230,6 +242,7 @@ class VDataListConfig {
       headerBorderRadius: headerBorderRadius ?? this.headerBorderRadius,
       headerBottomSpacing: headerBottomSpacing ?? this.headerBottomSpacing,
       headerPadding: headerPadding ?? this.headerPadding,
+      loadMoreThresholdScrollDistance: loadMoreThresholdScrollDistance ?? this.loadMoreThresholdScrollDistance,
       longPressToCopyCellValueToClipboard: longPressToCopyCellValueToClipboard ?? this.longPressToCopyCellValueToClipboard,
       noDataMessage: noDataMessage ?? this.noDataMessage,
       paginationBorderRadius: paginationBorderRadius ?? this.paginationBorderRadius,
@@ -247,6 +260,8 @@ class VDataListConfig {
       rowSpacing: rowSpacing ?? this.rowSpacing,
       showPagination: showPagination ?? this.showPagination,
       showRowClickHandler: showRowClickHandler ?? this.showRowClickHandler,
+      showRowEvenBackgroundColor: showRowEvenBackgroundColor ?? this.showRowEvenBackgroundColor,
+      showRowHoverColor: showRowHoverColor ?? this.showRowHoverColor,
       showSortIconsInHeader: showSortIconsInHeader ?? this.showSortIconsInHeader,
       showTooltip: showTooltip ?? this.showTooltip,
       showTotalCount: showTotalCount ?? this.showTotalCount,
@@ -261,8 +276,7 @@ class VDataListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      showRowHoverColor: showRowHoverColor ?? this.showRowHoverColor,
-      showRowEvenBackgroundColor: showRowEvenBackgroundColor ?? this.showRowEvenBackgroundColor,
+      noDataBorderRadius: noDataBorderRadius ?? this.noDataBorderRadius,
     );
   }
 }

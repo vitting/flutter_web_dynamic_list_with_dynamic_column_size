@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide DataRow;
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
+import 'package:v_data_list/v_data_list/no_data/v_data_list_no_data.dart';
 import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
@@ -71,6 +72,8 @@ class VDataList extends StatefulWidget {
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
   final int totalItems;
 
+  final Widget? noData;
+
   const VDataList({
     super.key,
     required this.columnDefs,
@@ -92,6 +95,7 @@ class VDataList extends StatefulWidget {
     this.onPaginationIndexChanged,
     this.paginationCurrentPage,
     this.rowCellStyleBuilder,
+    this.noData,
   });
 
   @override
@@ -140,7 +144,7 @@ class _VDataListState extends State<VDataList> {
       final scrollPosition = _verticalController.position;
       final scrollPercentage = scrollPosition.pixels / scrollPosition.maxScrollExtent;
 
-      if (scrollPercentage >= 0.5 && _loadMoreData && !_hasTriggeredLoadMore) {
+      if (scrollPercentage >= widget.config.loadMoreThresholdScrollDistance && _loadMoreData && !_hasTriggeredLoadMore) {
         _hasTriggeredLoadMore = true;
         widget.onLoadMore!();
       }
@@ -271,7 +275,7 @@ class _VDataListState extends State<VDataList> {
               ),
               if (widget.config.showTotalCount && widget.config.totalItemsPosition == TotalCountPosition.bottom) _buildTotalCount,
               if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
-                SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(widget.config.noDataMessage!)))
+                VDataListNoData(config: widget.config, child: widget.noData)
               else
                 SliverList.builder(
                   itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
