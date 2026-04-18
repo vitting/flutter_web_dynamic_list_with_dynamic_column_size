@@ -56,11 +56,9 @@ class _PaginationExampleState extends State<PaginationExample> {
                 paginationItemsPerPage: _itemsPerPage,
                 onPaginationIndexChanged: (page, totalItems, pageSize) {
                   // Simulate loading data for the selected page
-                  Future.delayed(const Duration(seconds: 1), () {
-                    setState(() {
-                      _currentPage = page;
-                      _data = [...GenerateFakeDataHelper.generateData(pageSize, columnDefs.keys.toList())];
-                    });
+                  setState(() {
+                    _currentPage = page;
+                    _data = [...GenerateFakeDataHelper.generateData(pageSize, columnDefs.keys.toList())];
                   });
                 },
                 onRowTap: (rowData, column) {

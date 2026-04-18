@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:v_data_list/screens/custom_snackbar.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
@@ -59,13 +60,9 @@ class _DynamicExampleState extends State<DynamicExample> {
                   Expanded(
                     child: VDataList(
                       columnDefs: columnDefWithAllColumnsResizable,
-                      // data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
                       data: [],
                       totalItems: _totalItems,
                       config: VDataListConfig(),
-                      // onLoadMore: _loadMoreData,
-                      // isLoading: false,
-                      // totalItems: _totalItems,
                       onRowTap: (rowData, column) {
                         ScaffoldMessenger.of(
                           context,
@@ -78,7 +75,7 @@ class _DynamicExampleState extends State<DynamicExample> {
                     child: Container(
                       color: Colors.blue,
                       height: 50,
-                      child: const Center(child: Text('This is a header that is outside of the list')),
+                      child: const Center(child: Text('Some other content')),
                     ),
                   ),
                 ],
@@ -91,7 +88,7 @@ class _DynamicExampleState extends State<DynamicExample> {
                     child: Container(
                       color: Colors.blue,
                       height: 50,
-                      child: const Center(child: Text('This is a header that is outside of the list')),
+                      child: const Center(child: Text('Some other content')),
                     ),
                   ),
 
@@ -101,10 +98,6 @@ class _DynamicExampleState extends State<DynamicExample> {
                       data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
                       totalItems: _totalItems,
                       config: VDataListConfig(),
-
-                      // onLoadMore: _loadMoreData,
-                      // isLoading: false,
-                      // totalItems: _totalItems,
                       onRowTap: (rowData, column) {
                         ScaffoldMessenger.of(
                           context,
@@ -117,68 +110,13 @@ class _DynamicExampleState extends State<DynamicExample> {
                     child: Container(
                       color: Colors.blue,
                       height: 50,
-                      child: const Center(child: Text('This is a header that is outside of the list')),
+                      child: const Center(child: Text('Some other content')),
                     ),
                   ),
                 ],
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: Colors.amber,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                      Container(
-                        color: Colors.amber,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: Colors.green,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                      Container(
-                        color: Colors.green,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        color: Colors.red,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                      Container(
-                        color: Colors.red,
-                        height: 50,
-                        child: const Center(child: Text('This is a header that is outside of the list')),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+
             Expanded(
               child: VDataList(
                 columnDefs: columnDefs,
@@ -191,7 +129,7 @@ class _DynamicExampleState extends State<DynamicExample> {
                   debugPrint(column.toString());
                 },
                 onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('Copied value: $value'))));
+                  CustomSnackbar.copySnackbar(context, value);
                 },
                 rowCellStyleBuilder: (context, id, cellData) {
                   if (cellData.additionalData != null && cellData.additionalData!.containsKey('animal')) {
