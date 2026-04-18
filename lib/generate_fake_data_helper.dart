@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/helpers/column_definition_helper.dart';
+import 'package:v_data_list/v_data_list/helpers/data_row_helper.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
@@ -128,4 +129,30 @@ final ColumnDefinitionMap columnDefinitions = ColumnDefinitionHelper.generateCol
   ColumnDefinition(id: 'street', label: 'Street'),
   ColumnDefinition(id: 'city', label: 'City'),
   ColumnDefinition(id: 'country', label: 'Country'),
+]);
+
+final VDataListDataRowList listOfRowExample = [
+  {
+    'id': VDataListRowCellData(value: '1'),
+    'name': VDataListRowCellData(value: 'John Doe'),
+    'email': VDataListRowCellData(value: 'example@email.com'),
+    'phone': VDataListRowCellData(value: '123-456-7890'),
+    'street': VDataListRowCellData(value: '123 Main St'),
+    'city': VDataListRowCellData(value: 'Any town'),
+    'country': VDataListRowCellData(value: 'USA'),
+  },
+  {
+    'id': VDataListRowCellData(value: '2'),
+    'name': VDataListRowCellData(value: 'Jane Smith'),
+    'email': VDataListRowCellData(value: 'another_email@example.com'),
+    'phone': VDataListRowCellData(value: '987-654-3210'),
+    'street': VDataListRowCellData(value: '456 Elm St'),
+    'city': VDataListRowCellData(value: 'Other town'),
+    'country': VDataListRowCellData(value: 'Canada'),
+  },
+];
+
+final VDataListDataRowList listOfRowExample2 = DataRowHelper.generateDataRowListFromListOfData(columnDefs, [
+  ['1', 'John Doe', 'example@email.com', '123-456-7890', '123 Main St', 'Any town', 'USA'],
+  ['2', 'Jane Smith', 'another_email@example.com', '987-654-3210', '456 Elm St', 'Other town', 'Canada'],
 ]);

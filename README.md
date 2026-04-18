@@ -24,6 +24,10 @@ A Flutter web application demonstrating a dynamic data list component with resiz
 
 The core component is `VDataList` which accepts:
 
+#### ColumnDefinition
+
+First define the structure of your data which is done by defining a list of columnDefinitions
+
 ```dart
 final ColumnDefinitionMap columnDefinitions = {
   'id': ColumnDefinition(id: 'id', label: 'ID'),
@@ -36,7 +40,7 @@ final ColumnDefinitionMap columnDefinitions = {
 };
 ```
 
-or you can use the `ColumnDefinitionHelper`. It creates the `ColumnDefinitionMap` from the id's
+or you can use the `ColumnDefinitionHelper`. It creates the `ColumnDefinitionMap` from the id's in the ColumnDefinition
 
 ```dart
 final ColumnDefinitionMap columnDefinitions = ColumnDefinitionHelper.generateColumnDefinitionMap([
@@ -50,7 +54,55 @@ final ColumnDefinitionMap columnDefinitions = ColumnDefinitionHelper.generateCol
 ]);
 ```
 
-#### ColumnDefinition Properties
+#### VDataListDataRowList
+
+Then organize your data into a structure of `VDataListDataRowList`
+
+```dart
+final VDataListDataRowList data = [
+  {
+    'id': VDataListRowCellData(value: '1'),
+    'name': VDataListRowCellData(value: 'John Doe'),
+    'email': VDataListRowCellData(value: 'example@email.com'),
+    'phone': VDataListRowCellData(value: '123-456-7890'),
+    'street': VDataListRowCellData(value: '123 Main St'),
+    'city': VDataListRowCellData(value: 'Any town'),
+    'country': VDataListRowCellData(value: 'USA'),
+  },
+  {
+    'id': VDataListRowCellData(value: '2'),
+    'name': VDataListRowCellData(value: 'Jane Smith'),
+    'email': VDataListRowCellData(value: 'another_email@example.com'),
+    'phone': VDataListRowCellData(value: '987-654-3210'),
+    'street': VDataListRowCellData(value: '456 Elm St'),
+    'city': VDataListRowCellData(value: 'Other town'),
+    'country': VDataListRowCellData(value: 'Canada'),
+  },
+];
+```
+
+or if you have data in a structure of List of lists then you can use `DataRowHelper.generateDataRowListFromListOfData`
+
+```dart
+final VDataListDataRowList data = DataRowHelper.generateDataRowListFromListOfData(columnDefinitions, [
+  ['1', 'John Doe', 'example@email.com', '123-456-7890', '123 Main St', 'Any town', 'USA'],
+  ['2', 'Jane Smith', 'another_email@example.com', '987-654-3210', '456 Elm St', 'Other town', 'Canada'],
+]);
+```
+
+#### VDataList widget
+
+```dart
+VDataList(
+    columnDefs: columnDefinitions,
+    config: VDataListConfig(),
+    data: data,
+),
+```
+
+Thats all!!!
+
+## ColumnDefinition Properties
 
 <!-- markdownlint-disable MD060 -->
 The `ColumnDefinition` class supports the following properties:
@@ -87,12 +139,12 @@ ColumnDefinition(
 )
 ```
 
-#### VDataList Properties
+## VDataList Properties
 
 <!-- markdownlint-disable MD060 -->
 The `VDataList` widget supports the following properties:
 
-##### Required Properties
+### Required Properties
 
 | Property     | Type                  | Description                                                              |
 | ------------ | --------------------- | ------------------------------------------------------------------------ |
@@ -100,14 +152,14 @@ The `VDataList` widget supports the following properties:
 | `config`     | `VDataListConfig`     | Configuration settings for appearance and behavior of the list.          |
 | `totalItems` | `int`                 | Total number of items (used for pagination and load more functionality). |
 
-##### Data Properties
+### Data Properties
 
 | Property | Type                   | Required | Default | Description                                                            |
 | -------- | ---------------------- | -------- | ------- | ---------------------------------------------------------------------- |
 | `data`   | `VDataListDataRowList` | ❌        | `[]`    | The data to display in rows. Each row should match column definitions. |
 | `noData` | `Widget?`              | ❌        | `null`  | Custom widget to display when there is no data.                        |
 
-##### Loading & Pagination Properties
+### Loading & Pagination Properties
 
 | Property                 | Type   | Required | Default | Description                                                  |
 | ------------------------ | ------ | -------- | ------- | ------------------------------------------------------------ |
@@ -115,7 +167,7 @@ The `VDataList` widget supports the following properties:
 | `paginationCurrentPage`  | `int?` | ❌        | `null`  | Current page index for pagination (zero-based).              |
 | `paginationItemsPerPage` | `int?` | ❌        | `null`  | Number of items per page for pagination controls.            |
 
-##### Callback Properties
+### Callback Properties
 
 | Property                   | Type                                                                             | Description                                                     |
 | -------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------- |
@@ -128,13 +180,13 @@ The `VDataList` widget supports the following properties:
 | `onLoadMore`               | `void Function()?`                                                               | Called when user scrolls to end of list for infinite scrolling. |
 | `onPaginationIndexChanged` | `void Function(int page, int totalItems, int pageSize)?`                         | Called when pagination page changes.                            |
 
-##### Styling Properties
+### Styling Properties
 
 | Property              | Type                                                                                             | Description                                                  |
 | --------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | `rowCellStyleBuilder` | `VDataListRowCellStyle? Function(BuildContext, String, VDataListRowCellData, ColumnDefinition)?` | Builder for custom cell styling based on content and column. |
 
-##### UI Component Properties
+### UI Component Properties
 
 | Property        | Type      | Description                                            |
 | --------------- | --------- | ------------------------------------------------------ |
@@ -145,9 +197,12 @@ The `VDataList` widget supports the following properties:
 #### VDataListConfig Properties
 
 <!-- markdownlint-disable MD060 -->
+
+## VDataListConfig properties
+
 The `VDataListConfig` class provides extensive customization options for the VDataList appearance and behavior:
 
-##### Header & Layout Properties
+### Header & Layout Properties
 
 | Property              | Type                   | Default                                | Description                                              |
 | --------------------- | ---------------------- | -------------------------------------- | -------------------------------------------------------- |
@@ -156,7 +211,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `headerBottomSpacing` | `double`               | `4`                                    | Spacing between the header and the first row.            |
 | `headerPadding`       | `EdgeInsetsGeometry`   | `EdgeInsets.all(8)`                    | Padding for the header row.                              |
 
-##### Row Styling Properties
+### Row Styling Properties
 
 | Property                     | Type                   | Default                                            | Description                                                                |
 | ---------------------------- | ---------------------- | -------------------------------------------------- | -------------------------------------------------------------------------- |
@@ -166,7 +221,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `showRowEvenBackgroundColor` | `bool`                 | `true`                                             | Whether to show different background color for even rows (striped effect). |
 | `showRowHoverColor`          | `bool`                 | `true`                                             | Whether to show hover background color for rows.                           |
 
-##### Row Interaction Properties
+### Row Interaction Properties
 
 | Property                                    | Type     | Default                                     | Description                                                              |
 | ------------------------------------------- | -------- | ------------------------------------------- | ------------------------------------------------------------------------ |
@@ -176,7 +231,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `triggerOnRowTapWhenRowClickHandlerIsShown` | `bool`   | `false`                                     | Whether tapping the row triggers `onRowTap` when click handler is shown. |
 | `longPressToCopyCellValueToClipboard`       | `bool`   | `true`                                      | Whether long pressing a cell copies its value to clipboard.              |
 
-##### Text & Content Properties
+### Text & Content Properties
 
 | Property           | Type      | Default               | Description                                                  |
 | ------------------ | --------- | --------------------- | ------------------------------------------------------------ |
@@ -184,7 +239,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `showTooltip`      | `bool`    | `true`                | Whether to show tooltips with full cell value when hovering. |
 | `noDataMessage`    | `String?` | `"No data available"` | Message to show when there is no data to display.            |
 
-##### Sorting Properties
+### Sorting Properties
 
 | Property                | Type     | Default                                                           | Description                                        |
 | ----------------------- | -------- | ----------------------------------------------------------------- | -------------------------------------------------- |
@@ -192,7 +247,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `sortIconAscending`     | `Widget` | `Icon(Symbols.arrow_upward_alt, color: Colors.white, size: 16)`   | Icon for ascending sort state.                     |
 | `sortIconDescending`    | `Widget` | `Icon(Symbols.arrow_downward_alt, color: Colors.white, size: 16)` | Icon for descending sort state.                    |
 
-##### Column Resize Properties
+### Column Resize Properties
 
 | Property                         | Type                  | Default                                  | Description                                                          |
 | -------------------------------- | --------------------- | ---------------------------------------- | -------------------------------------------------------------------- |
@@ -201,7 +256,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `resizeHandlerMargin`            | `EdgeInsetsGeometry?` | `EdgeInsets.only(right: 8)`              | Margin for resize handlers.                                          |
 | `resizeHandlerPadding`           | `EdgeInsetsGeometry?` | `EdgeInsets.all(4)`                      | Padding for resize handlers.                                         |
 
-##### Pagination Properties
+### Pagination Properties
 
 | Property                 | Type                   | Default                                | Description                                       |
 | ------------------------ | ---------------------- | -------------------------------------- | ------------------------------------------------- |
@@ -211,7 +266,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `paginationPadding`      | `EdgeInsetsGeometry`   | `EdgeInsets.all(8)`                    | Padding for pagination controls.                  |
 | `paginationPinned`       | `bool`                 | `false`                                | Whether pagination scrolls with the list content. |
 
-##### Total Count Properties
+### Total Count Properties
 
 | Property                  | Type                   | Default                                            | Description                                            |
 | ------------------------- | ---------------------- | -------------------------------------------------- | ------------------------------------------------------ |
@@ -222,7 +277,7 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `totalCountBottomSpacing` | `double`               | `4`                                                | Spacing below the total count display.                 |
 | `totalCountPadding`       | `EdgeInsetsGeometry?`  | `EdgeInsets.symmetric(horizontal: 8, vertical: 8)` | Padding for total count display.                       |
 
-##### Footer Properties
+### Footer Properties
 
 | Property             | Type                   | Default                                | Description                                   |
 | -------------------- | ---------------------- | -------------------------------------- | --------------------------------------------- |
@@ -231,13 +286,13 @@ The `VDataListConfig` class provides extensive customization options for the VDa
 | `footerPadding`      | `EdgeInsetsGeometry`   | `EdgeInsets.all(8)`                    | Padding for the footer.                       |
 | `footerPinned`       | `bool`                 | `false`                                | Whether footer scrolls with the list content. |
 
-##### Loading & Scrolling Properties
+### Loading & Scrolling Properties
 
 | Property                          | Type     | Default | Description                                                         |
 | --------------------------------- | -------- | ------- | ------------------------------------------------------------------- |
 | `loadMoreThresholdScrollDistance` | `double` | `0.5`   | Scroll distance (0-1) from bottom to trigger `onLoadMore` callback. |
 
-##### Styling Border Radius Properties
+### Styling Border Radius Properties
 
 | Property              | Type                   | Default                                | Description                       |
 | --------------------- | ---------------------- | -------------------------------------- | --------------------------------- |
