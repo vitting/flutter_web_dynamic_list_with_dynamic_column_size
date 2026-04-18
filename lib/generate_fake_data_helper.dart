@@ -119,3 +119,13 @@ final ColumnDefinitionMap columnDefsWithColumnsThatArentResizable = {
   'city': ColumnDefinition(id: 'city', label: 'City', width: null, isResizable: false),
   'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: false),
 };
+
+final ColumnDefinitionMap columnDefinitions = ColumnDefinitionHelper.generateColumnDefinitionMap([
+  ColumnDefinition(id: 'id', label: 'ID'),
+  ColumnDefinition(id: 'name', label: 'Name'),
+  ColumnDefinition(id: 'email', label: 'Email'),
+  ColumnDefinition(id: 'phone', label: 'Phone'),
+  ColumnDefinition(id: 'street', label: 'Street'),
+  ColumnDefinition(id: 'city', label: 'City'),
+  ColumnDefinition(id: 'country', label: 'Country'),
+]);

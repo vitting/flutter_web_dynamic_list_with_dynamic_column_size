@@ -131,7 +131,7 @@ class _DynamicExampleState extends State<DynamicExample> {
                 onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) {
                   CustomSnackbar.copySnackbar(context, value);
                 },
-                rowCellStyleBuilder: (context, id, cellData) {
+                rowCellStyleBuilder: (context, id, cellData, columnDef) {
                   if (cellData.additionalData != null && cellData.additionalData!.containsKey('animal')) {
                     return _getStyleForAnimal(cellData.additionalData!['animal']);
                   }

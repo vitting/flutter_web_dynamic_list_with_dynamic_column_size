@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row_cell.dart';
@@ -12,7 +13,13 @@ class VDataListRow extends StatefulWidget {
   final Function(VDataListDataRow data)? onRowTap;
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressCopy;
-  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? rowCellStyleBuilder;
+  final VDataListRowCellStyle? Function(
+    BuildContext context,
+    String id,
+    VDataListRowCellData cellData,
+    ColumnDefinition columnDef,
+  )?
+  rowCellStyleBuilder;
   final ColumnDefinitionMap columnDefs;
   final VDataListDataRow data;
   final VDataListConfig config;
@@ -76,7 +83,7 @@ class _VDataListRowState extends State<VDataListRow> {
               ...widget.columnDefs.entries.map((entry) {
                 final columnDef = entry.value;
                 final data = widget.data[columnDef.id] ?? VDataListRowCellData(value: '');
-                final cellStyle = widget.rowCellStyleBuilder?.call(context, columnDef.id, data);
+                final cellStyle = widget.rowCellStyleBuilder?.call(context, columnDef.id, data, columnDef);
                 return VDataListRowCell(
                   id: columnDef.id,
                   data: data,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide DataRow;
+import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
@@ -31,7 +32,13 @@ class VDataList extends StatefulWidget {
 
   /// An cell Style builder to override the default cell style for specific cells based on the column id and cell data.
   /// This allows for dynamic styling of cells based on their content or column.
-  final VDataListRowCellStyle? Function(BuildContext context, String id, VDataListRowCellData cellData)? rowCellStyleBuilder;
+  final VDataListRowCellStyle? Function(
+    BuildContext context,
+    String id,
+    VDataListRowCellData cellData,
+    ColumnDefinition columnDef,
+  )?
+  rowCellStyleBuilder;
 
   /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
   /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
