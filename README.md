@@ -52,6 +52,7 @@ final ColumnDefinitionMap columnDefinitions = ColumnDefinitionHelper.generateCol
 
 #### ColumnDefinition Properties
 
+<!-- markdownlint-disable MD060 -->
 The `ColumnDefinition` class supports the following properties:
 
 | Property                 | Type                   | Required | Default | Description                                                               |
