@@ -12,14 +12,11 @@ import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataList extends StatefulWidget {
-  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)? onRowTap;
-  final void Function(ColumnDefinitionMap updatedColumnDefinitions)? onColumnDefsChanged;
-  final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefinitions)? onSortChanged;
-  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)? onLongPress;
-  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)?
-  onLongPressRow;
-  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)?
-  onLongPressRowCopyValue;
+  final VDataListOnRowTap? onRowTap;
+  final VDataListonColumnDefsChanged? onColumnDefsChanged;
+  final VDataListOnSortChanged? onSortChanged;
+  final VDataListOnLongPressRow? onLongPressRow;
+  final VDataListOnLongPressRowCopyValue? onLongPressRowCopyValue;
 
   /// An optional callback that is triggered when the user scrolls to the end of the list,
   /// which can be used to load more data into the list.
@@ -86,7 +83,6 @@ class VDataList extends StatefulWidget {
     this.onRowTap,
     this.onColumnDefsChanged,
     this.onSortChanged,
-    this.onLongPress,
     required this.config,
     this.footer,
     this.resizeHandler,
@@ -183,10 +179,10 @@ class _VDataListState extends State<VDataList> {
     return totalWidth;
   }
 
-  void _sortChanged(String id, ColumnSortState sortState) {
+  void _sortChanged(String columnId, ColumnSortState sortState) {
     setState(() {
       _localColumnDefinitions = _localColumnDefinitions.map((key, value) {
-        if (key == id) {
+        if (key == columnId) {
           return MapEntry(key, value.copyWith(sortState: sortState));
         } else {
           return MapEntry(key, value.copyWith(sortState: ColumnSortState.none));
@@ -194,7 +190,7 @@ class _VDataListState extends State<VDataList> {
       });
 
       widget.onColumnDefsChanged?.call(_localColumnDefinitions);
-      widget.onSortChanged?.call(id, sortState, _localColumnDefinitions);
+      widget.onSortChanged?.call(columnId, sortState, _localColumnDefinitions);
     });
   }
 
@@ -212,16 +208,14 @@ class _VDataListState extends State<VDataList> {
     final rowContent =
         customRow ??
         VDataListRow(
-          columnDefs: _localColumnDefinitions,
+          columnDefinitions: _localColumnDefinitions,
           data: data,
           config: widget.config,
           isEven: isEven,
           rowCellStyleBuilder: widget.rowCellStyleBuilder,
-          onRowTap: (rowData) {
-            widget.onRowTap?.call(rowData, _localColumnDefinitions);
-          },
-          onLongPress: widget.onLongPressRow,
-          onLongPressCopy: widget.onLongPressRowCopyValue,
+          onRowTap: widget.onRowTap,
+          onLongPressRow: widget.onLongPressRow,
+          onLongPressRowCopyValue: widget.onLongPressRowCopyValue,
         );
 
     if (widget.config.textIsSelectable) {

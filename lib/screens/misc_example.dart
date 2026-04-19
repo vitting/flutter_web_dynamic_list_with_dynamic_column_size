@@ -186,7 +186,7 @@ class _MiscExampleState extends State<MiscExample> {
                             evenBackgroundColor: Colors.yellow,
                           )
                         : null,
-                    columnDefs: columnDefs,
+                    columnDefinitions: columnDefs,
                     isEven: isEven,
                     data: data,
                     config: config,

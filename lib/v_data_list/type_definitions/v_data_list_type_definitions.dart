@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
+import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
@@ -39,3 +40,16 @@ typedef VDataListRowBuilder =
       int index,
       bool isEven,
     );
+
+typedef VDataListOnRowTap = void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions);
+
+typedef VDataListonColumnDefsChanged = void Function(ColumnDefinitionMap updatedColumnDefinitions);
+
+typedef VDataListOnSortChanged =
+    void Function(String columnId, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefinitions);
+
+typedef VDataListOnLongPressRow =
+    void Function(String columnId, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions);
+
+typedef VDataListOnLongPressRowCopyValue =
+    void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions);
