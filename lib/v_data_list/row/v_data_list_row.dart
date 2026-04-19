@@ -13,7 +13,7 @@ class VDataListRow extends StatefulWidget {
   final VDataListOnLongPressRowCopyValue? onLongPressRowCopyValue;
   final VDataListRowCellStyleBuilder? rowCellStyleBuilder;
   final ColumnDefinitionMap columnDefinitions;
-  final VDataListDataRow data;
+  final VDataListDataRow rowData;
   final VDataListConfig config;
   final bool isEven;
   final RowTheme? rowTheme;
@@ -21,7 +21,7 @@ class VDataListRow extends StatefulWidget {
   const VDataListRow({
     super.key,
     required this.columnDefinitions,
-    required this.data,
+    required this.rowData,
     required this.config,
     this.isEven = false,
     this.onRowTap,
@@ -59,7 +59,7 @@ class _VDataListRowState extends State<VDataListRow> {
         onTap: widget.config.showRowClickHandler && !widget.config.triggerOnRowTapWhenRowClickHandlerIsShown
             ? null
             : () {
-                widget.onRowTap?.call(widget.data, widget.columnDefinitions);
+                widget.onRowTap?.call(widget.rowData, widget.columnDefinitions);
               },
         child: Container(
           decoration: BoxDecoration(
@@ -76,7 +76,7 @@ class _VDataListRowState extends State<VDataListRow> {
             children: [
               ...widget.columnDefinitions.entries.map((entry) {
                 final columnDef = entry.value;
-                final data = widget.data[columnDef.id] ?? VDataListRowCellData(value: '');
+                final data = widget.rowData[columnDef.id] ?? VDataListRowCellData(value: '');
                 final cellStyle = widget.rowCellStyleBuilder?.call(context, columnDef.id, data, columnDef);
                 return VDataListRowCell(
                   id: columnDef.id,
@@ -91,10 +91,10 @@ class _VDataListRowState extends State<VDataListRow> {
                   onLongPressCell: (value) async {
                     if (widget.config.longPressToCopyCellValueToClipboard) {
                       await Clipboard.setData(ClipboardData(text: value));
-                      widget.onLongPressRowCopyValue?.call(columnDef.id, value, widget.data, widget.columnDefinitions);
+                      widget.onLongPressRowCopyValue?.call(columnDef.id, value, widget.rowData, widget.columnDefinitions);
                     }
 
-                    widget.onLongPressRow?.call(columnDef.id, value, widget.data, widget.columnDefinitions);
+                    widget.onLongPressRow?.call(columnDef.id, value, widget.rowData, widget.columnDefinitions);
                   },
                 );
               }),
@@ -107,7 +107,7 @@ class _VDataListRowState extends State<VDataListRow> {
                   iconPlacement: RowCellIconPlacement.right,
                   icon: IconButton(
                     onPressed: () {
-                      widget.onRowTap?.call(widget.data, widget.columnDefinitions);
+                      widget.onRowTap?.call(widget.rowData, widget.columnDefinitions);
                     },
                     icon: widget.config.rowClickHandlerIcon,
                   ),

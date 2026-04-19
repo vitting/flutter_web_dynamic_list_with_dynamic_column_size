@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
@@ -172,11 +173,31 @@ class _MiscExampleState extends State<MiscExample> {
               child: VDataList(
                 columnDefinitions: columnDefs,
                 totalItems: 20,
-                config: VDataListConfig().copyWith(showRowEvenBackgroundColor: true, showRowHoverColor: false),
+                config: VDataListConfig().copyWith(
+                  showRowEvenBackgroundColor: true,
+                  showRowHoverColor: false,
+                  headerBorderRadius: BorderRadius.zero,
+                  headerBottomSpacing: 0,
+                ),
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                 },
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
+                headerBuilder:
+                    (context, columnDefintionMap, config, resizeHandler, onSortChanged, onDragHandlerLongPress, onDragUpdate) {
+                      return VDataListHeader(
+                        columnDefinitions: columnDefintionMap,
+                        config: config,
+                        resizeHandler: resizeHandler,
+                        onSortTap: onSortChanged,
+                        onDragHandlerLongPress: onDragHandlerLongPress,
+                        onDragUpdate: onDragUpdate,
+                        headerTheme: VDataListTheme.of(context).headerTheme.copyWith(
+                          backgroundColor: Colors.red,
+                          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
+                        ),
+                      );
+                    },
                 rowBuilder: (context, data, columnDefinitions, config, rowCellStyleBuilder, index, isEven) {
                   return VDataListRow(
                     rowTheme: isEven
@@ -186,9 +207,9 @@ class _MiscExampleState extends State<MiscExample> {
                             evenBackgroundColor: Colors.yellow,
                           )
                         : null,
-                    columnDefinitions: columnDefs,
+                    columnDefinitions: columnDefinitions,
                     isEven: isEven,
-                    data: data,
+                    rowData: data,
                     config: config,
                     rowCellStyleBuilder: (context, columnId, cellData, columnDefinition) {
                       if (columnId == 'name') {

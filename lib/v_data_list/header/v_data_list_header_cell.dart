@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
 class VDataListHeaderCell extends StatefulWidget {
-  final void Function(double delta, String id, double currentWidth)? onDragUpdate;
-  final void Function(String id, ColumnSortState sortState)? onSortTap;
-  final void Function(String id)? onDragHandlerLongPress;
+  final void Function(String columnId, double delta, double currentWidth)? onDragUpdate;
+  final void Function(String columnId, ColumnSortState sortState)? onSortTap;
+  final void Function(String columnId)? onDragHandlerLongPress;
   final String id;
   final bool isResizable;
-  final ColumnSortState sortState;
-  final String title;
-  final double? width;
-  final Widget? sortIconAscending;
-  final Widget? sortIconDescending;
+  final bool resizableHandlerPinned;
   final Widget? resizeHandler;
   final bool showSortIconsInHeader;
+  final Widget? sortIconAscending;
+  final Widget? sortIconDescending;
+  final ColumnSortState sortState;
   final TextStyle? textStyle;
-  final bool resizableHandlerPinned;
+  final String title;
+  final double? width;
 
   const VDataListHeaderCell({
     super.key,
@@ -42,6 +42,7 @@ class VDataListHeaderCell extends StatefulWidget {
 class _VDataListHeaderCellState extends State<VDataListHeaderCell> {
   bool _isDragging = false;
   bool _isHovering = false;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -101,7 +102,7 @@ class _VDataListHeaderCellState extends State<VDataListHeaderCell> {
                     : null,
                 onHorizontalDragUpdate: widget.isResizable
                     ? (details) {
-                        widget.onDragUpdate?.call(details.delta.dx, widget.id, context.size?.width ?? 0);
+                        widget.onDragUpdate?.call(widget.id, details.delta.dx, context.size?.width ?? 0);
                       }
                     : null,
                 onHorizontalDragEnd: widget.isResizable

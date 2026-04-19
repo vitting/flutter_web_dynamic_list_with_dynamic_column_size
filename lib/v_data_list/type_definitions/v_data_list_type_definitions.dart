@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
@@ -53,3 +54,14 @@ typedef VDataListOnLongPressRow =
 
 typedef VDataListOnLongPressRowCopyValue =
     void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions);
+
+typedef VDataListHeaderBuilder =
+    VDataListHeader Function(
+      BuildContext context,
+      ColumnDefinitionMap columnDefintionMap,
+      VDataListConfig config,
+      Widget? resizeHandler,
+      void Function(String columnId, ColumnSortState sortState)? onSortChanged,
+      void Function(String columnId)? onDragHandlerLongPress,
+      void Function(String, double, double)? onDragUpdate,
+    );

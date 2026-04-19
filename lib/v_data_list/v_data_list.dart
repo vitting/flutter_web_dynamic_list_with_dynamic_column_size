@@ -71,7 +71,11 @@ class VDataList extends StatefulWidget {
   /// An optional widget to display when there is no data to show in the list and [noDataMessage] is set in the config.
   final Widget? noData;
 
+  /// An optional custom row builder that can be used to build custom row widgets instead of the default [VDataListRow].
   final VDataListRowBuilder? rowBuilder;
+
+  /// An optional custom header builder that can be used to build a custom header widget instead of the default [VDataListHeader].
+  final VDataListHeaderBuilder? headerBuilder;
 
   const VDataList({
     super.key,
@@ -95,6 +99,7 @@ class VDataList extends StatefulWidget {
     this.rowCellStyleBuilder,
     this.noData,
     this.rowBuilder,
+    this.headerBuilder,
   });
 
   @override
@@ -150,16 +155,16 @@ class _VDataListState extends State<VDataList> {
     }
   }
 
-  void _updateColumnWidth(String id, double delta, currentColumnWidth) {
+  void _updateColumnWidth(String columnId, double delta, currentColumnWidth) {
     setState(() {
       if (currentColumnWidth != null) {
         final newWidth = (currentColumnWidth ?? 100) + delta;
         _localColumnDefinitions = {
           ..._localColumnDefinitions,
-          id: _localColumnDefinitions[id]!.setWidth(newWidth.clamp(100, 500)),
+          columnId: _localColumnDefinitions[columnId]!.setWidth(newWidth.clamp(100, 500)),
         };
       } else {
-        _localColumnDefinitions = {..._localColumnDefinitions, id: _localColumnDefinitions[id]!.setWidth(null)};
+        _localColumnDefinitions = {..._localColumnDefinitions, columnId: _localColumnDefinitions[columnId]!.setWidth(null)};
       }
 
       widget.onColumnDefsChanged?.call(_localColumnDefinitions);
@@ -209,7 +214,7 @@ class _VDataListState extends State<VDataList> {
         customRow ??
         VDataListRow(
           columnDefinitions: _localColumnDefinitions,
-          data: data,
+          rowData: data,
           config: widget.config,
           isEven: isEven,
           rowCellStyleBuilder: widget.rowCellStyleBuilder,
@@ -229,40 +234,51 @@ class _VDataListState extends State<VDataList> {
     return VDataListTotalCount(total: widget.totalItems, config: widget.config, child: widget.totalCount);
   }
 
-  Widget _buildSliverAppbar() {
-    return VDataListHeader(
-      config: widget.config,
-      columnDefinitions: _localColumnDefinitions,
-      resizeHandler: widget.resizeHandler ?? VDataListResizableHandler(config: widget.config),
-      onSortTap: _sortChanged,
-      onDragHandlerLongPress: (id) async {
-        if (widget.config.canResetColumnWidthOnLongPress) {
-          final result = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Reset Column Width'),
-              content: Text('Do you want to reset the width of this column to default?'),
-              actions: [
-                TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text('Reset'),
-                ),
-              ],
+  void _dragHandlerLongPress(String columnId) async {
+    if (widget.config.canResetColumnWidthOnLongPress) {
+      final result = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          // TODO: Theme and config
+          // TODO: Localize
+          title: Text('Reset Column Width'),
+          content: Text('Do you want to reset the width of this column to default?'),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Reset'),
             ),
-          );
-          if (result == true) {
-            _updateColumnWidth(id, 0, null);
-          }
-        }
-      },
-      onDragUpdate: (delta, id, currentWidth) {
-        _updateColumnWidth(id, delta, currentWidth);
-      },
-      // totalItems: widget.totalItems,
+          ],
+        ),
+      );
+      if (result == true) {
+        _updateColumnWidth(columnId, 0, null);
+      }
+    }
+  }
+
+  Widget _buildSliverAppbar() {
+    final customHeader = widget.headerBuilder?.call(
+      context,
+      _localColumnDefinitions,
+      widget.config,
+      widget.resizeHandler ?? VDataListResizableHandler(config: widget.config),
+      _sortChanged,
+      _dragHandlerLongPress,
+      _updateColumnWidth,
     );
+    return customHeader ??
+        VDataListHeader(
+          config: widget.config,
+          columnDefinitions: _localColumnDefinitions,
+          resizeHandler: widget.resizeHandler ?? VDataListResizableHandler(config: widget.config),
+          onSortTap: _sortChanged,
+          onDragHandlerLongPress: _dragHandlerLongPress,
+          onDragUpdate: _updateColumnWidth,
+        );
   }
 
   Widget _buildBody(BoxConstraints constraints) {

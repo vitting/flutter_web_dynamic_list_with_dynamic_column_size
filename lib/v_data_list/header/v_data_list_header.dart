@@ -6,12 +6,13 @@ import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataListHeader extends StatelessWidget {
-  final void Function(double delta, String columnId, double currentWidth)? onDragUpdate;
+  final void Function(String columnId, double delta, double currentWidth)? onDragUpdate;
   final void Function(String columnId, ColumnSortState sortState)? onSortTap;
   final void Function(String columnId)? onDragHandlerLongPress;
   final ColumnDefinitionMap columnDefinitions;
   final Widget? resizeHandler;
   final VDataListConfig config;
+  final HeaderTheme? headerTheme;
 
   const VDataListHeader({
     super.key,
@@ -21,11 +22,12 @@ class VDataListHeader extends StatelessWidget {
     this.onSortTap,
     this.onDragHandlerLongPress,
     this.resizeHandler,
+    this.headerTheme,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = VDataListTheme.of(context).headerTheme;
+    final theme = headerTheme ?? VDataListTheme.of(context).headerTheme;
     return PinnedHeaderSliver(
       child: Material(
         child: Container(
