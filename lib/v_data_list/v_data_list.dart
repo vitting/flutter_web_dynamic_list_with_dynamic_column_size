@@ -12,22 +12,9 @@ import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataList extends StatefulWidget {
-  final VDataListOnRowTap? onRowTap;
-  final VDataListonColumnDefsChanged? onColumnDefsChanged;
-  final VDataListOnSortChanged? onSortChanged;
-  final VDataListOnLongPressRow? onLongPressRow;
-  final VDataListOnLongPressRowCopyValue? onLongPressRowCopyValue;
-
   /// An optional callback that is triggered when the user scrolls to the end of the list,
   /// which can be used to load more data into the list.
-  final void Function()? onLoadMore;
-
-  /// An optional callback that is triggered when the pagination index changes, providing the new page index, total items, and page size.
-  final void Function(int page, int totalItems, int pageSize)? onPaginationIndexChanged;
-
-  /// An cell Style builder to override the default cell style for specific cells based on the column id and cell data.
-  /// This allows for dynamic styling of cells based on their content or column.
-  final VDataListRowCellStyleBuilder? rowCellStyleBuilder;
+  final VDataListOnLoadMore? onLoadMore;
 
   /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
   /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
@@ -45,9 +32,25 @@ class VDataList extends StatefulWidget {
   /// If null, no footer will be displayed.
   final Widget? footer;
 
+  /// An optional custom header builder that can be used to build a custom header widget instead of the default [VDataListHeader].
+  final VDataListHeaderBuilder? headerBuilder;
+
   /// A flag indicating whether the list is currently loading more data,
   /// which can be used to show a loading indicator at the end of the list when more data is being loaded.
   final bool isLoading;
+
+  /// An optional widget to display when there is no data to show in the list and [noDataMessage] is set in the config.
+  final Widget? noData;
+
+  final VDataListonColumnDefsChanged? onColumnDefsChanged;
+  final VDataListOnLongPressRow? onLongPressRow;
+  final VDataListOnLongPressRowCopyValue? onLongPressRowCopyValue;
+
+  /// An optional callback that is triggered when the pagination index changes, providing the new page index, total items, and page size.
+  final VDataListOnPaginationIndexChanged? onPaginationIndexChanged;
+
+  final VDataListOnRowTap? onRowTap;
+  final VDataListOnSortChanged? onSortChanged;
 
   /// An optional current page index to display in the pagination widget when [showPagination] is true.
   /// This should be a zero-based index, where 0 represents the first page.
@@ -62,20 +65,18 @@ class VDataList extends StatefulWidget {
   /// If null, the default [VDataListResizableHandler] will be used.
   final Widget? resizeHandler;
 
+  /// An optional custom row builder that can be used to build custom row widgets instead of the default [VDataListRow].
+  final VDataListRowBuilder? rowBuilder;
+
+  /// An cell Style builder to override the default cell style for specific cells based on the column id and cell data.
+  /// This allows for dynamic styling of cells based on their content or column.
+  final VDataListRowCellStyleBuilder? rowCellStyleBuilder;
+
   /// An optional widget to display in the total count area when [showTotalCount] is true.
   final Widget? totalCount;
 
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
   final int totalItems;
-
-  /// An optional widget to display when there is no data to show in the list and [noDataMessage] is set in the config.
-  final Widget? noData;
-
-  /// An optional custom row builder that can be used to build custom row widgets instead of the default [VDataListRow].
-  final VDataListRowBuilder? rowBuilder;
-
-  /// An optional custom header builder that can be used to build a custom header widget instead of the default [VDataListHeader].
-  final VDataListHeaderBuilder? headerBuilder;
 
   const VDataList({
     super.key,
@@ -88,15 +89,18 @@ class VDataList extends StatefulWidget {
     this.onColumnDefsChanged,
     this.onSortChanged,
     required this.config,
+    // TODO: Change to a builder
     this.footer,
     this.resizeHandler,
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
+    // TODO: Change to a builder
     this.totalCount,
     this.paginationItemsPerPage,
     this.onPaginationIndexChanged,
     this.paginationCurrentPage,
     this.rowCellStyleBuilder,
+    // TODO: Change to a builder
     this.noData,
     this.rowBuilder,
     this.headerBuilder,
@@ -310,6 +314,7 @@ class _VDataListState extends State<VDataList> {
                   itemBuilder: (context, index) {
                     if (index == widget.data.length) {
                       // Show loading indicator at the end
+                      // TODO: Create as a Widget or as a builder
                       return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
                     }
                     final bool isEven = index % 2 == 0;

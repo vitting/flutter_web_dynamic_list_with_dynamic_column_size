@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination_item.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataListPagination extends StatelessWidget {
   final VDataListConfig config;
   final int currentSelectedIndex;
-  final void Function(int page, int totalItems, int pageSize)? onPaginationIndexChanged;
+  final VDataListOnPaginationIndexChanged? onPaginationIndexChanged;
   final int pageSize;
   final int totalItems;
 

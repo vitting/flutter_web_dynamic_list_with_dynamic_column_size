@@ -65,3 +65,7 @@ typedef VDataListHeaderBuilder =
       void Function(String columnId)? onDragHandlerLongPress,
       void Function(String, double, double)? onDragUpdate,
     );
+
+typedef VDataListOnPaginationIndexChanged = void Function(int page, int totalItems, int pageSize);
+
+typedef VDataListOnLoadMore = void Function();
