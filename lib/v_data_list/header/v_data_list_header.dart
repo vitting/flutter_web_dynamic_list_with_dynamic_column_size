@@ -6,10 +6,10 @@ import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataListHeader extends StatelessWidget {
-  final void Function(double delta, String id, double currentWidth)? onDragUpdate;
-  final void Function(String id, ColumnSortState sortState)? onSortTap;
-  final void Function(String id)? onDragHandlerLongPress;
-  final ColumnDefinitionMap columnDefs;
+  final void Function(double delta, String columnId, double currentWidth)? onDragUpdate;
+  final void Function(String columnId, ColumnSortState sortState)? onSortTap;
+  final void Function(String columnId)? onDragHandlerLongPress;
+  final ColumnDefinitionMap columnDefinitions;
   final Widget? resizeHandler;
   final VDataListConfig config;
 
@@ -17,7 +17,7 @@ class VDataListHeader extends StatelessWidget {
     super.key,
     required this.config,
     this.onDragUpdate,
-    this.columnDefs = const {},
+    this.columnDefinitions = const {},
     this.onSortTap,
     this.onDragHandlerLongPress,
     this.resizeHandler,
@@ -33,20 +33,20 @@ class VDataListHeader extends StatelessWidget {
           decoration: BoxDecoration(color: theme.backgroundColor, borderRadius: config.headerBorderRadius),
           child: Row(
             children: [
-              ...columnDefs.entries.map((entry) {
-                final columnDef = entry.value;
+              ...columnDefinitions.entries.map((entry) {
+                final columnDefinition = entry.value;
                 return VDataListHeaderCell(
-                  id: columnDef.id,
-                  title: columnDef.label,
-                  width: columnDef.width,
+                  id: columnDefinition.id,
+                  title: columnDefinition.label,
+                  width: columnDefinition.width,
                   onDragUpdate: onDragUpdate,
-                  isResizable: columnDef.isResizable,
+                  isResizable: columnDefinition.isResizable,
                   onSortTap: onSortTap,
-                  sortState: columnDef.sortState,
+                  sortState: columnDefinition.sortState,
                   onDragHandlerLongPress: onDragHandlerLongPress,
                   resizeHandler: resizeHandler,
                   textStyle: theme.textStyle,
-                  resizableHandlerPinned: columnDef.resizableHandlerPinned,
+                  resizableHandlerPinned: columnDefinition.resizableHandlerPinned,
                 );
               }),
               if (config.showRowClickHandler)

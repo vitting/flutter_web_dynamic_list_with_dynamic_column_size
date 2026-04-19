@@ -14,6 +14,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
   HeaderTheme get headerTheme;
   FooterTheme get footerTheme;
   RowTheme get rowTheme;
+  RowCellTheme get rowCellTheme;
   TotalCountTheme get totalCountTheme;
   ResizeHandlerTheme get resizeHandlerTheme;
   PaginationTheme get paginationTheme;
@@ -25,6 +26,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
     HeaderTheme? headerTheme,
     FooterTheme? footerTheme,
     RowTheme? rowTheme,
+    RowCellTheme? rowCellTheme,
     TotalCountTheme? totalCountTheme,
     ResizeHandlerTheme? resizeHandlerTheme,
     PaginationTheme? paginationTheme,
@@ -35,6 +37,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       headerTheme: headerTheme ?? this.headerTheme,
       footerTheme: footerTheme ?? this.footerTheme,
       rowTheme: rowTheme ?? this.rowTheme,
+      rowCellTheme: rowCellTheme ?? this.rowCellTheme,
       totalCountTheme: totalCountTheme ?? this.totalCountTheme,
       resizeHandlerTheme: resizeHandlerTheme ?? this.resizeHandlerTheme,
       paginationTheme: paginationTheme ?? this.paginationTheme,
@@ -53,6 +56,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       headerTheme: headerTheme.lerp(other.headerTheme, t),
       footerTheme: footerTheme.lerp(other.footerTheme, t),
       rowTheme: rowTheme.lerp(other.rowTheme, t),
+      rowCellTheme: rowCellTheme.lerp(other.rowCellTheme, t),
       totalCountTheme: totalCountTheme.lerp(other.totalCountTheme, t),
       resizeHandlerTheme: resizeHandlerTheme.lerp(other.resizeHandlerTheme, t),
       paginationTheme: paginationTheme.lerp(other.paginationTheme, t),
@@ -79,6 +83,10 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
             ) &&
             const DeepCollectionEquality().equals(rowTheme, other.rowTheme) &&
             const DeepCollectionEquality().equals(
+              rowCellTheme,
+              other.rowCellTheme,
+            ) &&
+            const DeepCollectionEquality().equals(
               totalCountTheme,
               other.totalCountTheme,
             ) &&
@@ -104,6 +112,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       const DeepCollectionEquality().hash(headerTheme),
       const DeepCollectionEquality().hash(footerTheme),
       const DeepCollectionEquality().hash(rowTheme),
+      const DeepCollectionEquality().hash(rowCellTheme),
       const DeepCollectionEquality().hash(totalCountTheme),
       const DeepCollectionEquality().hash(resizeHandlerTheme),
       const DeepCollectionEquality().hash(paginationTheme),
@@ -119,6 +128,7 @@ extension VDataListThemeBuildContextProps on BuildContext {
   HeaderTheme get headerTheme => vDataListTheme.headerTheme;
   FooterTheme get footerTheme => vDataListTheme.footerTheme;
   RowTheme get rowTheme => vDataListTheme.rowTheme;
+  RowCellTheme get rowCellTheme => vDataListTheme.rowCellTheme;
   TotalCountTheme get totalCountTheme => vDataListTheme.totalCountTheme;
   ResizeHandlerTheme get resizeHandlerTheme =>
       vDataListTheme.resizeHandlerTheme;
@@ -208,30 +218,20 @@ mixin _$FooterThemeTailorMixin on ThemeExtension<FooterTheme> {
 }
 
 mixin _$RowThemeTailorMixin on ThemeExtension<RowTheme> {
-  TextStyle get textStyle;
   Color get hoverBackgroundColor;
   Color get evenBackgroundColor;
   Color get backgroundColor;
-  Color get tooltipBackgroundColor;
-  TextStyle get tooltipTextStyle;
 
   @override
   RowTheme copyWith({
-    TextStyle? textStyle,
     Color? hoverBackgroundColor,
     Color? evenBackgroundColor,
     Color? backgroundColor,
-    Color? tooltipBackgroundColor,
-    TextStyle? tooltipTextStyle,
   }) {
     return RowTheme(
-      textStyle: textStyle ?? this.textStyle,
       hoverBackgroundColor: hoverBackgroundColor ?? this.hoverBackgroundColor,
       evenBackgroundColor: evenBackgroundColor ?? this.evenBackgroundColor,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      tooltipBackgroundColor:
-          tooltipBackgroundColor ?? this.tooltipBackgroundColor,
-      tooltipTextStyle: tooltipTextStyle ?? this.tooltipTextStyle,
     );
   }
 
@@ -239,7 +239,6 @@ mixin _$RowThemeTailorMixin on ThemeExtension<RowTheme> {
   RowTheme lerp(covariant ThemeExtension<RowTheme>? other, double t) {
     if (other is! RowTheme) return this as RowTheme;
     return RowTheme(
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
       hoverBackgroundColor: Color.lerp(
         hoverBackgroundColor,
         other.hoverBackgroundColor,
@@ -251,6 +250,63 @@ mixin _$RowThemeTailorMixin on ThemeExtension<RowTheme> {
         t,
       )!,
       backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is RowTheme &&
+            const DeepCollectionEquality().equals(
+              hoverBackgroundColor,
+              other.hoverBackgroundColor,
+            ) &&
+            const DeepCollectionEquality().equals(
+              evenBackgroundColor,
+              other.evenBackgroundColor,
+            ) &&
+            const DeepCollectionEquality().equals(
+              backgroundColor,
+              other.backgroundColor,
+            ));
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      runtimeType.hashCode,
+      const DeepCollectionEquality().hash(hoverBackgroundColor),
+      const DeepCollectionEquality().hash(evenBackgroundColor),
+      const DeepCollectionEquality().hash(backgroundColor),
+    );
+  }
+}
+
+mixin _$RowCellThemeTailorMixin on ThemeExtension<RowCellTheme> {
+  TextStyle get textStyle;
+  Color get tooltipBackgroundColor;
+  TextStyle get tooltipTextStyle;
+
+  @override
+  RowCellTheme copyWith({
+    TextStyle? textStyle,
+    Color? tooltipBackgroundColor,
+    TextStyle? tooltipTextStyle,
+  }) {
+    return RowCellTheme(
+      textStyle: textStyle ?? this.textStyle,
+      tooltipBackgroundColor:
+          tooltipBackgroundColor ?? this.tooltipBackgroundColor,
+      tooltipTextStyle: tooltipTextStyle ?? this.tooltipTextStyle,
+    );
+  }
+
+  @override
+  RowCellTheme lerp(covariant ThemeExtension<RowCellTheme>? other, double t) {
+    if (other is! RowCellTheme) return this as RowCellTheme;
+    return RowCellTheme(
+      textStyle: TextStyle.lerp(textStyle, other.textStyle, t)!,
       tooltipBackgroundColor: Color.lerp(
         tooltipBackgroundColor,
         other.tooltipBackgroundColor,
@@ -268,20 +324,8 @@ mixin _$RowThemeTailorMixin on ThemeExtension<RowTheme> {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is RowTheme &&
+            other is RowCellTheme &&
             const DeepCollectionEquality().equals(textStyle, other.textStyle) &&
-            const DeepCollectionEquality().equals(
-              hoverBackgroundColor,
-              other.hoverBackgroundColor,
-            ) &&
-            const DeepCollectionEquality().equals(
-              evenBackgroundColor,
-              other.evenBackgroundColor,
-            ) &&
-            const DeepCollectionEquality().equals(
-              backgroundColor,
-              other.backgroundColor,
-            ) &&
             const DeepCollectionEquality().equals(
               tooltipBackgroundColor,
               other.tooltipBackgroundColor,
@@ -297,9 +341,6 @@ mixin _$RowThemeTailorMixin on ThemeExtension<RowTheme> {
     return Object.hash(
       runtimeType.hashCode,
       const DeepCollectionEquality().hash(textStyle),
-      const DeepCollectionEquality().hash(hoverBackgroundColor),
-      const DeepCollectionEquality().hash(evenBackgroundColor),
-      const DeepCollectionEquality().hash(backgroundColor),
       const DeepCollectionEquality().hash(tooltipBackgroundColor),
       const DeepCollectionEquality().hash(tooltipTextStyle),
     );

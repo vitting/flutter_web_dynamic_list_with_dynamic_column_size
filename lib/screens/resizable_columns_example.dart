@@ -83,7 +83,7 @@ class _ResizableColumnsExampleState extends State<ResizableColumnsExample> {
             ),
             Expanded(
               child: VDataList(
-                columnDefs: _columnDefs,
+                columnDefinitions: _columnDefs,
                 totalItems: 50,
                 data: GenerateFakeDataHelper.generateData(50, _columnDefs.keys.toList()),
                 config: VDataListConfig(),

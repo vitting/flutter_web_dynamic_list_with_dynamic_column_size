@@ -37,7 +37,7 @@ class _LazyLoadExampleState extends State<LazyLoadExample> {
           children: [
             Expanded(
               child: VDataList(
-                columnDefs: columnDefsWithColumnsThatArentResizable,
+                columnDefinitions: columnDefsWithColumnsThatArentResizable,
                 data: _data,
                 config: VDataListConfig(),
                 totalItems: _totalItems,

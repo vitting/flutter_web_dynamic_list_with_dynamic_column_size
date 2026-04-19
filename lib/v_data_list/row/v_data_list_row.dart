@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row_cell.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
-import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
@@ -13,17 +11,12 @@ class VDataListRow extends StatefulWidget {
   final Function(VDataListDataRow data)? onRowTap;
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
   final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressCopy;
-  final VDataListRowCellStyle? Function(
-    BuildContext context,
-    String id,
-    VDataListRowCellData cellData,
-    ColumnDefinition columnDef,
-  )?
-  rowCellStyleBuilder;
+  final VDataListRowCellStyleBuilder? rowCellStyleBuilder;
   final ColumnDefinitionMap columnDefs;
   final VDataListDataRow data;
   final VDataListConfig config;
   final bool isEven;
+  final RowTheme? rowTheme;
 
   const VDataListRow({
     super.key,
@@ -35,6 +28,7 @@ class VDataListRow extends StatefulWidget {
     this.onLongPress,
     this.onLongPressCopy,
     this.rowCellStyleBuilder,
+    this.rowTheme,
   });
 
   @override
@@ -46,7 +40,7 @@ class _VDataListRowState extends State<VDataListRow> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = VDataListTheme.of(context).rowTheme;
+    final theme = widget.rowTheme ?? VDataListTheme.of(context).rowTheme;
     return MouseRegion(
       cursor: widget.config.showRowClickHandler && !widget.config.triggerOnRowTapWhenRowClickHandlerIsShown
           ? MouseCursor.defer

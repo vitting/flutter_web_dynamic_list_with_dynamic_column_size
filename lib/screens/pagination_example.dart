@@ -48,7 +48,7 @@ class _PaginationExampleState extends State<PaginationExample> {
             ),
             Expanded(
               child: VDataList(
-                columnDefs: columnDefsWithColumnsThatArentResizable,
+                columnDefinitions: columnDefsWithColumnsThatArentResizable,
                 data: _data,
                 config: VDataListConfig().copyWith(showPagination: true, paginationPinned: _pinned),
                 totalItems: _totalItems,

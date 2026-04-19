@@ -16,6 +16,7 @@ class VDataListRowCell extends StatelessWidget {
   final RowCellIconPlacement iconPlacement;
   final VDataListConfig config;
   final VDataListRowCellStyle? cellStyle;
+  final RowCellTheme? rowCellTheme;
 
   const VDataListRowCell({
     super.key,
@@ -29,6 +30,7 @@ class VDataListRowCell extends StatelessWidget {
     this.columnSpacing = 0,
     this.iconPlacement = RowCellIconPlacement.right,
     this.cellStyle,
+    this.rowCellTheme,
   });
 
   bool get _hasIcon => icon != null || (cellStyle != null && cellStyle!.icon != null);
@@ -42,7 +44,7 @@ class VDataListRowCell extends StatelessWidget {
       : iconPlacement == RowCellIconPlacement.right;
 
   Widget _buildCellContent(BuildContext context) {
-    final theme = VDataListTheme.of(context).rowTheme;
+    final theme = rowCellTheme ?? VDataListTheme.of(context).rowCellTheme;
     Widget widget = Text(
       data.value,
       maxLines: 1,

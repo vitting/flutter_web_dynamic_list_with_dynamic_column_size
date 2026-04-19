@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
+import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
+import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/v_data_list.dart';
 
 class MiscExample extends StatefulWidget {
@@ -26,7 +29,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig(),
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
@@ -42,7 +45,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(footerPinned: true),
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
@@ -72,7 +75,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(showTotalCount: true, showTotalCountPinned: _totalCountPinned),
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
@@ -97,7 +100,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(
                   showTotalCount: true,
@@ -112,7 +115,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(longPressToCopyCellValueToClipboard: true),
                 onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) =>
@@ -125,7 +128,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig(),
                 onRowTap: (rowData, column) {
@@ -139,7 +142,7 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(showRowClickHandler: true),
                 onRowTap: (rowData, column) {
@@ -153,13 +156,48 @@ class _MiscExampleState extends State<MiscExample> {
             SizedBox(
               height: 300,
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(showRowClickHandler: true, triggerOnRowTapWhenRowClickHandlerIsShown: true),
                 onRowTap: (rowData, column) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
                 },
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
+              ),
+            ),
+            SizedBox(height: 20),
+            Text('RowBuilder', style: TextStyle(fontSize: 20)),
+            SizedBox(
+              height: 300,
+              child: VDataList(
+                columnDefinitions: columnDefs,
+                totalItems: 20,
+                config: VDataListConfig().copyWith(showRowEvenBackgroundColor: true, showRowHoverColor: false),
+                onRowTap: (rowData, column) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
+                },
+                data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
+                rowBuilder: (context, data, columnDefinitions, config, rowCellStyleBuilder, index, isEven) {
+                  return VDataListRow(
+                    rowTheme: isEven
+                        ? VDataListTheme.of(context).rowTheme.copyWith(
+                            backgroundColor: Colors.purple[500]!,
+                            hoverBackgroundColor: Colors.purple[300]!,
+                            evenBackgroundColor: Colors.yellow,
+                          )
+                        : null,
+                    columnDefs: columnDefs,
+                    isEven: isEven,
+                    data: data,
+                    config: config,
+                    rowCellStyleBuilder: (context, columnId, cellData, columnDefinition) {
+                      if (columnId == 'name') {
+                        return VDataListRowCellStyle(backgroundColor: Colors.yellow);
+                      }
+                      return null;
+                    },
+                  );
+                },
               ),
             ),
           ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide DataRow;
-import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
@@ -7,20 +6,19 @@ import 'package:v_data_list/v_data_list/no_data/v_data_list_no_data.dart';
 import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
-import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
-import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/total_count/v_data_list_total_count.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataList extends StatefulWidget {
-  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onRowTap;
-  final void Function(ColumnDefinitionMap updatedColumnDefs)? onColumnDefsChanged;
-  final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefs)? onSortChanged;
-  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPress;
-  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)? onLongPressRow;
-  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefs)?
+  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)? onRowTap;
+  final void Function(ColumnDefinitionMap updatedColumnDefinitions)? onColumnDefsChanged;
+  final void Function(String id, ColumnSortState sortState, ColumnDefinitionMap updatedColumnDefinitions)? onSortChanged;
+  final void Function(VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)? onLongPress;
+  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)?
+  onLongPressRow;
+  final void Function(String id, String value, VDataListDataRow data, ColumnDefinitionMap updatedColumnDefinitions)?
   onLongPressRowCopyValue;
 
   /// An optional callback that is triggered when the user scrolls to the end of the list,
@@ -32,17 +30,11 @@ class VDataList extends StatefulWidget {
 
   /// An cell Style builder to override the default cell style for specific cells based on the column id and cell data.
   /// This allows for dynamic styling of cells based on their content or column.
-  final VDataListRowCellStyle? Function(
-    BuildContext context,
-    String id,
-    VDataListRowCellData cellData,
-    ColumnDefinition columnDef,
-  )?
-  rowCellStyleBuilder;
+  final VDataListRowCellStyleBuilder? rowCellStyleBuilder;
 
   /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
   /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
-  final ColumnDefinitionMap columnDefs;
+  final ColumnDefinitionMap columnDefinitions;
 
   /// The configuration for the list, which includes various settings for the appearance and behavior of the list such as header and row styling.
   final VDataListConfig config;
@@ -79,11 +71,14 @@ class VDataList extends StatefulWidget {
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
   final int totalItems;
 
+  /// An optional widget to display when there is no data to show in the list and [noDataMessage] is set in the config.
   final Widget? noData;
+
+  final VDataListRowBuilder? rowBuilder;
 
   const VDataList({
     super.key,
-    required this.columnDefs,
+    required this.columnDefinitions,
     this.data = const [],
     this.onLoadMore,
     this.isLoading = false,
@@ -103,6 +98,7 @@ class VDataList extends StatefulWidget {
     this.paginationCurrentPage,
     this.rowCellStyleBuilder,
     this.noData,
+    this.rowBuilder,
   });
 
   @override
@@ -113,7 +109,7 @@ class _VDataListState extends State<VDataList> {
   bool _hasTriggeredLoadMore = false;
   final ScrollController _horizontalController = ScrollController();
   bool _loadMoreData = false;
-  late ColumnDefinitionMap _localColumnDefs;
+  late ColumnDefinitionMap _localColumnDefinitions;
   final ScrollController _verticalController = ScrollController();
 
   @override
@@ -126,8 +122,8 @@ class _VDataListState extends State<VDataList> {
       _loadMoreData = widget.data.length < widget.totalItems;
     }
 
-    if (oldWidget.columnDefs != widget.columnDefs) {
-      _localColumnDefs = {...widget.columnDefs};
+    if (oldWidget.columnDefinitions != widget.columnDefinitions) {
+      _localColumnDefinitions = {...widget.columnDefinitions};
     }
   }
 
@@ -141,7 +137,7 @@ class _VDataListState extends State<VDataList> {
   @override
   void initState() {
     super.initState();
-    _localColumnDefs = {...widget.columnDefs};
+    _localColumnDefinitions = {...widget.columnDefinitions};
     _verticalController.addListener(_onScroll);
     _loadMoreData = widget.data.length < widget.totalItems;
   }
@@ -162,21 +158,24 @@ class _VDataListState extends State<VDataList> {
     setState(() {
       if (currentColumnWidth != null) {
         final newWidth = (currentColumnWidth ?? 100) + delta;
-        _localColumnDefs = {..._localColumnDefs, id: _localColumnDefs[id]!.setWidth(newWidth.clamp(100, 500))};
+        _localColumnDefinitions = {
+          ..._localColumnDefinitions,
+          id: _localColumnDefinitions[id]!.setWidth(newWidth.clamp(100, 500)),
+        };
       } else {
-        _localColumnDefs = {..._localColumnDefs, id: _localColumnDefs[id]!.setWidth(null)};
+        _localColumnDefinitions = {..._localColumnDefinitions, id: _localColumnDefinitions[id]!.setWidth(null)};
       }
 
-      widget.onColumnDefsChanged?.call(_localColumnDefs);
+      widget.onColumnDefsChanged?.call(_localColumnDefinitions);
     });
   }
 
   // Calculate the total width needed for all columns
   double get _totalWidth {
     double totalWidth = 0;
-    for (var columnDef in _localColumnDefs.values) {
+    for (var columnDefinition in _localColumnDefinitions.values) {
       // Default width if null
-      totalWidth += columnDef.width ?? 100;
+      totalWidth += columnDefinition.width ?? 100;
     }
 
     // Add some padding to prevent scrollbar from overlapping content
@@ -186,7 +185,7 @@ class _VDataListState extends State<VDataList> {
 
   void _sortChanged(String id, ColumnSortState sortState) {
     setState(() {
-      _localColumnDefs = _localColumnDefs.map((key, value) {
+      _localColumnDefinitions = _localColumnDefinitions.map((key, value) {
         if (key == id) {
           return MapEntry(key, value.copyWith(sortState: sortState));
         } else {
@@ -194,24 +193,36 @@ class _VDataListState extends State<VDataList> {
         }
       });
 
-      widget.onColumnDefsChanged?.call(_localColumnDefs);
-      widget.onSortChanged?.call(id, sortState, _localColumnDefs);
+      widget.onColumnDefsChanged?.call(_localColumnDefinitions);
+      widget.onSortChanged?.call(id, sortState, _localColumnDefinitions);
     });
   }
 
-  Widget _buildRow(VDataListDataRow data, bool isEven) {
-    final rowContent = VDataListRow(
-      columnDefs: _localColumnDefs,
-      data: data,
-      config: widget.config,
-      isEven: isEven,
-      rowCellStyleBuilder: widget.rowCellStyleBuilder,
-      onRowTap: (rowData) {
-        widget.onRowTap?.call(rowData, _localColumnDefs);
-      },
-      onLongPress: widget.onLongPressRow,
-      onLongPressCopy: widget.onLongPressRowCopyValue,
+  Widget _buildRow(VDataListDataRow data, bool isEven, int index) {
+    final customRow = widget.rowBuilder?.call(
+      context,
+      data,
+      _localColumnDefinitions,
+      widget.config,
+      widget.rowCellStyleBuilder,
+      index,
+      isEven,
     );
+
+    final rowContent =
+        customRow ??
+        VDataListRow(
+          columnDefs: _localColumnDefinitions,
+          data: data,
+          config: widget.config,
+          isEven: isEven,
+          rowCellStyleBuilder: widget.rowCellStyleBuilder,
+          onRowTap: (rowData) {
+            widget.onRowTap?.call(rowData, _localColumnDefinitions);
+          },
+          onLongPress: widget.onLongPressRow,
+          onLongPressCopy: widget.onLongPressRowCopyValue,
+        );
 
     if (widget.config.textIsSelectable) {
       return SelectionArea(child: rowContent);
@@ -227,7 +238,7 @@ class _VDataListState extends State<VDataList> {
   Widget _buildSliverAppbar() {
     return VDataListHeader(
       config: widget.config,
-      columnDefs: _localColumnDefs,
+      columnDefinitions: _localColumnDefinitions,
       resizeHandler: widget.resizeHandler ?? VDataListResizableHandler(config: widget.config),
       onSortTap: _sortChanged,
       onDragHandlerLongPress: (id) async {
@@ -292,7 +303,7 @@ class _VDataListState extends State<VDataList> {
                       return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
                     }
                     final bool isEven = index % 2 == 0;
-                    return _buildRow(widget.data[index], isEven);
+                    return _buildRow(widget.data[index], isEven, index);
                   },
                 ),
               if (widget.footer != null && widget.config.footerPinned == false) SliverToBoxAdapter(child: _buildFooter()),

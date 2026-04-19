@@ -14,6 +14,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     required this.backgroundColor,
     required this.paginationTheme,
     required this.noDataTheme,
+    required this.rowCellTheme,
   });
 
   @override
@@ -27,6 +28,9 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
 
   @override
   final RowTheme rowTheme;
+
+  @override
+  final RowCellTheme rowCellTheme;
 
   @override
   final TotalCountTheme totalCountTheme;
@@ -44,6 +48,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     headerTheme: HeaderTheme.defaultTheme,
     footerTheme: FooterTheme.defaultTheme,
     rowTheme: RowTheme.defaultTheme,
+    rowCellTheme: RowCellTheme.defaultTheme,
     totalCountTheme: TotalCountTheme.defaultTheme,
     resizeHandlerTheme: ResizeHandlerTheme.defaultTheme,
     paginationTheme: PaginationTheme.defaultTheme,
@@ -88,17 +93,7 @@ class FooterTheme extends ThemeExtension<FooterTheme> with _$FooterThemeTailorMi
 
 @tailorMixinComponent
 class RowTheme extends ThemeExtension<RowTheme> with _$RowThemeTailorMixin {
-  const RowTheme({
-    required this.textStyle,
-    required this.tooltipBackgroundColor,
-    required this.tooltipTextStyle,
-    required this.hoverBackgroundColor,
-    required this.evenBackgroundColor,
-    required this.backgroundColor,
-  });
-
-  @override
-  final TextStyle textStyle;
+  const RowTheme({required this.hoverBackgroundColor, required this.evenBackgroundColor, required this.backgroundColor});
 
   @override
   final Color hoverBackgroundColor;
@@ -109,19 +104,30 @@ class RowTheme extends ThemeExtension<RowTheme> with _$RowThemeTailorMixin {
   @override
   final Color backgroundColor;
 
+  static RowTheme get defaultTheme => RowTheme(
+    hoverBackgroundColor: Colors.grey[400]!,
+    evenBackgroundColor: Colors.grey[300]!,
+    backgroundColor: Colors.grey[200]!,
+  );
+}
+
+@tailorMixinComponent
+class RowCellTheme extends ThemeExtension<RowCellTheme> with _$RowCellThemeTailorMixin {
+  const RowCellTheme({required this.textStyle, required this.tooltipBackgroundColor, required this.tooltipTextStyle});
+
+  @override
+  final TextStyle textStyle;
+
   @override
   final Color tooltipBackgroundColor;
 
   @override
   final TextStyle tooltipTextStyle;
 
-  static RowTheme get defaultTheme => RowTheme(
+  static RowCellTheme get defaultTheme => RowCellTheme(
     textStyle: const TextStyle(color: Colors.black),
     tooltipBackgroundColor: Colors.grey[700]!,
     tooltipTextStyle: const TextStyle(color: Colors.white),
-    hoverBackgroundColor: Colors.grey[400]!,
-    evenBackgroundColor: Colors.grey[300]!,
-    backgroundColor: Colors.grey[200]!,
   );
 }
 

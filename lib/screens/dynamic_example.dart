@@ -59,7 +59,7 @@ class _DynamicExampleState extends State<DynamicExample> {
                 children: [
                   Expanded(
                     child: VDataList(
-                      columnDefs: columnDefWithAllColumnsResizable,
+                      columnDefinitions: columnDefWithAllColumnsResizable,
                       data: [],
                       totalItems: _totalItems,
                       config: VDataListConfig(),
@@ -94,7 +94,7 @@ class _DynamicExampleState extends State<DynamicExample> {
 
                   Expanded(
                     child: VDataList(
-                      columnDefs: columnDefWithAllColumnsResizable,
+                      columnDefinitions: columnDefWithAllColumnsResizable,
                       data: GenerateFakeDataHelper.generateData(_totalItems, columnDefWithAllColumnsResizable.keys.toList()),
                       totalItems: _totalItems,
                       config: VDataListConfig(),
@@ -119,7 +119,7 @@ class _DynamicExampleState extends State<DynamicExample> {
 
             Expanded(
               child: VDataList(
-                columnDefs: columnDefs,
+                columnDefinitions: columnDefs,
                 data: GenerateFakeDataHelper.generateData(_totalItems, columnDefs.keys.toList()),
                 config: VDataListConfig(),
                 totalItems: _totalItems,

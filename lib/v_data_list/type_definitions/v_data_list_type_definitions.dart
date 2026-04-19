@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/column_definition.dart';
+import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
+import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
+import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
 
 /// A typedef for the column definition map, which is a map where
 /// the key is the column ID and the value is the ColumnDefinition object for that column
@@ -16,3 +20,22 @@ typedef VDataListDataRow = Map<String, VDataListRowCellData>;
 
 /// A typedef for the list of data rows, which is a list of DataRow objects
 typedef VDataListDataRowList = List<VDataListDataRow>;
+
+typedef VDataListRowCellStyleBuilder =
+    VDataListRowCellStyle? Function(
+      BuildContext context,
+      String columnId,
+      VDataListRowCellData cellData,
+      ColumnDefinition columnDefinition,
+    );
+
+typedef VDataListRowBuilder =
+    VDataListRow? Function(
+      BuildContext context,
+      VDataListDataRow data,
+      ColumnDefinitionMap columnDefinitions,
+      VDataListConfig config,
+      VDataListRowCellStyleBuilder? rowCellStyleBuilder,
+      int index,
+      bool isEven,
+    );
