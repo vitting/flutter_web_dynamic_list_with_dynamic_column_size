@@ -15,6 +15,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     required this.paginationTheme,
     required this.noDataTheme,
     required this.rowCellTheme,
+    required this.resetWidthDialogTheme,
   });
 
   @override
@@ -44,6 +45,9 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
   @override
   final NoDataTheme noDataTheme;
 
+  @override
+  final ResetWidthDialogTheme resetWidthDialogTheme;
+
   static VDataListTheme get defaultTheme => VDataListTheme(
     headerTheme: HeaderTheme.defaultTheme,
     footerTheme: FooterTheme.defaultTheme,
@@ -53,6 +57,7 @@ class VDataListTheme extends ThemeExtension<VDataListTheme> with _$VDataListThem
     resizeHandlerTheme: ResizeHandlerTheme.defaultTheme,
     paginationTheme: PaginationTheme.defaultTheme,
     noDataTheme: NoDataTheme.defaultTheme,
+    resetWidthDialogTheme: ResetWidthDialogTheme.defaultTheme,
     backgroundColor: Colors.white,
   );
 
@@ -218,6 +223,40 @@ class NoDataTheme extends ThemeExtension<NoDataTheme> with _$NoDataThemeTailorMi
 
   static NoDataTheme get defaultTheme => const NoDataTheme(
     textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    backgroundColor: Colors.white,
+  );
+}
+
+@tailorMixinComponent
+class ResetWidthDialogTheme extends ThemeExtension<ResetWidthDialogTheme> with _$ResetWidthDialogThemeTailorMixin {
+  const ResetWidthDialogTheme({
+    required this.titleTextStyle,
+    required this.contentTextStyle,
+    required this.cancelButtonTextStyle,
+    required this.confirmButtonTextStyle,
+    required this.backgroundColor,
+  });
+
+  @override
+  final TextStyle titleTextStyle;
+
+  @override
+  final TextStyle contentTextStyle;
+
+  @override
+  final TextStyle cancelButtonTextStyle;
+
+  @override
+  final TextStyle confirmButtonTextStyle;
+
+  @override
+  final Color backgroundColor;
+
+  static ResetWidthDialogTheme get defaultTheme => const ResetWidthDialogTheme(
+    titleTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    contentTextStyle: TextStyle(color: Colors.black),
+    cancelButtonTextStyle: TextStyle(color: Colors.black),
+    confirmButtonTextStyle: TextStyle(color: Colors.black),
     backgroundColor: Colors.white,
   );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/home';
@@ -50,6 +51,13 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/resizable-columns-example');
                 },
                 child: Text('Resizable columns example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, ResetWidthDialogExample.routeName);
+                },
+                child: Text('Custom reset width dialog example'),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
+import 'package:v_data_list/v_data_list/header/v_data_list_reset_width_dialog.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
@@ -69,3 +70,5 @@ typedef VDataListHeaderBuilder =
 typedef VDataListOnPaginationIndexChanged = void Function(int page, int totalItems, int pageSize);
 
 typedef VDataListOnLoadMore = void Function();
+
+typedef VDataListResetWidthDialogBuilder = Widget? Function(BuildContext context, VDataListConfig config);

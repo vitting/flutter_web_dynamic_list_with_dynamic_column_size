@@ -19,6 +19,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
   ResizeHandlerTheme get resizeHandlerTheme;
   PaginationTheme get paginationTheme;
   NoDataTheme get noDataTheme;
+  ResetWidthDialogTheme get resetWidthDialogTheme;
 
   @override
   VDataListTheme copyWith({
@@ -31,6 +32,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
     ResizeHandlerTheme? resizeHandlerTheme,
     PaginationTheme? paginationTheme,
     NoDataTheme? noDataTheme,
+    ResetWidthDialogTheme? resetWidthDialogTheme,
   }) {
     return VDataListTheme(
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -42,6 +44,8 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       resizeHandlerTheme: resizeHandlerTheme ?? this.resizeHandlerTheme,
       paginationTheme: paginationTheme ?? this.paginationTheme,
       noDataTheme: noDataTheme ?? this.noDataTheme,
+      resetWidthDialogTheme:
+          resetWidthDialogTheme ?? this.resetWidthDialogTheme,
     );
   }
 
@@ -61,6 +65,10 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       resizeHandlerTheme: resizeHandlerTheme.lerp(other.resizeHandlerTheme, t),
       paginationTheme: paginationTheme.lerp(other.paginationTheme, t),
       noDataTheme: noDataTheme.lerp(other.noDataTheme, t),
+      resetWidthDialogTheme: resetWidthDialogTheme.lerp(
+        other.resetWidthDialogTheme,
+        t,
+      ),
     );
   }
 
@@ -101,6 +109,10 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
             const DeepCollectionEquality().equals(
               noDataTheme,
               other.noDataTheme,
+            ) &&
+            const DeepCollectionEquality().equals(
+              resetWidthDialogTheme,
+              other.resetWidthDialogTheme,
             ));
   }
 
@@ -117,6 +129,7 @@ mixin _$VDataListThemeTailorMixin on ThemeExtension<VDataListTheme> {
       const DeepCollectionEquality().hash(resizeHandlerTheme),
       const DeepCollectionEquality().hash(paginationTheme),
       const DeepCollectionEquality().hash(noDataTheme),
+      const DeepCollectionEquality().hash(resetWidthDialogTheme),
     );
   }
 }
@@ -134,6 +147,8 @@ extension VDataListThemeBuildContextProps on BuildContext {
       vDataListTheme.resizeHandlerTheme;
   PaginationTheme get paginationTheme => vDataListTheme.paginationTheme;
   NoDataTheme get noDataTheme => vDataListTheme.noDataTheme;
+  ResetWidthDialogTheme get resetWidthDialogTheme =>
+      vDataListTheme.resetWidthDialogTheme;
 }
 
 mixin _$HeaderThemeTailorMixin on ThemeExtension<HeaderTheme> {
@@ -597,6 +612,100 @@ mixin _$NoDataThemeTailorMixin on ThemeExtension<NoDataTheme> {
     return Object.hash(
       runtimeType.hashCode,
       const DeepCollectionEquality().hash(textStyle),
+      const DeepCollectionEquality().hash(backgroundColor),
+    );
+  }
+}
+
+mixin _$ResetWidthDialogThemeTailorMixin
+    on ThemeExtension<ResetWidthDialogTheme> {
+  TextStyle get titleTextStyle;
+  TextStyle get contentTextStyle;
+  TextStyle get cancelButtonTextStyle;
+  TextStyle get confirmButtonTextStyle;
+  Color get backgroundColor;
+
+  @override
+  ResetWidthDialogTheme copyWith({
+    TextStyle? titleTextStyle,
+    TextStyle? contentTextStyle,
+    TextStyle? cancelButtonTextStyle,
+    TextStyle? confirmButtonTextStyle,
+    Color? backgroundColor,
+  }) {
+    return ResetWidthDialogTheme(
+      titleTextStyle: titleTextStyle ?? this.titleTextStyle,
+      contentTextStyle: contentTextStyle ?? this.contentTextStyle,
+      cancelButtonTextStyle:
+          cancelButtonTextStyle ?? this.cancelButtonTextStyle,
+      confirmButtonTextStyle:
+          confirmButtonTextStyle ?? this.confirmButtonTextStyle,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+    );
+  }
+
+  @override
+  ResetWidthDialogTheme lerp(
+    covariant ThemeExtension<ResetWidthDialogTheme>? other,
+    double t,
+  ) {
+    if (other is! ResetWidthDialogTheme) return this as ResetWidthDialogTheme;
+    return ResetWidthDialogTheme(
+      titleTextStyle: TextStyle.lerp(titleTextStyle, other.titleTextStyle, t)!,
+      contentTextStyle: TextStyle.lerp(
+        contentTextStyle,
+        other.contentTextStyle,
+        t,
+      )!,
+      cancelButtonTextStyle: TextStyle.lerp(
+        cancelButtonTextStyle,
+        other.cancelButtonTextStyle,
+        t,
+      )!,
+      confirmButtonTextStyle: TextStyle.lerp(
+        confirmButtonTextStyle,
+        other.confirmButtonTextStyle,
+        t,
+      )!,
+      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t)!,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ResetWidthDialogTheme &&
+            const DeepCollectionEquality().equals(
+              titleTextStyle,
+              other.titleTextStyle,
+            ) &&
+            const DeepCollectionEquality().equals(
+              contentTextStyle,
+              other.contentTextStyle,
+            ) &&
+            const DeepCollectionEquality().equals(
+              cancelButtonTextStyle,
+              other.cancelButtonTextStyle,
+            ) &&
+            const DeepCollectionEquality().equals(
+              confirmButtonTextStyle,
+              other.confirmButtonTextStyle,
+            ) &&
+            const DeepCollectionEquality().equals(
+              backgroundColor,
+              other.backgroundColor,
+            ));
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      runtimeType.hashCode,
+      const DeepCollectionEquality().hash(titleTextStyle),
+      const DeepCollectionEquality().hash(contentTextStyle),
+      const DeepCollectionEquality().hash(cancelButtonTextStyle),
+      const DeepCollectionEquality().hash(confirmButtonTextStyle),
       const DeepCollectionEquality().hash(backgroundColor),
     );
   }

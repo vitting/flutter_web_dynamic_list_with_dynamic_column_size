@@ -39,6 +39,9 @@ class VDataListConfig {
   /// show a snackbar with the [copyCellValueToClipboardMessage] if not null.
   final bool longPressToCopyCellValueToClipboard;
 
+  /// The border radius for the no data widget when there is no data to display in the list.
+  final BorderRadiusGeometry noDataBorderRadius;
+
   /// An optional message to show when there is no data to display in the list.
   /// If null, no message will be shown when the list is empty.
   final String? noDataMessage;
@@ -58,6 +61,33 @@ class VDataListConfig {
   /// Whether the header should be pinned to the top of the list when scrolling.
   /// If true, the header will remain visible at the top of the list when scrolling.
   final bool pinHeader;
+
+  /// The border radius for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  final BorderRadiusGeometry resetWidthDialogBorderRadius;
+
+  /// The cancel button text for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  /// This is used as the text for the cancel button in the dialog that appears when long pressing a column resize handler if [canResetColumnWidthOnLongPress] is true.
+  final String resetWidthDialogCancelButtonText;
+
+  /// The reset button text for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  /// This is used as the text for the reset button in the dialog that appears when long pressing a column resize handler if [canResetColumnWidthOnLongPress] is true.
+  final String resetWidthDialogConfirmButtonText;
+
+  /// The content for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  final String resetWidthDialogContent;
+
+  /// The content padding for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  /// This is used as the content padding for the dialog that appears when long pressing a column resize handler if [canResetColumnWidthOnLongPress] is true.
+  /// If null, the default content padding of AlertDialog will be used.
+  final EdgeInsetsGeometry resetWidthDialogContentPadding;
+
+  /// The title for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  final String resetWidthDialogTitle;
+
+  /// The title padding for the reset column width dialog when confirming to reset a column width to default after long pressing the column resize handler.
+  /// This is used as the title padding for the dialog that appears when long pressing a column resize handler if [canResetColumnWidthOnLongPress] is true.
+  /// If null, the default title padding of AlertDialog will be used.
+  final EdgeInsetsGeometry resetWidthDialogTitlePadding;
 
   /// The Icon to use as the resize handler for column resizing.
   final Widget? resizeHandlerIcon;
@@ -141,9 +171,6 @@ class VDataListConfig {
   /// Whether tapping the row should trigger the [onRowTap] callback even if [showRowClickHandler] is true.
   final bool triggerOnRowTapWhenRowClickHandlerIsShown;
 
-  /// The border radius for the no data widget when there is no data to display in the list.
-  final BorderRadiusGeometry noDataBorderRadius;
-
   VDataListConfig({
     this.headerBottomSpacing = 4,
     this.longPressToCopyCellValueToClipboard = true,
@@ -187,6 +214,13 @@ class VDataListConfig {
     this.showRowEvenBackgroundColor = true,
     this.loadMoreThresholdScrollDistance = 0.5,
     this.noDataBorderRadius = const BorderRadius.all(Radius.circular(8)),
+    this.resetWidthDialogTitle = 'Reset Column Width',
+    this.resetWidthDialogContent = 'Do you want to reset the width of this column to default?',
+    this.resetWidthDialogCancelButtonText = 'Cancel',
+    this.resetWidthDialogConfirmButtonText = 'Reset',
+    this.resetWidthDialogBorderRadius = const BorderRadius.all(Radius.circular(8)),
+    this.resetWidthDialogContentPadding = const EdgeInsets.all(16),
+    this.resetWidthDialogTitlePadding = const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 8),
   });
 
   VDataListConfig copyWith({
@@ -200,12 +234,20 @@ class VDataListConfig {
     EdgeInsetsGeometry? headerPadding,
     double? loadMoreThresholdScrollDistance,
     bool? longPressToCopyCellValueToClipboard,
+    BorderRadiusGeometry? noDataBorderRadius,
     String? noDataMessage,
     BorderRadiusGeometry? paginationBorderRadius,
     EdgeInsetsGeometry? paginationMargin,
     EdgeInsetsGeometry? paginationPadding,
     bool? paginationPinned,
     bool? pinHeader,
+    BorderRadiusGeometry? resetWidthDialogBorderRadius,
+    String? resetWidthDialogCancelButtonText,
+    String? resetWidthDialogContent,
+    EdgeInsetsGeometry? resetWidthDialogContentPadding,
+    String? resetWidthDialogConfirmButtonText,
+    String? resetWidthDialogTitle,
+    EdgeInsetsGeometry? resetWidthDialogTitlePadding,
     Widget? resizeHandlerIcon,
     EdgeInsetsGeometry? resizeHandlerMargin,
     EdgeInsetsGeometry? resizeHandlerPadding,
@@ -231,7 +273,6 @@ class VDataListConfig {
     EdgeInsetsGeometry? totalCountPadding,
     TotalCountPosition? totalItemsPosition,
     bool? triggerOnRowTapWhenRowClickHandlerIsShown,
-    BorderRadiusGeometry? noDataBorderRadius,
   }) {
     return VDataListConfig(
       canResetColumnWidthOnLongPress: canResetColumnWidthOnLongPress ?? this.canResetColumnWidthOnLongPress,
@@ -244,12 +285,20 @@ class VDataListConfig {
       headerPadding: headerPadding ?? this.headerPadding,
       loadMoreThresholdScrollDistance: loadMoreThresholdScrollDistance ?? this.loadMoreThresholdScrollDistance,
       longPressToCopyCellValueToClipboard: longPressToCopyCellValueToClipboard ?? this.longPressToCopyCellValueToClipboard,
+      noDataBorderRadius: noDataBorderRadius ?? this.noDataBorderRadius,
       noDataMessage: noDataMessage ?? this.noDataMessage,
       paginationBorderRadius: paginationBorderRadius ?? this.paginationBorderRadius,
       paginationMargin: paginationMargin ?? this.paginationMargin,
       paginationPadding: paginationPadding ?? this.paginationPadding,
       paginationPinned: paginationPinned ?? this.paginationPinned,
       pinHeader: pinHeader ?? this.pinHeader,
+      resetWidthDialogBorderRadius: resetWidthDialogBorderRadius ?? this.resetWidthDialogBorderRadius,
+      resetWidthDialogCancelButtonText: resetWidthDialogCancelButtonText ?? this.resetWidthDialogCancelButtonText,
+      resetWidthDialogContent: resetWidthDialogContent ?? this.resetWidthDialogContent,
+      resetWidthDialogContentPadding: resetWidthDialogContentPadding ?? this.resetWidthDialogContentPadding,
+      resetWidthDialogConfirmButtonText: resetWidthDialogConfirmButtonText ?? this.resetWidthDialogConfirmButtonText,
+      resetWidthDialogTitle: resetWidthDialogTitle ?? this.resetWidthDialogTitle,
+      resetWidthDialogTitlePadding: resetWidthDialogTitlePadding ?? this.resetWidthDialogTitlePadding,
       resizeHandlerIcon: resizeHandlerIcon ?? this.resizeHandlerIcon,
       resizeHandlerMargin: resizeHandlerMargin ?? this.resizeHandlerMargin,
       resizeHandlerPadding: resizeHandlerPadding ?? this.resizeHandlerPadding,
@@ -276,7 +325,6 @@ class VDataListConfig {
       totalItemsPosition: totalItemsPosition ?? this.totalItemsPosition,
       triggerOnRowTapWhenRowClickHandlerIsShown:
           triggerOnRowTapWhenRowClickHandlerIsShown ?? this.triggerOnRowTapWhenRowClickHandlerIsShown,
-      noDataBorderRadius: noDataBorderRadius ?? this.noDataBorderRadius,
     );
   }
 }

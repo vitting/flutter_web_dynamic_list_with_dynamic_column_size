@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 import 'package:v_data_list/screens/home_screen.dart';
 import 'package:v_data_list/screens/lazy_load_example.dart';
 import 'package:v_data_list/screens/misc_example.dart';
@@ -36,6 +37,7 @@ class WebListExampleApp extends StatelessWidget {
         PaginationExample.routeName: (context) => const PaginationExample(),
         ResizableColumnsExample.routeName: (context) => const ResizableColumnsExample(),
         MiscExample.routeName: (context) => const MiscExample(),
+        ResetWidthDialogExample.routeName: (context) => const ResetWidthDialogExample(),
       },
     );
   }

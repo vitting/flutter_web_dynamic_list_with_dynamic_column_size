@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide DataRow;
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
+import 'package:v_data_list/v_data_list/header/v_data_list_reset_width_dialog.dart';
 import 'package:v_data_list/v_data_list/no_data/v_data_list_no_data.dart';
 import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
@@ -78,6 +79,8 @@ class VDataList extends StatefulWidget {
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
   final int totalItems;
 
+  final VDataListResetWidthDialogBuilder? resetWidthDialogBuilder;
+
   const VDataList({
     super.key,
     required this.columnDefinitions,
@@ -104,6 +107,7 @@ class VDataList extends StatefulWidget {
     this.noData,
     this.rowBuilder,
     this.headerBuilder,
+    this.resetWidthDialogBuilder,
   });
 
   @override
@@ -240,24 +244,12 @@ class _VDataListState extends State<VDataList> {
 
   void _dragHandlerLongPress(String columnId) async {
     if (widget.config.canResetColumnWidthOnLongPress) {
-      final result = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          // TODO: Theme and config
-          // TODO: Localize
-          title: Text('Reset Column Width'),
-          content: Text('Do you want to reset the width of this column to default?'),
-          actions: [
-            TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text('Reset'),
-            ),
-          ],
-        ),
+      final result = await VDataListResetWidthDialog.show(
+        context,
+        config: widget.config,
+        resetWidthDialogBuilder: widget.resetWidthDialogBuilder,
       );
+
       if (result == true) {
         _updateColumnWidth(columnId, 0, null);
       }
