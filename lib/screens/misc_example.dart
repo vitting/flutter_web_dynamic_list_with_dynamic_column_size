@@ -78,7 +78,7 @@ class _MiscExampleState extends State<MiscExample> {
               child: VDataList(
                 columnDefinitions: columnDefs,
                 totalItems: 20,
-                config: VDataListConfig().copyWith(showTotalCount: true, showTotalCountPinned: _totalCountPinned),
+                config: VDataListConfig().copyWith(showTotalCountPinned: _totalCountPinned),
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
               ),
             ),
@@ -104,7 +104,6 @@ class _MiscExampleState extends State<MiscExample> {
                 columnDefinitions: columnDefs,
                 totalItems: 20,
                 config: VDataListConfig().copyWith(
-                  showTotalCount: true,
                   totalItemsPosition: TotalCountPosition.bottom,
                   showTotalCountPinned: _totalCountPinned,
                 ),

@@ -9,6 +9,7 @@ import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dar
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
+import 'package:v_data_list/v_data_list/total_count/v_data_list_total_count.dart';
 
 /// A typedef for the column definition map, which is a map where
 /// the key is the column ID and the value is the ColumnDefinition object for that column
@@ -79,3 +80,6 @@ typedef VDataListNoDataBuilder = VDataListNoData? Function(BuildContext context,
 
 typedef VDataListFooterBuilder =
     VDataListFooter? Function(BuildContext context, VDataListConfig config, Widget? child, FooterTheme? theme);
+
+typedef VDataListTotalCountBuilder =
+    VDataListTotalCount? Function(BuildContext context, VDataListConfig config, int? total, TotalCountTheme? theme);

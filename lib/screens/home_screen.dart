@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/screens/footer_example.dart';
 import 'package:v_data_list/screens/no_data_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
+import 'package:v_data_list/screens/total_count_example.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/home';
@@ -74,6 +75,13 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, FooterExample.routeName);
                 },
                 child: Text('Footer example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, TotalCountExample.routeName);
+                },
+                child: Text('Total Count example'),
               ),
             ],
           ),

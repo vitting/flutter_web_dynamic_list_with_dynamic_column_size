@@ -13,10 +13,6 @@ import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 import 'package:v_data_list/v_data_list/type_definitions/v_data_list_type_definitions.dart';
 
 class VDataList extends StatefulWidget {
-  /// An optional callback that is triggered when the user scrolls to the end of the list,
-  /// which can be used to load more data into the list.
-  final VDataListOnLoadMore? onLoadMore;
-
   /// The column definitions for the list, which define the columns to display and their properties such as width and sort state.
   /// The keys of the column definitions should match the keys in the data rows to display the correct data in each column.
   final ColumnDefinitionMap columnDefinitions;
@@ -28,6 +24,13 @@ class VDataList extends StatefulWidget {
   /// The list will display the values from the data rows according to the column definitions, and any updates to the data will be reflected in the list.
   final VDataListDataRowList data;
 
+  /// An optional widget to display as the footer of the list, which can be used to show additional information or actions related to the list.
+  /// If [footerBuilder] is also provided, the footer widget will be passed to the builder to allow for custom building of the footer based on the provided widget.
+  final Widget? footer;
+
+  /// An optional custom builder that can be used to build a custom footer widget when there is data to display in the list.
+  final VDataListFooterBuilder? footerBuilder;
+
   /// An optional custom header builder that can be used to build a custom header widget instead of the default [VDataListHeader].
   final VDataListHeaderBuilder? headerBuilder;
 
@@ -35,7 +38,15 @@ class VDataList extends StatefulWidget {
   /// which can be used to show a loading indicator at the end of the list when more data is being loaded.
   final bool isLoading;
 
+  /// An optional custom builder that can be used to build a custom no data widget when there is no data to display in the list.
+  final VDataListNoDataBuilder? noDataBuilder;
+
   final VDataListonColumnDefsChanged? onColumnDefsChanged;
+
+  /// An optional callback that is triggered when the user scrolls to the end of the list,
+  /// which can be used to load more data into the list.
+  final VDataListOnLoadMore? onLoadMore;
+
   final VDataListOnLongPressRow? onLongPressRow;
   final VDataListOnLongPressRowCopyValue? onLongPressRowCopyValue;
 
@@ -53,6 +64,9 @@ class VDataList extends StatefulWidget {
   /// An optional total count of items to display in the pagination widget when [showPagination] is true.
   final int? paginationItemsPerPage;
 
+  /// An optional custom dialog builder that can be used to build a custom dialog widget when resetting column widths,
+  final VDataListResetWidthDialogBuilder? resetWidthDialogBuilder;
+
   /// If provided, this widget will be used as the resize handler for column resizing instead of the default [VDataListResizableHandler].
   /// This allows for custom styling and behavior of the resize handler.
   /// If null, the default [VDataListResizableHandler] will be used.
@@ -65,19 +79,10 @@ class VDataList extends StatefulWidget {
   /// This allows for dynamic styling of cells based on their content or column.
   final VDataListRowCellStyleBuilder? rowCellStyleBuilder;
 
-  /// An optional widget to display in the total count area when [showTotalCount] is true.
-  final Widget? totalCount;
-
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
   final int totalItems;
 
-  final VDataListResetWidthDialogBuilder? resetWidthDialogBuilder;
-
-  final VDataListNoDataBuilder? noDataBuilder;
-
-  final VDataListFooterBuilder? footerBuilder;
-
-  final Widget? footer;
+  final VDataListTotalCountBuilder? totalCountBuilder;
 
   const VDataList({
     super.key,
@@ -93,7 +98,6 @@ class VDataList extends StatefulWidget {
     this.resizeHandler,
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
-    this.totalCount,
     this.paginationItemsPerPage,
     this.onPaginationIndexChanged,
     this.paginationCurrentPage,
@@ -104,6 +108,7 @@ class VDataList extends StatefulWidget {
     this.resetWidthDialogBuilder,
     this.footerBuilder,
     this.footer,
+    this.totalCountBuilder,
   });
 
   @override
@@ -235,7 +240,13 @@ class _VDataListState extends State<VDataList> {
   }
 
   Widget get _buildTotalCount {
-    return VDataListTotalCount(total: widget.totalItems, config: widget.config, child: widget.totalCount);
+    final customTotalCount = widget.totalCountBuilder?.call(
+      context,
+      widget.config,
+      widget.totalItems,
+      VDataListTheme.of(context).totalCountTheme,
+    );
+    return customTotalCount ?? VDataListTotalCount(config: widget.config);
   }
 
   void _dragHandlerLongPress(String columnId) async {
@@ -252,7 +263,7 @@ class _VDataListState extends State<VDataList> {
     }
   }
 
-  Widget _buildSliverAppbar() {
+  Widget get _buildSliverAppbar {
     final customHeader = widget.headerBuilder?.call(
       context,
       _localColumnDefinitions,
@@ -273,7 +284,7 @@ class _VDataListState extends State<VDataList> {
         );
   }
 
-  Widget _buildNoData() {
+  Widget get _buildNoData {
     final customNoData = widget.noDataBuilder?.call(context, widget.config, VDataListTheme.of(context).noDataTheme);
     return customNoData ?? VDataListNoData(config: widget.config);
   }
@@ -293,14 +304,16 @@ class _VDataListState extends State<VDataList> {
             shrinkWrap: true,
             controller: _verticalController,
             slivers: [
-              if (widget.config.showTotalCount && widget.config.totalItemsPosition == TotalCountPosition.top) _buildTotalCount,
+              if (widget.totalCountBuilder != null && widget.config.totalItemsPosition == TotalCountPosition.top)
+                _buildTotalCount,
               SliverPadding(
                 padding: EdgeInsets.only(bottom: widget.config.headerBottomSpacing),
-                sliver: _buildSliverAppbar(),
+                sliver: _buildSliverAppbar,
               ),
-              if (widget.config.showTotalCount && widget.config.totalItemsPosition == TotalCountPosition.bottom) _buildTotalCount,
+              if (widget.totalCountBuilder != null && widget.config.totalItemsPosition == TotalCountPosition.bottom)
+                _buildTotalCount,
               if (widget.data.isEmpty && !widget.isLoading)
-                _buildNoData()
+                _buildNoData
               else
                 SliverList.builder(
                   itemCount: widget.data.length + (widget.isLoading ? 1 : 0),

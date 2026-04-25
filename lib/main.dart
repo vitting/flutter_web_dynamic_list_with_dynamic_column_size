@@ -10,6 +10,7 @@ import 'package:v_data_list/screens/misc_example.dart';
 import 'package:v_data_list/screens/pagination_example.dart';
 import 'package:v_data_list/screens/resizable_columns_example.dart';
 import 'package:v_data_list/screens/dynamic_example.dart';
+import 'package:v_data_list/screens/total_count_example.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 
 void main() {
@@ -42,6 +43,7 @@ class WebListExampleApp extends StatelessWidget {
         ResetWidthDialogExample.routeName: (context) => const ResetWidthDialogExample(),
         NoDataExample.routeName: (context) => const NoDataExample(),
         FooterExample.routeName: (context) => const FooterExample(),
+        TotalCountExample.routeName: (context) => const TotalCountExample(),
       },
     );
   }

@@ -134,9 +134,6 @@ class VDataListConfig {
   /// Whether to show a tooltip with the full cell value when hovering over a cell.
   final bool showTooltip;
 
-  /// Whether to show the total count of items in the list when [totalItems] is provided.
-  final bool showTotalCount;
-
   /// Whether to show the total count of items in the list when [totalItems] is provided and pin it to the top of the list.
   final bool showTotalCountPinned;
 
@@ -202,7 +199,6 @@ class VDataListConfig {
     this.resizeHandlerIcon = const Icon(Symbols.arrows_outward, size: 12),
     this.resizeHandlerMargin = const EdgeInsets.only(right: 8),
     this.resizeHandlerPadding = const EdgeInsets.all(4),
-    this.showTotalCount = false,
     this.showTotalCountPinned = false,
     this.paginationBorderRadius = const BorderRadius.all(Radius.circular(8)),
     this.paginationMargin = const EdgeInsets.symmetric(vertical: 4),
@@ -243,9 +239,9 @@ class VDataListConfig {
     bool? pinHeader,
     BorderRadiusGeometry? resetWidthDialogBorderRadius,
     String? resetWidthDialogCancelButtonText,
+    String? resetWidthDialogConfirmButtonText,
     String? resetWidthDialogContent,
     EdgeInsetsGeometry? resetWidthDialogContentPadding,
-    String? resetWidthDialogConfirmButtonText,
     String? resetWidthDialogTitle,
     EdgeInsetsGeometry? resetWidthDialogTitlePadding,
     Widget? resizeHandlerIcon,
@@ -262,7 +258,6 @@ class VDataListConfig {
     bool? showRowHoverColor,
     bool? showSortIconsInHeader,
     bool? showTooltip,
-    bool? showTotalCount,
     bool? showTotalCountPinned,
     Widget? sortIconAscending,
     Widget? sortIconDescending,
@@ -294,9 +289,9 @@ class VDataListConfig {
       pinHeader: pinHeader ?? this.pinHeader,
       resetWidthDialogBorderRadius: resetWidthDialogBorderRadius ?? this.resetWidthDialogBorderRadius,
       resetWidthDialogCancelButtonText: resetWidthDialogCancelButtonText ?? this.resetWidthDialogCancelButtonText,
+      resetWidthDialogConfirmButtonText: resetWidthDialogConfirmButtonText ?? this.resetWidthDialogConfirmButtonText,
       resetWidthDialogContent: resetWidthDialogContent ?? this.resetWidthDialogContent,
       resetWidthDialogContentPadding: resetWidthDialogContentPadding ?? this.resetWidthDialogContentPadding,
-      resetWidthDialogConfirmButtonText: resetWidthDialogConfirmButtonText ?? this.resetWidthDialogConfirmButtonText,
       resetWidthDialogTitle: resetWidthDialogTitle ?? this.resetWidthDialogTitle,
       resetWidthDialogTitlePadding: resetWidthDialogTitlePadding ?? this.resetWidthDialogTitlePadding,
       resizeHandlerIcon: resizeHandlerIcon ?? this.resizeHandlerIcon,
@@ -313,7 +308,6 @@ class VDataListConfig {
       showRowHoverColor: showRowHoverColor ?? this.showRowHoverColor,
       showSortIconsInHeader: showSortIconsInHeader ?? this.showSortIconsInHeader,
       showTooltip: showTooltip ?? this.showTooltip,
-      showTotalCount: showTotalCount ?? this.showTotalCount,
       showTotalCountPinned: showTotalCountPinned ?? this.showTotalCountPinned,
       sortIconAscending: sortIconAscending ?? this.sortIconAscending,
       sortIconDescending: sortIconDescending ?? this.sortIconDescending,
