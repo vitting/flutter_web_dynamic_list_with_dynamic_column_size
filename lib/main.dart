@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:v_data_list/screens/footer_example.dart';
+import 'package:v_data_list/screens/load_more_data_spinner_builder_example.dart';
 import 'package:v_data_list/screens/no_data_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 import 'package:v_data_list/screens/home_screen.dart';
@@ -44,6 +45,7 @@ class WebListExampleApp extends StatelessWidget {
         NoDataExample.routeName: (context) => const NoDataExample(),
         FooterExample.routeName: (context) => const FooterExample(),
         TotalCountExample.routeName: (context) => const TotalCountExample(),
+        LoadMoreDataSpinnerBuilder.routeName: (context) => const LoadMoreDataSpinnerBuilder(),
       },
     );
   }

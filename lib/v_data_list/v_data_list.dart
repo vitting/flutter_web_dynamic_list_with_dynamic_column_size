@@ -3,6 +3,7 @@ import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_reset_width_dialog.dart';
+import 'package:v_data_list/v_data_list/load_more_data_spinner/v_data_list_load_more_data_spinner.dart';
 import 'package:v_data_list/v_data_list/no_data/v_data_list_no_data.dart';
 import 'package:v_data_list/v_data_list/pagination/v_data_list_pagination.dart';
 import 'package:v_data_list/v_data_list/resize_handler/v_data_list_resizable_handler.dart';
@@ -82,7 +83,10 @@ class VDataList extends StatefulWidget {
   /// An optional total number of items to display in the total count widget when [showTotalCount] is true.
   final int totalItems;
 
+  /// An optional custom total count builder that can be used to build a custom total count widget above or under the header.
   final VDataListTotalCountBuilder? totalCountBuilder;
+
+  final VDataListLoadMoreDataSpinnerBuilder? loadMoreDataSpinnerBuilder;
 
   const VDataList({
     super.key,
@@ -109,6 +113,7 @@ class VDataList extends StatefulWidget {
     this.footerBuilder,
     this.footer,
     this.totalCountBuilder,
+    this.loadMoreDataSpinnerBuilder,
   });
 
   @override
@@ -320,8 +325,8 @@ class _VDataListState extends State<VDataList> {
                   itemBuilder: (context, index) {
                     if (index == widget.data.length) {
                       // Show loading indicator at the end
-                      // TODO: Create as a Widget or as a builder
-                      return Container(height: 60, alignment: Alignment.center, child: const CircularProgressIndicator());
+                      final customLoadMoreDataSpinner = widget.loadMoreDataSpinnerBuilder?.call(context, widget.config);
+                      return customLoadMoreDataSpinner ?? VDataListLoadMoreDataSpinner();
                     }
                     final bool isEven = index % 2 == 0;
                     return _buildRow(widget.data[index], isEven, index);

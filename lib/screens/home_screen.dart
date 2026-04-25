@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:v_data_list/screens/footer_example.dart';
+import 'package:v_data_list/screens/load_more_data_spinner_builder_example.dart';
 import 'package:v_data_list/screens/no_data_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 import 'package:v_data_list/screens/total_count_example.dart';
@@ -82,6 +83,13 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, TotalCountExample.routeName);
                 },
                 child: Text('Total Count example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, LoadMoreDataSpinnerBuilder.routeName);
+                },
+                child: Text('Load more data spinner builder example'),
               ),
             ],
           ),
