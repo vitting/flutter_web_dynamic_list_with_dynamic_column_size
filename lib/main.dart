@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/footer_example.dart';
+import 'package:v_data_list/screens/no_data_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 import 'package:v_data_list/screens/home_screen.dart';
 import 'package:v_data_list/screens/lazy_load_example.dart';
@@ -38,6 +40,8 @@ class WebListExampleApp extends StatelessWidget {
         ResizableColumnsExample.routeName: (context) => const ResizableColumnsExample(),
         MiscExample.routeName: (context) => const MiscExample(),
         ResetWidthDialogExample.routeName: (context) => const ResetWidthDialogExample(),
+        NoDataExample.routeName: (context) => const NoDataExample(),
+        FooterExample.routeName: (context) => const FooterExample(),
       },
     );
   }

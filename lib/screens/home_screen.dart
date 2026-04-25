@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/footer_example.dart';
+import 'package:v_data_list/screens/no_data_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -58,6 +60,20 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, ResetWidthDialogExample.routeName);
                 },
                 child: Text('Custom reset width dialog example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, NoDataExample.routeName);
+                },
+                child: Text('No data example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, FooterExample.routeName);
+                },
+                child: Text('Footer example'),
               ),
             ],
           ),

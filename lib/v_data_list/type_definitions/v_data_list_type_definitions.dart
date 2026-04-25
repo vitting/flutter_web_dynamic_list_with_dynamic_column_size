@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:v_data_list/v_data_list/config/column_definition.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
+import 'package:v_data_list/v_data_list/footer/v_data_list_footer.dart';
 import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
-import 'package:v_data_list/v_data_list/header/v_data_list_reset_width_dialog.dart';
+import 'package:v_data_list/v_data_list/no_data/v_data_list_no_data.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_data.dart';
 import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
 import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
+import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 
 /// A typedef for the column definition map, which is a map where
 /// the key is the column ID and the value is the ColumnDefinition object for that column
@@ -72,3 +74,8 @@ typedef VDataListOnPaginationIndexChanged = void Function(int page, int totalIte
 typedef VDataListOnLoadMore = void Function();
 
 typedef VDataListResetWidthDialogBuilder = Widget? Function(BuildContext context, VDataListConfig config);
+
+typedef VDataListNoDataBuilder = VDataListNoData? Function(BuildContext context, VDataListConfig config, NoDataTheme? theme);
+
+typedef VDataListFooterBuilder =
+    VDataListFooter? Function(BuildContext context, VDataListConfig config, Widget? child, FooterTheme? theme);

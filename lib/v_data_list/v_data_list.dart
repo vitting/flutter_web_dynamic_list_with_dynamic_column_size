@@ -28,20 +28,12 @@ class VDataList extends StatefulWidget {
   /// The list will display the values from the data rows according to the column definitions, and any updates to the data will be reflected in the list.
   final VDataListDataRowList data;
 
-  /// An optional widget to display as the footer of the list when [showFooter] is true.
-  /// This widget will be displayed below the list content and can be used to show additional information or actions related to the list.
-  /// If null, no footer will be displayed.
-  final Widget? footer;
-
   /// An optional custom header builder that can be used to build a custom header widget instead of the default [VDataListHeader].
   final VDataListHeaderBuilder? headerBuilder;
 
   /// A flag indicating whether the list is currently loading more data,
   /// which can be used to show a loading indicator at the end of the list when more data is being loaded.
   final bool isLoading;
-
-  /// An optional widget to display when there is no data to show in the list and [noDataMessage] is set in the config.
-  final Widget? noData;
 
   final VDataListonColumnDefsChanged? onColumnDefsChanged;
   final VDataListOnLongPressRow? onLongPressRow;
@@ -81,6 +73,12 @@ class VDataList extends StatefulWidget {
 
   final VDataListResetWidthDialogBuilder? resetWidthDialogBuilder;
 
+  final VDataListNoDataBuilder? noDataBuilder;
+
+  final VDataListFooterBuilder? footerBuilder;
+
+  final Widget? footer;
+
   const VDataList({
     super.key,
     required this.columnDefinitions,
@@ -92,22 +90,20 @@ class VDataList extends StatefulWidget {
     this.onColumnDefsChanged,
     this.onSortChanged,
     required this.config,
-    // TODO: Change to a builder
-    this.footer,
     this.resizeHandler,
     this.onLongPressRow,
     this.onLongPressRowCopyValue,
-    // TODO: Change to a builder
     this.totalCount,
     this.paginationItemsPerPage,
     this.onPaginationIndexChanged,
     this.paginationCurrentPage,
     this.rowCellStyleBuilder,
-    // TODO: Change to a builder
-    this.noData,
+    this.noDataBuilder,
     this.rowBuilder,
     this.headerBuilder,
     this.resetWidthDialogBuilder,
+    this.footerBuilder,
+    this.footer,
   });
 
   @override
@@ -277,6 +273,11 @@ class _VDataListState extends State<VDataList> {
         );
   }
 
+  Widget _buildNoData() {
+    final customNoData = widget.noDataBuilder?.call(context, widget.config, VDataListTheme.of(context).noDataTheme);
+    return customNoData ?? VDataListNoData(config: widget.config);
+  }
+
   Widget _buildBody(BoxConstraints constraints) {
     Widget body = Scrollbar(
       controller: _horizontalController,
@@ -298,8 +299,8 @@ class _VDataListState extends State<VDataList> {
                 sliver: _buildSliverAppbar(),
               ),
               if (widget.config.showTotalCount && widget.config.totalItemsPosition == TotalCountPosition.bottom) _buildTotalCount,
-              if (widget.config.noDataMessage != null && widget.data.isEmpty && !widget.isLoading)
-                VDataListNoData(config: widget.config, child: widget.noData)
+              if (widget.data.isEmpty && !widget.isLoading)
+                _buildNoData()
               else
                 SliverList.builder(
                   itemCount: widget.data.length + (widget.isLoading ? 1 : 0),
@@ -313,7 +314,8 @@ class _VDataListState extends State<VDataList> {
                     return _buildRow(widget.data[index], isEven, index);
                   },
                 ),
-              if (widget.footer != null && widget.config.footerPinned == false) SliverToBoxAdapter(child: _buildFooter()),
+              if ((widget.footer != null || widget.footerBuilder != null) && widget.config.footerPinned == false)
+                SliverToBoxAdapter(child: _buildFooter()),
               if (widget.config.showPagination &&
                   widget.paginationItemsPerPage != null &&
                   widget.paginationCurrentPage != null &&
@@ -325,7 +327,7 @@ class _VDataListState extends State<VDataList> {
       ),
     );
 
-    if (widget.footer != null && widget.config.footerPinned) {
+    if ((widget.footer != null || widget.footerBuilder != null) && widget.config.footerPinned) {
       body = Column(
         children: [
           Expanded(child: body),
@@ -350,7 +352,13 @@ class _VDataListState extends State<VDataList> {
   }
 
   Widget _buildFooter() {
-    return VDataListFooter(config: widget.config, child: widget.footer);
+    final customFooter = widget.footerBuilder?.call(
+      context,
+      widget.config,
+      widget.footer,
+      VDataListTheme.of(context).footerTheme,
+    );
+    return customFooter ?? VDataListFooter(config: widget.config, child: widget.footer);
   }
 
   Widget _buildPagination() {
