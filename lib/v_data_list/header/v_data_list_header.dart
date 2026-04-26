@@ -49,6 +49,9 @@ class VDataListHeader extends StatelessWidget {
                   resizeHandler: resizeHandler,
                   textStyle: theme.textStyle,
                   resizableHandlerPinned: columnDefinition.resizableHandlerPinned,
+                  showSortIconsInHeader: config.showSortIconsInHeader,
+                  sortIconAscending: config.sortIconAscending,
+                  sortIconDescending: config.sortIconDescending,
                 );
               }),
               if (config.showRowClickHandler)

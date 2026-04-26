@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
 
-class ColumnDefinition extends Equatable {
+class ColumnDefinition<T> extends Equatable {
   /// The spacing to the right of the column.
   /// This is used to create space between columns.
   /// The last column will not have spacing applied to it.
@@ -41,7 +41,7 @@ class ColumnDefinition extends Equatable {
   final ColumnSortState sortState;
 
   /// The type of the column, which can be used to determine how to render the cells in this column.
-  final ColumnDefinitionType type;
+  final T? type;
 
   /// The width of the column.
   /// If null, the column will auto-size based on its content.
@@ -58,7 +58,7 @@ class ColumnDefinition extends Equatable {
     this.rowCellIconSpacing = 0,
     this.columnSpacing = 0,
     this.rowCellIconPlacement = RowCellIconPlacement.left,
-    this.type = ColumnDefinitionType.text,
+    this.type,
     this.resizableHandlerPinned = false,
   });
 
@@ -108,7 +108,7 @@ class ColumnDefinition extends Equatable {
     double? rowCellIconSpacing,
     ColumnSortState? sortState,
     double? width,
-    ColumnDefinitionType? type,
+    T? type,
     bool? resizableHandlerPinned,
   }) {
     return ColumnDefinition(

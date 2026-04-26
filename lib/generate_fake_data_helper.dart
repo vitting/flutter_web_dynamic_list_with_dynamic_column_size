@@ -71,6 +71,12 @@ final ColumnDefinitionMap columnDefs = {
   'country': ColumnDefinition(id: 'country', label: 'Country', width: null, isResizable: true),
 };
 
+final ColumnDefinitionMap columnDefsWithTypes = {
+  'id': ColumnDefinition(id: 'id', label: 'ID', width: null, isResizable: true, type: 'id'),
+  'name': ColumnDefinition(id: 'name', label: 'Name', width: null, isResizable: true),
+  'email': ColumnDefinition(id: 'email', label: 'Email', width: null, isResizable: true, type: 'email'),
+};
+
 final ColumnDefinitionMap columnDefsWithWidthResizable = {
   'id': ColumnDefinition(id: 'id', label: 'ID', width: 120, isResizable: true),
   'name': ColumnDefinition(id: 'name', label: 'Name', width: 120, isResizable: true),

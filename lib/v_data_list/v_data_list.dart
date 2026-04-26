@@ -86,7 +86,12 @@ class VDataList extends StatefulWidget {
   /// An optional custom total count builder that can be used to build a custom total count widget above or under the header.
   final VDataListTotalCountBuilder? totalCountBuilder;
 
+  /// An optional custom builder that can be used to build a custom loading spinner widget when more data is being loaded at the end of the list.
+  /// This allows for customization of the loading indicator shown when [isLoading] is true and the user has scrolled to the end of the list.
   final VDataListLoadMoreDataSpinnerBuilder? loadMoreDataSpinnerBuilder;
+
+  /// An optional custom pagination builder that can be used to build a custom pagination widget instead of the default [VDataListPagination].
+  final VDataListPaginationBuilder? paginationBuilder;
 
   const VDataList({
     super.key,
@@ -114,6 +119,7 @@ class VDataList extends StatefulWidget {
     this.footer,
     this.totalCountBuilder,
     this.loadMoreDataSpinnerBuilder,
+    this.paginationBuilder,
   });
 
   @override
@@ -380,13 +386,22 @@ class _VDataListState extends State<VDataList> {
   }
 
   Widget _buildPagination() {
-    return VDataListPagination(
-      config: widget.config,
-      currentSelectedIndex: widget.paginationCurrentPage ?? 0,
-      onPaginationIndexChanged: widget.onPaginationIndexChanged,
-      pageSize: widget.paginationItemsPerPage!,
-      totalItems: widget.totalItems,
+    final customPagination = widget.paginationBuilder?.call(
+      context,
+      widget.config,
+      widget.paginationCurrentPage ?? 0,
+      widget.paginationItemsPerPage!,
+      widget.totalItems,
+      widget.onPaginationIndexChanged,
     );
+    return customPagination ??
+        VDataListPagination(
+          config: widget.config,
+          currentSelectedIndex: widget.paginationCurrentPage ?? 0,
+          onPaginationIndexChanged: widget.onPaginationIndexChanged,
+          pageSize: widget.paginationItemsPerPage!,
+          totalItems: widget.totalItems,
+        );
   }
 
   @override

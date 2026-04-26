@@ -85,3 +85,13 @@ typedef VDataListTotalCountBuilder =
     VDataListTotalCount? Function(BuildContext context, VDataListConfig config, int? total, TotalCountTheme? theme);
 
 typedef VDataListLoadMoreDataSpinnerBuilder = Widget? Function(BuildContext context, VDataListConfig config);
+
+typedef VDataListPaginationBuilder =
+    Widget? Function(
+      BuildContext context,
+      VDataListConfig config,
+      int currentPage,
+      int pageSize,
+      int totalItems,
+      VDataListOnPaginationIndexChanged? onPaginationIndexChanged,
+    );
