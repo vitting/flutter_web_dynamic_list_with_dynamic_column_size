@@ -25,8 +25,6 @@ class HeaderBuilderExample extends StatelessWidget {
                 headerBorderRadius: BorderRadius.zero,
                 headerBottomSpacing: 0,
                 showSortIconsInHeader: true,
-                sortIconAscending: Icon(Icons.arrow_upward, size: 16, color: Colors.white),
-                sortIconDescending: Icon(Icons.arrow_downward, size: 16, color: Colors.white),
               ),
               onRowTap: (rowData, column) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('You Clicked: $rowData'))));
