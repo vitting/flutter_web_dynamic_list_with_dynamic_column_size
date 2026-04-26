@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/copy_to_clipboard_example.dart';
+import 'package:v_data_list/screens/dynamic_example.dart';
 import 'package:v_data_list/screens/footer_example.dart';
 import 'package:v_data_list/screens/header_builder_example.dart';
+import 'package:v_data_list/screens/lazy_load_example.dart';
 import 'package:v_data_list/screens/load_more_data_spinner_builder_example.dart';
 import 'package:v_data_list/screens/no_data_example.dart';
+import 'package:v_data_list/screens/pagination_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
+import 'package:v_data_list/screens/resizable_columns_example.dart';
 import 'package:v_data_list/screens/row_builder_example.dart';
 import 'package:v_data_list/screens/row_cell_style_builder_example.dart';
+import 'package:v_data_list/screens/row_tap_example.dart';
 import 'package:v_data_list/screens/sort_example.dart';
 import 'package:v_data_list/screens/total_count_example.dart';
 
@@ -27,36 +33,28 @@ class HomeScreen extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/dynamic-example');
+                  Navigator.pushNamed(context, DynamicExample.routeName);
                 },
                 child: Text('Dynamic example'),
               ),
               SizedBox(height: 20),
-
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/misc-example');
-                },
-                child: Text('Misc example'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/lazy-load-example');
+                  Navigator.pushNamed(context, LazyLoadExample.routeName);
                 },
                 child: Text('Lazy load example'),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/pagination-example');
+                  Navigator.pushNamed(context, PaginationExample.routeName);
                 },
                 child: Text('Pagination example'),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/resizable-columns-example');
+                  Navigator.pushNamed(context, ResizableColumnsExample.routeName);
                 },
                 child: Text('Resizable columns example'),
               ),
@@ -122,6 +120,20 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, SortExample.routeName);
                 },
                 child: Text('Sort example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, CopyToClipboardExample.routeName);
+                },
+                child: Text('Copy to clipboard example'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, RowTapExample.routeName);
+                },
+                child: Text('Row Tap example'),
               ),
             ],
           ),

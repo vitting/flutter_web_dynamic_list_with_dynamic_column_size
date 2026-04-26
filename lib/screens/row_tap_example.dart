@@ -1,48 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:v_data_list/generate_fake_data_helper.dart';
 import 'package:v_data_list/v_data_list/config/v_data_list_config.dart';
-import 'package:v_data_list/v_data_list/enums/v_data_list_enums.dart';
-import 'package:v_data_list/v_data_list/header/v_data_list_header.dart';
-import 'package:v_data_list/v_data_list/row/models/v_data_list_row_cell_style.dart';
-import 'package:v_data_list/v_data_list/row/v_data_list_row.dart';
-import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
 import 'package:v_data_list/v_data_list/v_data_list.dart';
 
-class MiscExample extends StatefulWidget {
-  static const routeName = '/misc-example';
-  const MiscExample({super.key});
+class RowTapExample extends StatelessWidget {
+  static const routeName = '/row-tap-example';
+  const RowTapExample({super.key});
 
-  @override
-  State<MiscExample> createState() => _MiscExampleState();
-}
-
-class _MiscExampleState extends State<MiscExample> {
-  bool _totalCountPinned = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Misc example')),
+      appBar: AppBar(title: Text('Row tap example')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
-            Text('Copy to clipboard', style: TextStyle(fontSize: 20)),
-            SizedBox(
-              height: 300,
-              child: VDataList(
-                columnDefinitions: columnDefs,
-                totalItems: 20,
-                config: VDataListConfig().copyWith(longPressToCopyCellValueToClipboard: true),
-                onLongPressRowCopyValue: (id, value, data, updatedColumnDefs) =>
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Center(child: Text('Copied value: $value')))),
-                data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
-              ),
-            ),
-            SizedBox(height: 20),
             Text('Tap Row', style: TextStyle(fontSize: 20)),
-            SizedBox(
-              height: 300,
+            Expanded(
               child: VDataList(
                 columnDefinitions: columnDefs,
                 totalItems: 20,
@@ -55,8 +30,7 @@ class _MiscExampleState extends State<MiscExample> {
             ),
             SizedBox(height: 20),
             Text('Tap Row with handler', style: TextStyle(fontSize: 20)),
-            SizedBox(
-              height: 300,
+            Expanded(
               child: VDataList(
                 columnDefinitions: columnDefs,
                 totalItems: 20,
@@ -69,8 +43,7 @@ class _MiscExampleState extends State<MiscExample> {
             ),
             SizedBox(height: 20),
             Text('Tap Row with handler and tap row', style: TextStyle(fontSize: 20)),
-            SizedBox(
-              height: 300,
+            Expanded(
               child: VDataList(
                 columnDefinitions: columnDefs,
                 totalItems: 20,
@@ -81,8 +54,6 @@ class _MiscExampleState extends State<MiscExample> {
                 data: GenerateFakeDataHelper.generateData(20, columnDefs.keys.toList()),
               ),
             ),
-            SizedBox(height: 20),
-            Text('RowBuilder', style: TextStyle(fontSize: 20)),
           ],
         ),
       ),

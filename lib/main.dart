@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:v_data_list/screens/copy_to_clipboard_example.dart';
 import 'package:v_data_list/screens/footer_example.dart';
 import 'package:v_data_list/screens/header_builder_example.dart';
 import 'package:v_data_list/screens/load_more_data_spinner_builder_example.dart';
@@ -8,12 +9,12 @@ import 'package:v_data_list/screens/no_data_example.dart';
 import 'package:v_data_list/screens/reset_width_dialog_example.dart';
 import 'package:v_data_list/screens/home_screen.dart';
 import 'package:v_data_list/screens/lazy_load_example.dart';
-import 'package:v_data_list/screens/misc_example.dart';
 import 'package:v_data_list/screens/pagination_example.dart';
 import 'package:v_data_list/screens/resizable_columns_example.dart';
 import 'package:v_data_list/screens/dynamic_example.dart';
 import 'package:v_data_list/screens/row_builder_example.dart';
 import 'package:v_data_list/screens/row_cell_style_builder_example.dart';
+import 'package:v_data_list/screens/row_tap_example.dart';
 import 'package:v_data_list/screens/sort_example.dart';
 import 'package:v_data_list/screens/total_count_example.dart';
 import 'package:v_data_list/v_data_list/theme/v_data_list_theme.dart';
@@ -45,7 +46,6 @@ class WebListExampleApp extends StatelessWidget {
         LazyLoadExample.routeName: (context) => const LazyLoadExample(),
         PaginationExample.routeName: (context) => const PaginationExample(),
         ResizableColumnsExample.routeName: (context) => const ResizableColumnsExample(),
-        MiscExample.routeName: (context) => const MiscExample(),
         ResetWidthDialogExample.routeName: (context) => const ResetWidthDialogExample(),
         NoDataExample.routeName: (context) => const NoDataExample(),
         FooterExample.routeName: (context) => const FooterExample(),
@@ -55,6 +55,8 @@ class WebListExampleApp extends StatelessWidget {
         RowBuilderExample.routeName: (context) => const RowBuilderExample(),
         HeaderBuilderExample.routeName: (context) => const HeaderBuilderExample(),
         SortExample.routeName: (context) => const SortExample(),
+        CopyToClipboardExample.routeName: (context) => const CopyToClipboardExample(),
+        RowTapExample.routeName: (context) => const RowTapExample(),
       },
     );
   }
